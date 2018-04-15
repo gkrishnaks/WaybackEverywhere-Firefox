@@ -13,15 +13,15 @@ Examples:
 *   If http://gnu.org is in 'Excludes' List --> http://gnu.org  
 
 
-Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here [Exclude List](#Excludes-List)
+Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here [Exclude List](#excludes-list)
 
 
 Features
 --------
 
 *   **Popup menu** \- Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here [Popup Menu](#popup-menu)
-*   **Automatic Detection of Wayback Machine Site's Error Messages** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information on Automatic Detection of WM Error Messages available here [Auto-detect Wayback Machine Error Messages](#Auto-Detect-Wayback-Machine-Error-Messages
-*   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#settings)
+*   **Automatic Detection of Wayback Machine Site's Error Messages** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information on Automatic Detection of WM Error Messages available here [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
+*   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#edit-settings)
 
 
 
@@ -59,9 +59,9 @@ Excludes List
 *   Sites (hostnames) in the Excludes list are excluded from routing to Wayback Machine.
 *   You can use popup menu buttons to add/remove from this Excludes list to suit your browsing habits
 *   You also have the option to add or remove from Excludes list via Settings Page
-*   Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in building a Excludes list without manual effort. Read more here : [Auto-detect Wayback Machine Error Messages](#AutodetectWayBackMessages)
+*   Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in building a Excludes list without manual effort. Read more here : [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
 *   The 'Excludes' list excludes at domain level, including subdomains - for example, if we exclude _*.google.*_ \- this results in redirect rules not applying to _all_ Google sites - the ones that have 'google' in the url (i.e no redirection to wayback machine) happens across all google domains - _docs.google.com, drive.google.com, google.de, google.co.in_ and so on.
-*   Now, in those domains, if there are "public pages" (like Blog posts) which do _not_ need login to view, you can use the popup menu's "Save Page Now" button to save that page alone to the wayback machine - More info on popup menu's features here [Popup Menu](#popup)
+*   Now, in those domains, if there are "public pages" (like Blog posts) which do _not_ need login to view, you can use the popup menu's "Save Page Now" button to save that page alone to the wayback machine - More info on popup menu's features here [Popup Menu](#popup-menu)
 
 
 Edit Settings
@@ -69,8 +69,8 @@ Edit Settings
 
 *   Click "Edit Settings" from Popup Menu to open Settings Page.
 *   Settings page lets you view Existing Excludes list. and add or remove from excludes list manually by using the buttons provides
-*   This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : [Default Excludes list provided during install](#defaultexcludepattern)
-*   You can export and import settings from this page. More information on this here : [Export and Import Settings](#exportimport)
+*   This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : [Default Excludes list provided during install](#default-excludes-list)
+*   You can export and import settings from this page. More information on this here : [Export and Import Settings](#exportimport-settings)
 *   Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.
 
 
