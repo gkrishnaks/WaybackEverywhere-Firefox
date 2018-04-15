@@ -1,0 +1,15 @@
+Check Exclude/Include URL types:
+https://web.archive.org/web/2/https://www.quora.com
+https://web.archive.org/web/2/http://www.quora.com
+https://web.archive.org/web/2/www.quora.com
+https://web.archive.org/web/2/www.quora.com/
+https://web.archive.org/web/2/quora.com
+https://web.archive.org/web/2/quora.com/
+
+
+web.archive.org/web/2/https://www.wikipedia.org/
+web.archive.org/web/2/http://www.wikipedia.org/
+web.archive.org/web/2/www.wikipedia.org
+web.archive.org/web/2/wikipedia.org
+web.archive.org/web/2/www.wikipedia.org/
+web.archive.org/web/2/wikipedia.org/

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Wayback Everywhere</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="css/bootstrap.min.old.css" />
+
+	<link rel="stylesheet" href="css/settings.css" />
+
+
+
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+	<!--link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css"-->
+
+
+
+	<!-- ☈ -->
+	<link rel="shortcut icon" href="images/icon@2x.png">
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+
+	<script src="js/angular-1.6.6.min.js"></script>
+	<script src="js/redirect.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/controllers/settingspage.js"></script>
+	<script src="js/controllers/editredirect.js"></script>
+	<script src="js/controllers/deleteredirect.js"></script>
+	<script src="js/controllers/importexport.js"></script>
+	<!--<script src="js/excludesite.js"></script>-->
+	<script src="js/controllers/listredirects.js"></script>
+</head>
+
+<body class="container" ng-app="waybackEverywhereApp" ng-controller="WBESettingsPageControl" class="private">
+	<div id="cover" ng-show="showEditForm || showDeleteForm">
+		<div id="private-mode-message" ng-show="false">
+			Wayback Everywhere may not work in Private Mode
+		</div>
+	</div>
+
+	<!-- Confirmation form for deleting redirects -->
+	<div id="delete-redirect-form" ng-show="showDeleteForm" ng-controller="DeleteRedirectCtrl">
+		<h3>Are you sure you want to delete this redirect?</h3>
+		<div>
+			<label>Description:</label>
+			<span>{{redirect.description}}</span>
+		</div>
+		<div>
+			<label>Example URL:</label>
+			<span>{{redirect.exampleUrl}}</span>
+		</div>
+		<div>
+			<label>Include pattern:</label>
+			<span>{{redirect.includePattern}}
+			</div>
+			<div>
+				<label>Redirect to:</label>
+				<span>{{redirect.redirectUrl}}</span>
+		</div>
+		<div>
+			<label>Pattern type:</label>
+			<span>{{redirect.patternType == 'W' ? 'Wildcard' : 'Regular Expression'}}</span>
+		</div>
+		<div class="button-container">
+			<a class="btn red large" ng-click="deleteRedirect()">Yes, delete it</a>
+			<a class="btn grey large" ng-click="cancelDelete()">No, don't delete it</a>
+		</div>
+	</div>
+
+	<!-- Confirmation form for factory reset -->
+	<div id="reset-redirect-form" ng-show="showResetForm" ng-controller="DeleteRedirectCtrl">
+		<h3>Are you sure you want to delete this redirect?</h3>
+		<div>
+			<label>Description:</label>
+			<span>{{redirect.description}}</span>
+		</div>
+		<div>
+			<label>Example URL:</label>
+			<span>{{redirect.exampleUrl}}</span>
+		</div>
+		<div>
+			<label>Include pattern:</label>
+			<span>{{redirect.includePattern}}
+			</div>
+			<div>
+				<label>Redirect to:</label>
+				<span>{{redirect.redirectUrl}}</span>
+		</div>
+		<div>
+			<label>Pattern type:</label>
+			<span>{{redirect.patternType == 'W' ? 'Wildcard' : 'Regular Expression'}}</span>
+		</div>
+		<div class="button-container">
+			<a class="btn red large" ng-click="deleteRedirect()">Yes, delete it</a>
+			<a class="btn grey large" ng-click="cancelDelete()">No, don't delete it</a>
+		</div>
+	</div>
+
+
+
+
+	<!-- Form for creating and editing redirects -->
+	<div id="edit-redirect-form" ng-show="showEditForm" ng-controller="EditRedirectCtrl">
+		<h3>{{editIndex >= 0 ? 'Edit' : 'Create'}} Redirect</h3>
+		<div class="form-grid">
+			<div>
+				<label>Description:</label>
+				<div class="input-cell"><input readonly type="text" ng-model="redirect.description" placeholder="Enter a description for your redirect rule" /></div>
+			</div>
+			<div>
+				<label>Example URL:</label>
+				<div class="input-cell"><input type="text" ng-model="redirect.exampleUrl" ng-change="redirect.updateExampleResult()" placeholder="http://example.com/some/path?a=1" /></div>
+			</div>
+			<div>
+				<label>Include pattern:</label>
+				<div class="input-cell"><input readonly type="text" ng-model="redirect.includePattern" ng-change="redirect.updateExampleResult()" placeholder="Pattern that matches the urls you want to redirect" /></div>
+				<!--<div class="input-cell"><input type="text" ng-model="redirect.includePattern" ng-readonly=true/>-->
+			</div>
+			<div>
+				<label>Redirect to:</label>
+				<div class="input-cell"><input readonly type="text" ng-model="redirect.redirectUrl" ng-change="redirect.updateExampleResult()" placeholder="The url you want to redirect requests to" /></div>
+			</div>
+			<div>
+				<label>Pattern type:</label>
+				<div class="input-cell">
+					<label id="wildcardtype">
+						<input type="radio" ng-change="redirect.updateExampleResult()" ng-model="redirect.patternType" name="patterntype" value="W">Wildcard</label>
+					<!--	<label id="regextype">
+							<input readonly type="radio" ng-change="redirect.updateExampleResult()" ng-model="redirect.patternType" name="patterntype" value="R">Regular Expression</label>-->
+				</div>
+			</div>
+			<div>
+				<label>Example result:</label>
+				<div class="input-cell"><span class="error example-result-error" ng-show="redirect.error">{{redirect.error}}</span><span class="example-result" ng-show="redirect.exampleResult">{{redirect.exampleResult}}</span></div>
+			</div>
+		</div>
+		<div id="advanced-toggle">
+			<a ng-click="showAdvanced=true" ng-show="!showAdvanced">Show advanced options...</a>
+			<a ng-click="showAdvanced=false" ng-show="showAdvanced">Hide advanced options...</a>
+		</div>
+		<div class="form-grid advanced" ng-show="showAdvanced">
+			<div>
+				<label>Exclude pattern:</label>
+				<div class="input-cell"><input type="text" ng-change="redirect.updateExampleResult()" ng-model="redirect.excludePattern" placeholder="Pattern to exclude certain urls from the redirection" /></div>
+			</div>
+			<div>
+				<label for="process-matches">Process matches:</label>
+				<div class="input-cell">
+					<select id="process-matches" ng-model="redirect.processMatches" ng-change="redirect.updateExampleResult()">
+							<option value="noProcessing">No Processing</option>
+							<option value="urlEncode">URL Encode</option>
+							<option value="urlDecode">URL Decode</option>
+							<option value="base64decode">Base64 Decode</option>
+						</select>
+					<span class="placeholder" ng-show="redirect.processMatches=='noProcessing'">Use matches as they are</span>
+					<span class="placeholder" ng-show="redirect.processMatches=='urlEncode'">E.g. turn /bar/foo?x=2 into %2Fbar%2Ffoo%3Fx%3D2</span>
+					<span class="placeholder" ng-show="redirect.processMatches=='urlDecode'">E.g. turn %2Fbar%2Ffoo%3Fx%3D2 into /bar/foo?x=2</span>
+					<span class="placeholder" ng-show="redirect.processMatches=='base64decode'">E.g. turn aHR0cDovL2Nubi5jb20= into http://cnn.com</span>
+				</div>
+			</div>
+			<div>
+				<label>Apply to:</label>
+				<div class="input-cell" id="apply-to">
+					<label ng-repeat="(key,value) in requestTypes"><input type="checkbox" ng-checked="appliesTo(key)" ng-click="toggleApplies(key)"><span>{{value}}</span></label>
+				</div>
+
+			</div>
+		</div>
+		<div class="button-container">
+			<a ng-class="{disabled:redirect.error || redirect.includePattern == ''}" class="btn green large" ng-click="saveRedirect()">Save</a>
+			<a class="btn red large" ng-click="cancelEdit()">Cancel</a>
+		</div>
+	</div>
+
+
+	<div id="blur-wrapper" ng-class="{blur: showEditForm || showDeleteForm}">
+
+		<h1>Wayback Everywhere</h1>
+
+		<!--<h5>Go where <em>YOU</em> want!</h5>-->
+
+		<div id="menu">
+
+			<!--	<a class="btn blue large" ng-click="createNewRedirect()">Create new redirect</a>-->
+			<!-- Importing/Exporting of redirects -->
+
+			<div>
+				<span ng-controller="ImportExportCtrl">
+
+				<input type="file" id="import-file" fileselected="importRedirects($file)" accept=".rjson,.json,.txt,text/*"  />
+					<label for="import-file" class="btn blue large">Import</label>
+
+
+					<a class="btn blue large" ng-mousedown="updateExportLink()" ng-href="{{redirectDownload}}" download="Wayback_Everywhere_Settings_{{timestamp}}.json">Export</a>
+				</span>
+				<a class="btn blue large" ng-click="openHelp()">Help</a>
+
+			</div>
+		</div>
+
+
+
+		<!-- List of existing redirects -->
+		<div ng-controller="ListRedirectsCtrl">
+			<div class="redirect-table" ng-show="true">
+				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
+					{{message}}
+					<a ng-click="message=null">&#x2716;</a>
+				</div>
+
+				<div class="redirect-row" ng-class="{disabled: r.disabled}" ng-repeat="r in redirects">
+					<h4><span class="disabled-marker" ng-show="r.disabled">[Disabled] </span><span>{{r.description}}</span></h4>
+					<div class="redirect-info">
+						<div>
+							<label style="white-space:initial;">Redirect:</label>
+							<p>All!</p>
+						</div>
+						<div>
+							<label>to:</label>
+							<p>Wayback Machine!</p>
+						</div>
+						<div ng-show="r.excludePattern">
+							<label>Excludes List:</label>
+							<p><button class="btn blue" ng-click="showExcludes=!showExcludes" ng-show="!showExcludes">Excludes list</button>
+								<span ng-if="showExcludes">{{ReadableExcludePattern}}</span></p>
+						</div>
+					</div>
+
+
+				</div>
+
+
+				<div id="message-box" ng-show="true" ng-class="{visible : incExcmsg, error : messageType == 'error', success : messageType == 'success'}">
+					{{incExcmsg}}
+					<a ng-click="incExcmsg=null">&#x2716;</a>
+				</div>
+				<div><button class="btn blue" ng-disabled="!newExcludesite" ng-click="addtoExclude(newExcludesite)">Add to Excludes List</button><input type="text" class="incexcbuttons" ng-model="newExcludesite" placeholder="Enter a link/site to Exclude" id="addexclbutton"
+					/><br/>
+					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
+				</div>
+				<br/>
+				<label><input type="checkbox" ng-model="logging " ng-click="toggleLogging()" /> Logging</label>
+				<a style="float: right " ng-if="showresetbutton " class="btn red reset " ng-click="toggleResetwarn()">Factory Reset</a>
+				<div style="text-align: center; color:red; " ng-if="showresetConfirmation ">
+					<p style="font-style: italic ">
+						Are you sure you wish to reset settings to factory settings? <br/>You will lose your "excluded sites " settings, and the addon will do full reset! </p>
+					<div style="text-align:left ">
+						<a style="float: left " ng-click="toggleResetwarn()" class="btn medium green">No, Cancel and let me retain my settings</a>
+						<a style="float: right " ng-click="doFactoryReset()" class=" btn red reset"> Yes, I understand, do full reset</a></div>
+
+
+				</div>
+
+
+			</div>
+		</div>
+		<br/><br/>
+		<footer><small>
+			Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
+gokulakrishnaks@gmail.com
+</a> Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a></small>
+		</footer>
+
+	</div>
+</body>
+
+</html>

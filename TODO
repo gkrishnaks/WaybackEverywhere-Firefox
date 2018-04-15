@@ -1,0 +1,4 @@
+1. Fix CSS in Settings.html (Success/Error Messages don't show up properly in phone/tablet screensizes)
+2. Update Settings page's Add to Exclude/Remove to Exclude buttons to handle different types of links/URLs
+3. Make Popup menu display buttons based on if a hostname is in Temporary excluded/temporary included list or not
+   (currently we just check and display include/exclude buttons based on currently loaded URL)

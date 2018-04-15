@@ -1,0 +1,45 @@
+{
+
+  "manifest_version": 2,
+  "name": "Wayback Everywhere",
+  "description": "Automatically redirect every page to its archived version in Wayback Machine, except the sites in Excludes List",
+  "version": "1.0.0",
+
+  "icons": {
+    "16": "images/icon.png",
+    "32": "images/icon@2x.png",
+    "48": "images/icon@2x.png",
+    "64": "images/icon@2x.png",
+    "128": "images/icon@2x.png"
+  },
+
+  "permissions": ["webRequest", "webRequestBlocking", "storage", "notifications", "tabs", "http://*/*", "https://*/*"],
+
+  "applications": {
+    "gecko": {
+      "id": "gokulakrishnaks@gmail.com"
+    }
+  },
+  "page_action": {
+    "default_title": "Wayback Everywhere",
+    "default_popup": "popup.html",
+    "default_icon": "images/icon@2x.png"
+  },
+
+
+  "content_scripts": [{
+    "matches": ["*://web.archive.org/*"],
+    "js": ["js/detectwaybackMessages.js"]
+  }],
+
+
+  "background": {
+    "scripts": ["js/parseUrl.js", "js/redirect.js", "js/readData.js", "js/background.js"],
+    "persistent": true
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  }
+}
