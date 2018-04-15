@@ -1,0 +1,14 @@
+Wayback Everywhere Privacy Policy
+In this document, "It" refers the Wayback Everywhere addon/extension, and "We" or "Us" refers the developer(s) of this addon.
+
+
+Wayback Everywhere does not collect any data at all about its users. It does not (and technically cannot - see sourcecode in github at ) send any data back to any central server. It stores "Excludes List", "stats", and other settings in user's local storage - and not send to any server anywhere. It does not (again, technically cannot - see sourcecode) collect a list of URLs you visit and send to us in any form or way. We do not wish to know what sites you browse.
+
+
+The archived pages are fetched from (or saved in) the Internet Archive (archive.org) Wayback Machine (web.archive.org). If you need clarifications about Wayback Machine, checkout the web.archive.org site. If you wish to have your website/page/resource removed from the wayback machine (web.archive.org), please reach out to the Internet Archive team (they would tell you to use robots.txt to avoid your pages being archived by them - you could also request them to remove any old saved pages from their site)
+
+
+When you install any addon/extension, Google Chrome store or Mozilla addons.mozilla.org merely tracks the "number of installations" of any addon. Updates to this extension/addon will be provided on the means provided by browser vendor like Google or Mozilla via their respective update methods.
+
+
+If you need further clarification about the addon, you may reach out to me at gokulakrishnaks@gmail.com or tweet me @gkrishnaks - https://twitter.com/gkrishnaks
