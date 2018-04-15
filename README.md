@@ -40,15 +40,15 @@ Popup Menu appearance changes based on in which page you click on the Popup Menu
 
 Any "Temporary" Exclude/Include are cleared back when the browser is closed and started again.
 
-When viewing an archived page
+###When viewing an archived page
 
 ![](images/ShowExcludes.png)
 
-When viewing an excluded site
+###When viewing an excluded site
 
 ![](images/ShowIncludes.png)
 
-When you are on special pages
+###When you are on special pages
 
 ![](images/settingspage.png)
 
