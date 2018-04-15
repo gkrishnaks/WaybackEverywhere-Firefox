@@ -127,7 +127,7 @@ Privacy Policy in one line : We do not collect your data. Detailed privacy polic
 
 
 Credits and Acknowledgements
-============================
+----------------------------
 *   This addon is built based on the 'Redirector' addon developed by [Einar Regilsson](http://einaregilsson.com/redirector). He published its sourcecode under MIT license.
 *   The developer of this addon is _NOT_ affliated to Internet Archive (archive.org) or its Wayback Machine (web.archive.org)- but I thank them for making web.archive.org a freely available resource on the internet for the benefit of general public, and the commons.
 *   This addon uses the icons from https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/. Some parts of popup.html were also taken from this addon.
