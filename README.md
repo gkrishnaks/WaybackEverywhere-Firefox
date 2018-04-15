@@ -1,0 +1,1 @@
+# WaybackEverywhere-Firefox
