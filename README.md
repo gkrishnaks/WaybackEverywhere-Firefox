@@ -2,6 +2,7 @@ Wayback Everywhere
 ==================
 
 * * *
+Install in Firefox / Firefox for Android : https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere/ 
 
 What is Wayback Everywhere?
 ---------------------------
