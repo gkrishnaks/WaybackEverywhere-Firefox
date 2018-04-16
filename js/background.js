@@ -45,7 +45,7 @@ function onError(error) {
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //Issue #1 fix
-if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
+if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('about:pref')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
   chrome.pageAction.show(tabId);
 }
     else{
