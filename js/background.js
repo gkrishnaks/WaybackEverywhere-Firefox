@@ -44,7 +44,9 @@ function onError(error) {
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  chrome.pageAction.show(tabId);
+//Issue #1 fix
+if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
+  chrome.pageAction.show(tabId);}
 
 
 });
@@ -58,7 +60,10 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 });*/
 
 chrome.tabs.onActivated.addListener(function(tab) {
-  chrome.pageAction.show(tab.tabId);
+//Issue #1 fix
+if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
+
+  chrome.pageAction.show(tab.tabId);}
 });
 
 const VERSION = "1.7.0";
