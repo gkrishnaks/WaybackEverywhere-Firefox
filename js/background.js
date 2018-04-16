@@ -46,7 +46,11 @@ function onError(error) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //Issue #1 fix
 if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
-  chrome.pageAction.show(tabId);}
+  chrome.pageAction.show(tabId);
+}
+    else{
+        chrome.pageAction.hide(tabId);
+    }
 
 
 });
@@ -60,10 +64,8 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 });*/
 
 chrome.tabs.onActivated.addListener(function(tab) {
-//Issue #1 fix
-if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('file:/')<0 && tab.url.indexOf('ftp:/')<0 ){
-
-  chrome.pageAction.show(tab.tabId);}
+    // As per documentation, URL may not be available this 'tab' object.
+  chrome.pageAction.show(tab.tabId);
 });
 
 const VERSION = "1.7.0";
