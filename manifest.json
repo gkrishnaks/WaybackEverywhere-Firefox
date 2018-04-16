@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Wayback Everywhere",
   "description": "Automatically redirect every page to its archived version in Wayback Machine, except the sites in Excludes List",
-  "version": "1.0.2",
+  "version": "1.0.4",
 
   "icons": {
     "16": "images/icon.png",
