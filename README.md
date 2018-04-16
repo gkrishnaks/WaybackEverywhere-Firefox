@@ -62,6 +62,7 @@ Excludes List
 
 *   Sites (hostnames) in the Excludes list are excluded from routing to Wayback Machine.
 *   You can use popup menu buttons to add/remove from this Excludes list to suit your browsing habits
+*   Temporary exclude/include 'remembers' the selection until the browser is restarted. (See Popup menu)
 *   You also have the option to add or remove from Excludes list via Settings Page
 *   Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in building a Excludes list without manual effort. Read more here : [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
 *   The 'Excludes' list excludes at domain level, including subdomains - for example, if we exclude _*.google.*_ \- this results in redirect rules not applying to _all_ Google sites - the ones that have 'google' in the url (i.e no redirection to wayback machine) happens across all google domains - _docs.google.com, drive.google.com, google.de, google.co.in_ and so on.
