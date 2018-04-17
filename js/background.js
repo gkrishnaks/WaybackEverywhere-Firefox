@@ -70,6 +70,7 @@ chrome.tabs.onActivated.addListener(function(tab) {
     chrome.tabs.query({active:true, currentWindow:true},
                       function(tabs){
         currentUrl=tabs[0].url;
+log('switched to tab '+ tab.tabId+ ' which has url as '+ currentUrl);
         if(currentUrl.indexOf('about:add')<0 
            && currentUrl.indexOf('about:conf')<0 && currentUrl.indexOf('about:pref')<0 
            && currentUrl.indexOf('file://')<0 && currentUrl.indexOf('ftp:/')<0 ){
