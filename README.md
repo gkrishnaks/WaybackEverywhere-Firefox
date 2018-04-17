@@ -94,7 +94,7 @@ Default Excludes List
 *   Upon install, a set of predefined rules are loaded into the Excludes List. This is to provide a starting point for the users. This list is prepared by the developer(s) of this addon on purely technical basis:
 *   Some sites that are excluded from Wayback Machine - quora.com for example
 *   Some sites that use robots.txt file on server to exclude themselves from Wayback Machine - smithsonianmag.com, for example
-*   Some sites that may need login, as Wayback Machine archives public pages only. For example, docs.google.com or paypal.com , or some sites that host video content which may not work in Waymachine Archived version like youtube.com or vimeo.com
+*   Some sites that may need login, as Wayback Machine archives public pages only. For example, docs.google.com or paypal.com , or some sites that host video content which may not work in Wayback machine Archived version like youtube.com or vimeo.com
 *   Some sites that may not work fine with Wayback Machine - ft.com for example.
 *   Some URL shortener sites.
 *   Some Search engines to help the user avoid seeing Wayback redirects when she searches
@@ -104,11 +104,13 @@ P.S : There's no other agenda behind this bundled list made available during ins
 
 If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
 
+TODO : [TODO](TODO)
+
 
 License
 -------
 
-The WaybackEverywhere addon is licensed under GPLv3 license. Refer the full license here : [License](LICENSE.html)
+The WaybackEverywhere addon is licensed under GPLv3 license. Refer the full license here : [License](LICENSE)
 
 
 \-\-\-
@@ -126,7 +128,7 @@ The developer of this addon/extension is _NOT_ affliated with the Internet Archi
 
 
 
-Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : [Privacy Policy](privacy.html)
+Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : [Privacy Policy](Privacy%20Policy)
 
 
 
