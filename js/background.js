@@ -44,7 +44,7 @@ function onError(error) {
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//Issue #1 fix
+//Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
 if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('about:pref')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
   chrome.pageAction.show(tabId);
 }
@@ -64,8 +64,24 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 });*/
 
 chrome.tabs.onActivated.addListener(function(tab) {
-    // As per documentation, URL may not be available this 'tab' object.
-  chrome.pageAction.show(tab.tabId);
+    let currentUrl;
+    // As per documentation, URL may not be available this 'tab' object, so we use tabs.query to find current url in activated tab..
+    //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
+    chrome.tabs.query({active:true, currentWindow:true},
+                      function(tabs){
+        currentUrl=tabs[0].url;
+        if(currentUrl.indexOf('about:add')<0 
+           && currentUrl.indexOf('about:conf')<0 && currentUrl.indexOf('about:pref')<0 
+           && currentUrl.indexOf('file://')<0 && currentUrl.indexOf('ftp:/')<0 ){
+              chrome.pageAction.show(tab.tabId);
+            // We will still show icon in about:newtab until issue #2 is resolved https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
+        }
+        else{
+            chrome.pageAction.hide(tab.tabId);
+        }
+                
+    });
+
 });
 
 const VERSION = "1.7.0";
