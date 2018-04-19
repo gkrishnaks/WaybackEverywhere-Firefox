@@ -4,7 +4,7 @@
     archive.org's Wayback Machine except the ones in Excludes List
     Copyright (C) 2018 Gokulakrishna K S
 
-    his program is free software: you can redistribute it and/or modify
+    This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -297,6 +297,19 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
         logging: !obj.logging
       });
       $s.logging = !obj.logging;
+      $s.$apply();
+    });
+  };
+    
+    
+  $s.togglereadermode = function() {
+    storage.get({
+      readermode : false
+    }, function(obj) {
+      storage.set({
+        readermode: !obj.readermode
+      });
+      $s.readermode = !obj.readermode;
       $s.$apply();
     });
   };
