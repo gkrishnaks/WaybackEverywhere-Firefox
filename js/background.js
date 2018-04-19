@@ -52,6 +52,9 @@ if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.
         chrome.pageAction.hide(tabId);
     }
 
+  if (tab.url.indexOf("web.archive.org/web/") > -1 && changeInfo.isArticle) {
+    chrome.tabs.toggleReaderMode(tabId);
+  }    
 
 });
 /*
@@ -80,7 +83,8 @@ log('switched to tab '+ tab.tabId+ ' which has url as '+ currentUrl);
         else{
             chrome.pageAction.hide(tab.tabId);
         }
-                
+    
+                  
     });
 
 });
