@@ -300,18 +300,27 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
       $s.$apply();
     });
   };
-    
-    
+
+  var useragent = navigator.userAgent;
+  console.log(useragent);
+  if (useragent.match(/Android/i)) {
+    $s.isMobilefirefox = true;
+  }
+
+
+  storage.get({
+    readermode: false
+  }, function(obj) {
+    $s.readermode = obj.readermode;
+    $s.$apply();
+  });
+
   $s.togglereadermode = function() {
-    storage.get({
-      readermode : false
-    }, function(obj) {
-      storage.set({
-        readermode: !obj.readermode
-      });
-      $s.readermode = !obj.readermode;
-      $s.$apply();
+    storage.set({
+      readermode: !$s.readermode
     });
+    $s.readermode = !$s.readermode;
+    $s.$apply();
   };
 
   $s.doFactoryReset = function() {

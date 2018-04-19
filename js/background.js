@@ -28,6 +28,7 @@ chrome.runtime.onInstalled.addListener(onInstalledfn);
 chrome.runtime.onStartup.addListener(handleStartup);
 const STORAGE = chrome.storage.local;
 
+var justUpdatedReader = "";
 
 function log(msg) {
   if (log.enabled) {
@@ -38,23 +39,27 @@ var appDisabled = false;
 var tempExcludes = [];
 var tempIncludes = [];
 
+console.log(JSON.stringify(chrome.tabs));
 
 function onError(error) {
   log(error);
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
-if(tab.url.indexOf('about:add')<0 && tab.url.indexOf('about:conf')<0 && tab.url.indexOf('about:pref')<0 && tab.url.indexOf('file://')<0 && tab.url.indexOf('ftp:/')<0 ){
-  chrome.pageAction.show(tabId);
-}
-    else{
-        chrome.pageAction.hide(tabId);
-    }
+  //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
+  if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 && tab.url.indexOf('about:pref') < 0 && tab.url.indexOf('file://') < 0 && tab.url.indexOf('ftp:/') < 0) {
+    chrome.pageAction.show(tabId);
+  } else {
+    chrome.pageAction.hide(tabId);
+  }
 
-  if (tab.url.indexOf("web.archive.org/web/") > -1 && changeInfo.isArticle) {
+  if (tab.url.indexOf("web.archive.org/web/") > -1 &&
+    changeInfo.isArticle && tab.url !== justUpdatedReader &&
+    isReaderModeEnabled) {
     chrome.tabs.toggleReaderMode(tabId);
-  }    
+    justUpdatedReader = tab.url; // without this check, user will not be able to exit reader mode
+    //as it will keep toggling back to Reader mode whem user tries to exit, since page loads again resulting in onUpdated
+  }
 
 });
 /*
@@ -67,24 +72,26 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 });*/
 
 chrome.tabs.onActivated.addListener(function(tab) {
-    let currentUrl;
-    // As per documentation, URL may not be available this 'tab' object, so we use tabs.query to find current url in activated tab..
-    //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
-    chrome.tabs.query({active:true, currentWindow:true},
-                      function(tabs){
-        currentUrl=tabs[0].url;
-log('switched to tab '+ tab.tabId+ ' which has url as '+ currentUrl);
-        if(currentUrl.indexOf('about:add')<0 
-           && currentUrl.indexOf('about:conf')<0 && currentUrl.indexOf('about:pref')<0 
-           && currentUrl.indexOf('file://')<0 && currentUrl.indexOf('ftp:/')<0 ){
-              chrome.pageAction.show(tab.tabId);
-            // We will still show icon in about:newtab until issue #2 is resolved https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
-        }
-        else{
-            chrome.pageAction.hide(tab.tabId);
-        }
-    
-                  
+  let currentUrl;
+  // As per documentation, URL may not be available this 'tab' object, so we use tabs.query to find current url in activated tab..
+  //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
+  chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    },
+    function(tabs) {
+      currentUrl = tabs[0].url;
+      log('switched to tab ' + tab.tabId + ' which has url as ' + currentUrl);
+      if (currentUrl.indexOf('about:add') < 0 &&
+        currentUrl.indexOf('about:conf') < 0 && currentUrl.indexOf('about:pref') < 0 &&
+        currentUrl.indexOf('file://') < 0 && currentUrl.indexOf('ftp:/') < 0) {
+        chrome.pageAction.show(tab.tabId);
+        // We will still show icon in about:newtab until issue #2 is resolved https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
+      } else {
+        chrome.pageAction.hide(tab.tabId);
+      }
+
+
     });
 
 });
@@ -387,6 +394,12 @@ function monitorChanges(changes, namespace) {
     tempExcludes = changes.tempExcludes.newValue;
     log(tempExcludes);
   }
+
+  if (changes.readermode) {
+    log('readermode is changed to ' + changes.readermode.newValue);
+    isReaderModeEnabled = changes.readermode.newValue;
+
+  }
 }
 
 //TODO: move Remove from Excludes from popup.js to here
@@ -620,6 +633,7 @@ String.prototype.replaceAll = function(searchStr, replaceStr) {
 
   return str.replace(new RegExp(searchStr, 'gi'), replaceStr);
 };
+var isReaderModeEnabled = false;
 
 function handleStartup() {
   STORAGE.get({
@@ -629,6 +643,13 @@ function handleStartup() {
     counts.waybackSavescount = response.counts.waybackSavescount;
     oldcounts = JSON.parse(JSON.stringify(counts));
   });
+
+  STORAGE.get({
+    readermode: false
+  }, function(obj) {
+    isReaderModeEnabled = obj.readermode;
+  });
+
   // Enable on startup - Popup button is "Temporarily disable.."
   // as user can do full disable from addon/extension page anyway
   STORAGE.set({
