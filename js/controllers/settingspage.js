@@ -334,7 +334,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     
   $s.toggleOperationMode=function(){
       storage.set({
-      operationMode:!$s.operationmode;
+      operationMode:!$s.operationmode
       },function(a){
         $s.operationmode=!$s.operationmode;
          $s.$apply();
