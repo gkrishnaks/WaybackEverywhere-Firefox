@@ -651,7 +651,9 @@ function handleStartup() {
   STORAGE.get({
     operationMode: false
   }, function(obj) {
-    disabled = obj.operationMode;
+     STORAGE.set({
+    disabled: obj.operationMode
+  }); 
       //operationMode -> false is default behaviour of turning on WBE when browser loads. 
       // true - if user wishes to start browser with WBE disabled
   });  
