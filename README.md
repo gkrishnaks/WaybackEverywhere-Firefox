@@ -2,9 +2,9 @@ Wayback Everywhere
 ==================
 
 * * *
-Install in Firefox / Firefox for Android : https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere/ 
+Install in Firefox / Firefox for Android : [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere)
 
-Install in Chrome/Chromium : https://chrome.google.com/webstore/detail/wayback-everywhere/heienainncnjjejmamdkmbbfmblpffjj
+Install in Chrome/Chromium : [Chrome Webstore](https://chrome.google.com/webstore/detail/wayback-everywhere/heienainncnjjejmamdkmbbfmblpffjj)
 
 
 What is Wayback Everywhere?
@@ -26,13 +26,13 @@ Features
 *   **Popup menu** \- Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here [Popup Menu](#popup-menu)
 *   **Automatic Detection of Wayback Machine Site's Error Messages** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information on Automatic Detection of WM Error Messages available here [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
 *   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#edit-settings)
-
+*   **Auto-enable Reader mode for Archived pages** \- From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. 
 
 
 Auto-Detect Wayback Machine Error Messages
 -----------------------------
 
-*   **Save Page to Wayback Machine** \- When WaybackMachine site throws error message that says "This page is available on the web, save this page to Wayback to make it more complete", the addon automatically loads the Save page url as https://web.archive.org/save/ <URL>
+*   **Auto-Save Page to Wayback Machine** \- When WaybackMachine site throws error message that says "This page is available on the web, save this page to Wayback to make it more complete", the addon automatically loads the Save page url as https://web.archive.org/save/ <URL>
 *   **Auto-add to Excludes List** \- When Wayback Machine site throws error message that says it cannot load a page due to the site being excluded from Wayback Machine or if the site excluded itself from Wayback using Robots.txt file, the addon automatically detects this error message and puts the site (domainname) in Excludes list. And then it loads the live webpage. This helps the user to build her Excludes list Automatically over few days of usage.
 
 
@@ -75,6 +75,7 @@ Edit Settings
 *   Click "Edit Settings" from Popup Menu to open Settings Page.
 *   Settings page lets you view Existing Excludes list. and add or remove from excludes list manually by using the buttons provides
 *   This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : [Default Excludes list provided during install](#default-excludes-list)
+*   From settings page, you can enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. 
 *   You can export and import settings from this page. More information on this here : [Export and Import Settings](#exportimport-settings)
 *   Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.
 
