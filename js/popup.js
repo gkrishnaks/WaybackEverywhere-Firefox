@@ -317,7 +317,19 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       $s.disabled = obj.disabled;
       $s.$apply();
     });*/
-
+    
+  $s.saveAsPDF=function(){
+     browser.tabs.saveAsPDF({})
+    .then((status) => {
+      log(status);
+    });
+  }
+  
+  $s.isMobilefirefox = false;
+  if (navigator.userAgent.match(/Android/i)) {
+    $s.isMobilefirefox = true;
+  }
+  
   $s.toggleDisabled = function() {
 
     storage.set({
