@@ -651,11 +651,11 @@ function handleStartup() {
   });
     
   STORAGE.get({
-    operationMode: true
+    operationMode: false
   }, function(obj) {
-    disabled = !obj.readerMode;
-      //operationMode -> True is default behaviour of turning on WBE when browser loads. 
-      // False - if user wishes to start browser with WBE disabled
+    disabled = obj.readerMode;
+      //operationMode -> false is default behaviour of turning on WBE when browser loads. 
+      // true - if user wishes to start browser with WBE disabled
   });  
 /*
   // Enable on startup - Popup button is "Temporarily disable.."
