@@ -302,7 +302,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   };
 
   var useragent = navigator.userAgent;
-  console.log(useragent);
+  //console.log(useragent);
   if (useragent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
