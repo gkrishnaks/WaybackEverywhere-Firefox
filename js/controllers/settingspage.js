@@ -322,7 +322,26 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.readermode = !$s.readermode;
     $s.$apply();
   };
-
+    
+  $s.operationmode=true; // we consider true as Default ON, false as disable on browser startup..
+  
+  storage.get({
+    operationMode: true
+  }, function(obj) {
+  $s.operationmode=obj.operationMode;
+      $s.$apply();
+  });
+    
+  $s.toggleOperationMode=function(){
+      storage.set({
+      operationMode=!$s.operationmode;
+      },function(a){
+     $s.operationmode=!$s.operationmode;
+          $s.$apply();
+      });
+     
+  }
+    
   $s.doFactoryReset = function() {
     chrome.runtime.sendMessage({
       type: "doFullReset",
