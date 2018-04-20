@@ -39,8 +39,6 @@ var appDisabled = false;
 var tempExcludes = [];
 var tempIncludes = [];
 
-console.log(JSON.stringify(chrome.tabs));
-
 function onError(error) {
   log(error);
 }
@@ -653,7 +651,7 @@ function handleStartup() {
   STORAGE.get({
     operationMode: false
   }, function(obj) {
-    disabled = obj.readerMode;
+    disabled = obj.operationMode;
       //operationMode -> false is default behaviour of turning on WBE when browser loads. 
       // true - if user wishes to start browser with WBE disabled
   });  
