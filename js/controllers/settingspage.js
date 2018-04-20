@@ -323,10 +323,10 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.$apply();
   };
     
-  $s.operationmode=true; // we consider true as Default ON, false as disable on browser startup..
+  $s.operationmode=false; // we consider false as Default ON, true as disable on browser startup..
   
   storage.get({
-    operationMode: true
+    operationMode: false
   }, function(obj) {
   $s.operationmode=obj.operationMode;
       $s.$apply();
