@@ -241,15 +241,16 @@
 					/><br/>
 					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
 				</div>
-				<br/><div ng-if="!isMobilefirefox">
-				<label><input type="checkbox" ng-model="readermode" ng-click="togglereadermode()" />Use Reader mode for all archived webpages, if supported</label>
+				<br/>
+				<div ng-if="!isMobilefirefox">
+					<label><input type="checkbox" ng-model="readermode" ng-click="togglereadermode()" /> Use Reader mode for all archived webpages, if supported</label>
 
-				<br/></div>
-				
-				<label><input type="checkbox" ng-model="operationmode" ng-click="toggleOperationMode()" />Disable Wayback Everywhere when browser starts (so you can enable it when needed in popup menu)</label>
+					<br/></div>
+
+				<label><input type="checkbox" ng-model="operationmode" ng-click="toggleOperationMode()" /> Disable Wayback Everywhere when browser starts (so you can enable it whenever needed, from popup menu)</label>
 
 				<br/>
-						
+
 				<br/>
 
 				<label><input type="checkbox" ng-model="logging" ng-click="toggleLogging()" /> Logging</label>

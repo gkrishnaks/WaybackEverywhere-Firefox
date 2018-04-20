@@ -45,7 +45,9 @@ function onError(error) {
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
-  if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 && tab.url.indexOf('about:pref') < 0 && tab.url.indexOf('file://') < 0 && tab.url.indexOf('ftp:/') < 0) {
+  if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 &&
+    tab.url.indexOf('about:pref') < 0 && tab.url.indexOf('file://') < 0 &&
+    tab.url.indexOf('ftp:/') < 0 && tab.url.indexOf('about:debug') < 0) {
     chrome.pageAction.show(tabId);
   } else {
     chrome.pageAction.hide(tabId);
@@ -82,7 +84,8 @@ chrome.tabs.onActivated.addListener(function(tab) {
       log('switched to tab ' + tab.tabId + ' which has url as ' + currentUrl);
       if (currentUrl.indexOf('about:add') < 0 &&
         currentUrl.indexOf('about:conf') < 0 && currentUrl.indexOf('about:pref') < 0 &&
-        currentUrl.indexOf('file://') < 0 && currentUrl.indexOf('ftp:/') < 0) {
+        currentUrl.indexOf('file://') < 0 && currentUrl.indexOf('ftp:/') < 0 &&
+        currentUrl.indexOf('about:debug') < 0) {
         chrome.pageAction.show(tab.tabId);
         // We will still show icon in about:newtab until issue #2 is resolved https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
       } else {
@@ -647,22 +650,23 @@ function handleStartup() {
   }, function(obj) {
     isReaderModeEnabled = obj.readermode;
   });
-    
+
   STORAGE.get({
     operationMode: false
   }, function(obj) {
-     STORAGE.set({
-    disabled: obj.operationMode
-  }); 
-      //operationMode -> false is default behaviour of turning on WBE when browser loads. 
-      // true - if user wishes to start browser with WBE disabled
-  });  
-/*
-  // Enable on startup - Popup button is "Temporarily disable.."
-  // as user can do full disable from addon/extension page anyway
-  STORAGE.set({
-    disabled: false
-  }); */
+    STORAGE.set({
+      disabled: obj.operationMode
+    });
+    appDisabled = obj.operationMode;
+    //operationMode -> false is default behaviour of turning on WBE when browser loads.
+    // true - if user wishes to start browser with WBE disabled
+  });
+  /*
+    // Enable on startup - Popup button is "Temporarily disable.."
+    // as user can do full disable from addon/extension page anyway
+    STORAGE.set({
+      disabled: false
+    }); */
   // Disable logging on startup
   STORAGE.set({
     logging: false

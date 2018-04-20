@@ -317,19 +317,26 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       $s.disabled = obj.disabled;
       $s.$apply();
     });*/
-    
-  $s.saveAsPDF=function(){
-     browser.tabs.saveAsPDF({})
-    .then((status) => {
-      log(status);
+
+  $s.saveAsPDF = function() {
+
+    //close wayback toolbar before saving as pdf, otherwise it shows up in pdf
+    browser.tabs.sendMessage(tabid, {
+      type: "hideWaybackToolbar",
+    }).then(function(response) {
+      console.log(JSON.stringify(response));
+      browser.tabs.saveAsPDF({})
+        .then((status) => {
+          //console.log(status);
+        });
     });
   }
-  
+
   $s.isMobilefirefox = false;
   if (navigator.userAgent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
-  
+
   $s.toggleDisabled = function() {
 
     storage.set({
