@@ -649,12 +649,20 @@ function handleStartup() {
   }, function(obj) {
     isReaderModeEnabled = obj.readermode;
   });
-
+    
+  STORAGE.get({
+    operationMode: true
+  }, function(obj) {
+    disabled = !obj.readerMode;
+      //operationMode -> True is default behaviour of turning on WBE when browser loads. 
+      // False - if user wishes to start browser with WBE disabled
+  });  
+/*
   // Enable on startup - Popup button is "Temporarily disable.."
   // as user can do full disable from addon/extension page anyway
   STORAGE.set({
     disabled: false
-  });
+  }); */
   // Disable logging on startup
   STORAGE.set({
     logging: false
