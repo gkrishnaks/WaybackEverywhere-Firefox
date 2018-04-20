@@ -335,12 +335,10 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   $s.toggleOperationMode=function(){
       storage.set({
       operationMode=!$s.operationmode;
-      },function(a){
-     $s.operationmode=!$s.operationmode;
-          $s.$apply();
       });
-     
-  }
+     $s.operationmode=!$s.operationmode;
+     $s.$apply();
+   }
     
   $s.doFactoryReset = function() {
     chrome.runtime.sendMessage({
