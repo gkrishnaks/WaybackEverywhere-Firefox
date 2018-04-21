@@ -4,8 +4,9 @@
 // 2. In Firefox Android, as there`s limited screen space,  let's hide it for Android firefox
 
 
-chrome.runtime.onMessage.addListener(hidetoolbarMsghandler);
- var hidetoolbarMsghandler= function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(msgHandler);
+
+function msgHandler(request, sender, sendResponse) {
     // console.log(' Received : ' + JSON.stringify(request));
     if (request.type == 'hideWaybackToolbar') {
       hideToolbar(sendResponse);
@@ -17,7 +18,7 @@ chrome.runtime.onMessage.addListener(hidetoolbarMsghandler);
 
 if (navigator.userAgent.match(/Android/i)) {
   hideWaybackToolbar();
-chrome.runtime.onMessage.removeListener(hidetoolbarMsghandler); 
+chrome.runtime.onMessage.removeListener(msgHandler);
 //remove listener as android firefox does not support save page as pdf anyway
 }
 
