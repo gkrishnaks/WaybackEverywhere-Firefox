@@ -12,7 +12,7 @@ function msgHandler(request, sender, sendResponse) {
       hideToolbar(sendResponse);
     }
     return false; //sync, let's wait till toolbar hidden
-  });
+  }
 
 
 
