@@ -47,7 +47,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
   if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 &&
     tab.url.indexOf('about:pref') < 0 && tab.url.indexOf('file://') < 0 &&
-    tab.url.indexOf('ftp:/') < 0 && tab.url.indexOf('about:debug') < 0) {
+    tab.url.indexOf('ftp:/') < 0 && tab.url.indexOf('about:debug') < 0 && tab.url.indexOf('about:log') < 0 &&
+    tab.url.indexOf('about:fir') < 0 && tab.url.indexOf('about:down') < 0) {
     chrome.pageAction.show(tabId);
   } else {
     chrome.pageAction.hide(tabId);
@@ -85,9 +86,11 @@ chrome.tabs.onActivated.addListener(function(tab) {
       if (currentUrl.indexOf('about:add') < 0 &&
         currentUrl.indexOf('about:conf') < 0 && currentUrl.indexOf('about:pref') < 0 &&
         currentUrl.indexOf('file://') < 0 && currentUrl.indexOf('ftp:/') < 0 &&
-        currentUrl.indexOf('about:debug') < 0) {
+        currentUrl.indexOf('about:debug') < 0 && currentUrl.indexOf('about:log') < 0 &&
+        currentUrl.indexOf('about:fir') < 0 && currentUrl.indexOf('about:down') < 0) {
         chrome.pageAction.show(tab.tabId);
-        // We will still show icon in about:newtab until issue #2 is resolved https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
+        // Until issue #2 is resolved, we use pageaction instrad of browseraction Popup
+        // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
       } else {
         chrome.pageAction.hide(tab.tabId);
       }
