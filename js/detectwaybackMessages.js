@@ -83,6 +83,12 @@ if (error != null) {
   }
 }
 
+//to hide wayback hideWaybackToolbat
+// We hide for 2 cases
+// 1. In desktop firefox user clicks save as pdf button
+// 2. In Firefox Android, as there`s limited screen space,  let's hide it
+// Below is for case2, case 1 handled by hideWMtoolbar.js called from popup.js
+
 if (navigator.userAgent.match(/Android/i)) {
   let c = document.getElementById("wm-tb-close");
   if (c != null) {
