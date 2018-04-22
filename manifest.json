@@ -29,7 +29,7 @@
 
   "content_scripts": [{
     "matches": ["*://web.archive.org/*"],
-    "js": ["js/hideWMtoolbar.js","js/detectwaybackMessages.js"]
+    "js": ["js/detectwaybackMessages.js"]
   }],
 
 

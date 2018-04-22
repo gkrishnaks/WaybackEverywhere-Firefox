@@ -318,18 +318,23 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       $s.$apply();
     });*/
 
+  function onError(error) {
+    log(`Error: ${error}`);
+  }
+
   $s.saveAsPDF = function() {
 
     //close wayback toolbar before saving as pdf, otherwise it shows up in pdf
-    browser.tabs.sendMessage(tabid, {
-      type: "hideWaybackToolbar",
-    }).then(function(response) {
-      console.log(JSON.stringify(response));
+
+    let executing = browser.tabs.executeScript({
+      file: "/js/hideWMtoolbar.js"
+    });
+    executing.then(function() {
       browser.tabs.saveAsPDF({})
         .then((status) => {
-          //console.log(status);
+          log(status);
         });
-    });
+    }, onError);
   }
 
   $s.isMobilefirefox = false;

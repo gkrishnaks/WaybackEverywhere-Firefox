@@ -82,3 +82,10 @@ if (error != null) {
     //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
   }
 }
+
+if (navigator.userAgent.match(/Android/i)) {
+  let c = document.getElementById("wm-tb-close");
+  if (c != null) {
+    c.click();
+  }
+}
