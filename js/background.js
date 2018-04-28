@@ -673,7 +673,7 @@ updateWorker.onmessage = function(e) {
           continue;
         }
         let pattern = "|*" + removeFromDefaultExcludes[i] + "*";
-        log("removing this from excludest list" + pattern);
+        //log("removing this from excludest list" + pattern);
         redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(pattern, '');
       }
       log("the new excludes list is.." + redirects[0].excludePattern);
@@ -780,16 +780,9 @@ function handleStartup() {
 
 function onInstalledfn(details) {
   log(JSON.stringify(details));
-  if ((details.reason == "install" || details.reason == "update") && details.temporary != true) {
-    let url = chrome.extension.getURL('help.html');
-    log("Wayback Everywhere addon installed or updated..");
-    chrome.tabs.create({
-      url: url
-    });
-  }
-
   if (details.reason == "install") {
-    log(" Wayback Everywhere addon installed");
+    loadinitialdata('init');
+    console.log(" Wayback Everywhere addon installed");
 
     let counts = {
       archivedPageLoadsCount: 0,
@@ -798,22 +791,28 @@ function onInstalledfn(details) {
     STORAGE.set({
       counts: counts
     });
-    loadinitialdata('init');
-
     let tempExcludes = [];
     STORAGE.set({
       tempExcludes: tempExcludes
     });
-    let tempIncludes = [];
     STORAGE.set({
-      tempIncludes: tempIncludes
+      tempIncludes: tempExcludes
     });
   }
 
   if (details.reason == "update") {
-    // if addon updated, just do a onstartup function once to set some values..
+    handleUpdate(); // To add or remove from "default excludes - see settings/updates.json
+    console.log(" Wayback Everywhere addon was updated - or the browser was updated");
+    // just do a onstartup function once to set some values..
     handleStartup();
-    handleUpdate();
+  }
+
+  if ((details.reason == "install" || details.reason == "update") && details.temporary != true) {
+    let url = chrome.extension.getURL('help.html');
+    log("Wayback Everywhere addon installed or updated..");
+    chrome.tabs.create({
+      url: url
+    });
   }
 
 }
