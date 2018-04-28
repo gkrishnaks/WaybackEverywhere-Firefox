@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Home: https://github.com/gkrishnaks
+    Home: https://github.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
 
@@ -639,6 +639,52 @@ String.prototype.replaceAll = function(searchStr, replaceStr) {
 };
 var isReaderModeEnabled = false;
 
+var updateWorker = new Worker(chrome.extension.getURL('js/readData.js'));
+
+function handleUpdate() {
+  let type = 'update';
+  let updateJson = 'settings/updates.json';
+  let absUrl = chrome.extension.getURL(updateJson);
+  updateWorker.postMessage([absUrl, 'json', type]);
+}
+
+updateWorker.onmessage = function(e) {
+  let changeInAddList = e.data.workerResult.changeInAddList;
+  let changeInRemoveList = e.data.workerResult.changeInRemoveList;
+  let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
+  let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
+  // Add or remove from Excludes
+  STORAGE.get({
+    redirects: []
+  }, function(response) {
+    let redirects = response.redirects;
+    // Add to redirects
+
+    if (changeInAddList && addToDefaultExcludes != null) {
+      redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
+      log("the new excludes list is..." + redirects[0].excludePattern);
+      STORAGE.set({
+        redirects: redirects
+      });
+    }
+    if (changeInRemoveList && removeFromDefaultExcludes != null) {
+      for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
+        if (removeFromDefaultExcludes[i].indexOf("web.archive.org") > -1) {
+          continue;
+        }
+        let pattern = "|*" + removeFromDefaultExcludes[i] + "*";
+        log("removing this from excludest list" + pattern);
+        redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(pattern, '');
+      }
+      log("the new excludes list is.." + redirects[0].excludePattern);
+      STORAGE.set({
+        redirects: redirects
+      });
+    }
+  });
+
+}
+
 function handleStartup() {
   STORAGE.get({
     counts: counts
@@ -767,6 +813,7 @@ function onInstalledfn(details) {
   if (details.reason == "update") {
     // if addon updated, just do a onstartup function once to set some values..
     handleStartup();
+    handleUpdate();
   }
 
 }

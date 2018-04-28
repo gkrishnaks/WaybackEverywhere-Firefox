@@ -63,7 +63,7 @@ if (error != null) {
   e8 = fullString.indexOf('retrieve all the files we need to display that page');
   e9 = fullString.indexOf('Wayback Exception');
   e10 = fullString.indexOf('unknown exception has occured');
-  e11=fullString.indexOf('snapshot cannot be displayed due to an internal error');
+  e11 = fullString.indexOf('snapshot cannot be displayed due to an internal error');
 
   //console.log(canSave, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
   if (canSave > -1) {
