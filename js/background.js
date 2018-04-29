@@ -116,6 +116,8 @@ readworker.onmessage = function(e) {
   initialsettings = e.data.workerResult.redirects;
   var isReset = e.data.type;
   log(JSON.stringify(initialsettings));
+  readworker.terminate();
+  readworker=undefined;
   STORAGE.set({
     redirects: initialsettings
   }, function() {
@@ -653,6 +655,8 @@ updateWorker.onmessage = function(e) {
   let changeInRemoveList = e.data.workerResult.changeInRemoveList;
   let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
   let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
+  updateWorker.terminate();
+  updateWorker=undefined;
   // Add or remove from Excludes
   STORAGE.get({
     redirects: []
