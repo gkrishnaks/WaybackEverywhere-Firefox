@@ -657,15 +657,13 @@ updateWorker.onmessage = function(e) {
   STORAGE.get({
     redirects: []
   }, function(response) {
+    log("handleUpdate-  updating default excludes if needed");
     let redirects = response.redirects;
     // Add to redirects
 
     if (changeInAddList && addToDefaultExcludes != null) {
       redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
       log("the new excludes list is..." + redirects[0].excludePattern);
-      STORAGE.set({
-        redirects: redirects
-      });
     }
     if (changeInRemoveList && removeFromDefaultExcludes != null) {
       for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
@@ -673,21 +671,26 @@ updateWorker.onmessage = function(e) {
           continue;
         }
         let pattern = "|*" + removeFromDefaultExcludes[i] + "*";
-        //log("removing this from excludest list" + pattern);
+        //log("removing this from excludest list" + pattern);  
         redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(pattern, '');
       }
-      log("the new excludes list is.." + redirects[0].excludePattern);
+      log("the new excludes list is. ." + redirects[0].excludePattern);
+    }
+    if (changeInAddList || changeInRemoveList) {
       STORAGE.set({
         redirects: redirects
+      }, function() {
+        // just do a onstartup function once to set some values..
+        handleStartup();
       });
     }
-    // just do a onstartup function once to set some values..
-    handleStartup();
+
   });
 
 }
 
 function handleStartup() {
+  log("Handle startup - fetch counts, fetch readermode setting, fetch appdisabled setting, clear out any temp excludes or temp includes");
   STORAGE.get({
     counts: counts
   }, function(response) {
