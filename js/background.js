@@ -681,6 +681,8 @@ updateWorker.onmessage = function(e) {
         redirects: redirects
       });
     }
+    // just do a onstartup function once to set some values..
+    handleStartup();
   });
 
 }
@@ -803,8 +805,6 @@ function onInstalledfn(details) {
   if (details.reason == "update") {
     handleUpdate(); // To add or remove from "default excludes - see settings/updates.json
     console.log(" Wayback Everywhere addon was updated - or the browser was updated");
-    // just do a onstartup function once to set some values..
-    handleStartup();
   }
 
   if ((details.reason == "install" || details.reason == "update") && details.temporary != true) {
