@@ -83,6 +83,16 @@
       </td>
     </tr>
 
+    <tr class="spaceUnder" align="center" ng-if="isLoadAllLinksEnabled && issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+
+      <td>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-disabled="!selector" ng-click="loadAll1pLinks(selector)"><strong>Open all links that have:</strong></button>
+        <br/><input ng-model="selector" placeholder="Enter a selector" />
+        <BR>
+      </td>
+      <hr/>
+    </tr>
+
     <tr class="spaceUnder" align="center" ng-if="!disabled">
       <td>
         <button type="button" class="btn btn-outline-dark btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Disable Wayback temporarily</button>

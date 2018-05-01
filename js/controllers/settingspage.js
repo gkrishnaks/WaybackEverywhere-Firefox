@@ -30,6 +30,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   $s.showEditForm = $s.showDeleteForm = false; // Variables, child controllers can set them to show their forms
   $s.newExcludesite = "";
   $s.newIncludeSite = "";
+  var storage = chrome.storage.local; //TODO: Change to sync when Firefox supports it...
 
   //   $scope.enterkey = function($event){
   //     var keyCode = $event.which || $event.keyCode;
@@ -122,6 +123,26 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     }
 
   };
+  $s.showExampleOpenall = function() {
+    $s.showExampleOpen = !$s.showExampleOpen;
+  }
+  $s.isLoadAllLinksEnabled = false;
+
+  storage.get({
+    isLoadAllLinksEnabled: false
+  }, function(obj) {
+    $s.isLoadAllLinksEnabled = obj.isLoadAllLinksEnabled;
+    $s.$apply();
+  });
+
+  $s.toggleLoadAllLinksSettings = function() {
+    storage.set({
+      isLoadAllLinksEnabled: !$s.isLoadAllLinksEnabled
+    }, function() {
+      $s.isLoadAllLinksEnabled = !$s.isLoadAllLinksEnabled;
+      $s.$apply();
+    });
+  }
 
   var replaceAll = function(exclist, domain) {
     // format *web.archive.org*|*example.org*

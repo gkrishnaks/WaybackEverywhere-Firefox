@@ -38,6 +38,7 @@ function log(msg) {
 var appDisabled = false;
 var tempExcludes = [];
 var tempIncludes = [];
+var isLoadAllLinksEnabled = false;
 
 function onError(error) {
   log(error);
@@ -405,6 +406,10 @@ function monitorChanges(changes, namespace) {
     isReaderModeEnabled = changes.readermode.newValue;
 
   }
+  if (changes.isLoadAllLinksEnabled) {
+    log("load all 1p links setting changed to " + changes.isLoadAllLinksEnabled.newValue);
+    isLoadAllLinksEnabled = changes.isLoadAllLinksEnabled.newValue;
+  }
 }
 
 //TODO: move Remove from Excludes from popup.js to here
@@ -540,7 +545,8 @@ chrome.runtime.onMessage.addListener(
         counts: a,
         appDisabled: appDisabled,
         tempExcludes: tempExcludes,
-        tempIncludes: tempIncludes
+        tempIncludes: tempIncludes,
+        isLoadAllLinksEnabled: isLoadAllLinksEnabled
       };
       sendResponse(c);
 
@@ -684,7 +690,7 @@ String.prototype.replaceAll = function(searchStr, replaceStr) {
 var isReaderModeEnabled = false;
 
 
-function handleUpdate() {
+function handleUpdate(istemporary) {
   let updateWorker = new Worker(chrome.extension.getURL('js/readData.js'));
 
   let type = 'update';
@@ -696,6 +702,7 @@ function handleUpdate() {
     let changeInRemoveList = e.data.workerResult.changeInRemoveList;
     let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
     let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
+    let showUpdatehtml = e.data.workerResult.showUpdatehtml;
     updateWorker.terminate();
     // Add or remove from Excludes
     STORAGE.get({
@@ -726,16 +733,27 @@ function handleUpdate() {
         }, function() {
           // just do a onstartup function once to set some values..
           handleStartup();
+
         });
       } else {
         handleStartup();
       }
 
+      if (showUpdatehtml && istemporary != true) {
+        openUpdatehtml();
+      }
     });
 
   }
 }
 
+function openUpdatehtml() {
+  let url = chrome.extension.getURL('update.html');
+  log("Wayback Everywhere addon installed or updated..");
+  chrome.tabs.create({
+    url: url
+  });
+}
 
 
 function handleStartup() {
@@ -752,6 +770,13 @@ function handleStartup() {
     readermode: false
   }, function(obj) {
     isReaderModeEnabled = obj.readermode;
+  });
+
+
+  STORAGE.get({
+    isLoadAllLinksEnabled: false
+  }, function(obj) {
+    isLoadAllLinksEnabled = obj.isLoadAllLinksEnabled;
   });
 
   STORAGE.get({
@@ -855,11 +880,11 @@ function onInstalledfn(details) {
   }
 
   if (details.reason == "update") {
-    handleUpdate(); // To add or remove from "default excludes - see settings/updates.json
+    handleUpdate(details.temporary); // To add or remove from "default excludes - see settings/updates.json
     console.log(" Wayback Everywhere addon was updated - or the browser was updated");
   }
 
-  if ((details.reason == "install" || details.reason == "update") && details.temporary != true) {
+  if (details.reason == "install" && details.temporary != true) {
     let url = chrome.extension.getURL('help.html');
     log("Wayback Everywhere addon installed or updated..");
     chrome.tabs.create({

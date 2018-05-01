@@ -26,8 +26,8 @@ Features
 *   **Popup menu** \- Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here [Popup Menu](#popup-menu)
 *   **Automatic Detection of Wayback Machine Site's Error Messages** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information on Automatic Detection of WM Error Messages available here [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
 *   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#edit-settings)
-*   **Auto-enable Reader mode for Archived pages** \- From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. 
-
+*   **Auto-enable Reader mode for Archived pages** \- From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode.
+*   **Load all links in a archived page as new tabs** \- From Settings page, enable the option to open all links of an archived page based on a "selector" that user enters in popup menu - intended to be used for opening all "chapters" in new tabs when reading a html book format pages. Example : Wikisource or wikibooks
 
 Auto-Detect Wayback Machine Error Messages
 -----------------------------
@@ -75,7 +75,7 @@ Edit Settings
 *   Click "Edit Settings" from Popup Menu to open Settings Page.
 *   Settings page lets you view Existing Excludes list. and add or remove from excludes list manually by using the buttons provides
 *   This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : [Default Excludes list provided during install](#default-excludes-list)
-*   From settings page, you can enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. 
+*   From settings page, you can enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode.
 *   You can export and import settings from this page. More information on this here : [Export and Import Settings](#exportimport-settings)
 *   Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.
 
@@ -89,6 +89,15 @@ Export/Import Settings
 *   Addon tries to do some validation on the imported JSON before it saves settings to Disk. But we advise not to manually edit the exported JSON before importing to avoid errors
 
 
+Open all links in a archived page as new tabs
+---------------------------------------------
+*   This feature is for advanced users only, hence not enabled by default. Please read the below before using it
+*   From Settings page has an option to enable "open all links in page" button to Popup menu.
+*   Once enabled, this adds a button and input field to Popup Menu.
+*   You need to enter a selector in input field before you click Open all links.
+*   For example, open this page [Free as in Freedom - Book in wikisource]( href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002))
+*   All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs
+*   This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs
 
 Default Excludes List
 ---------------------

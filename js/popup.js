@@ -36,6 +36,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   $s.loadcount = 0;
   var tempIncludes = [];
   var tempExcludes = [];
+  $s.isLoadAllLinksEnabled = false;
 
   getCurrentUrl(updateDetails);
 
@@ -52,6 +53,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.disabled = response.appDisabled;
         tempExcludes = response.tempExcludes;
         tempIncludes = response.tempIncludes;
+        $s.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
         //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
 
         $s.$apply();
@@ -161,6 +163,30 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
     }
   }
 */
+  //$s.selector = "Enter a selector";
+  $s.loadAll1pLinks = function(selector) {
+    //console.log(selector);
+    let type = "getAllFirstPartylinks";
+    if (selector.length > 0 && selector !== "Enter a selector") {
+      chrome.tabs.sendMessage(tabid, {
+        type: type
+      }, function(response) {
+        //console.log(response.data);
+        log(selector + " is the selector");
+        log("list of all URLS --> " + response.data);
+        chrome.runtime.sendMessage({
+          type: "openAllLinks",
+          subtype: "fromPopup",
+          data: response.data,
+          tabid: tabid,
+          selector: selector
+        });
+        //window.close();
+
+      });
+    }
+  }
+
   $s.savePage = function() {
 
     chrome.runtime.sendMessage({
