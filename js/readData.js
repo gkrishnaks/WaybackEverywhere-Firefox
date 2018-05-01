@@ -24,7 +24,7 @@
 function loadInitial(absUrl, returnType) {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", absUrl, false);
-  //false -> synchrnous call  (blocking xhr), read fill fully before returning to background js
+  //false -> synchrnous call  (blocking xhr), read file fully before returning to background js
   xhr.send(null);
   if (xhr.readyState !== 4) {
     return;
@@ -35,14 +35,12 @@ function loadInitial(absUrl, returnType) {
   return xhr.responseText;
 }
 
-
 self.onmessage = function(e) {
-  var workerResult = loadInitial(e.data[0], e.data[1]);
   var obj = {
     workerResult: "",
     type: ""
   };
-  obj.workerResult = workerResult;
+  obj.workerResult = loadInitial(e.data[0], e.data[1]);
   obj.type = e.data[2];
   postMessage(obj);
 }

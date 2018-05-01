@@ -43,10 +43,19 @@ function getHostfromUrl(url) {
     url2 = url2.split('web.archive.org/').pop();
     let index = url2.indexOf('/');
     //console.log(url2)
-    temp = url2.substring(index + 1)
+    temp = url2.substring(index + 1);
     //console.log(temp)
-    temp = temp.substring(temp.indexOf('/') + 1)
-    //console.log(temp)
+    temp = temp.substring(temp.indexOf('/') + 1);
+
+    // The if Block below is for this weird error I faced when I loaded https://web.archive.org/web/2/http://fsf.org/
+    // in address bar and that somehow resulted in wayback machine adding "http://http//www.fsf.org" as URL which is invalid!
+    if (temp.indexOf("http://http//") === 0 || temp.indexOf("https://https//") === 0) {
+      if (temp.indexOf("http://http//") === 0) {
+        temp = temp.replace("http//", '');
+      } else {
+        temp = temp.replace("https//", '');
+      }
+    }
 
   } else {
     temp = url;

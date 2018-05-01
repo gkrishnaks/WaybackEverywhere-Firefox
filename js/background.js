@@ -100,35 +100,34 @@ chrome.tabs.onActivated.addListener(function(tab) {
 
 });
 
-const VERSION = "1.7.0";
 log.enabled = false;
-const jsonUrl = 'settings/setting.json';
-var initialsettings;
-var readworker = new Worker(chrome.extension.getURL('js/readData.js'));
 
 function loadinitialdata(type) {
-  var absUrl = chrome.extension.getURL(jsonUrl);
+  let initialsettings;
+  let jsonUrl = 'settings/setting.json';
+  let absUrl = chrome.extension.getURL(jsonUrl);
+  let readworker = new Worker(chrome.extension.getURL('js/readData.js'));
   readworker.postMessage([absUrl, 'json', type]);
+  readworker.onmessage = function(e) {
+    initialsettings = e.data.workerResult.redirects;
+    var isReset = e.data.type;
+    log(JSON.stringify(initialsettings));
+    readworker.terminate();
+    STORAGE.set({
+      redirects: initialsettings
+    }, function() {
+      if (isReset == 'doFullReset') {
+        log('full reset completed, refrreshing tab to show changes');
+        chrome.tabs.reload({
+          bypassCache: true
+        });
+      }
+    });
+  };
 };
 
 
-readworker.onmessage = function(e) {
-  initialsettings = e.data.workerResult.redirects;
-  var isReset = e.data.type;
-  log(JSON.stringify(initialsettings));
-  readworker.terminate();
-  readworker=undefined;
-  STORAGE.set({
-    redirects: initialsettings
-  }, function() {
-    if (isReset == 'doFullReset') {
-      log('full reset completed, refrreshing tab to show changes');
-      chrome.tabs.reload({
-        bypassCache: true
-      });
-    }
-  });
-};
+
 
 var addSitetoExclude = function(request, sender) {
 
@@ -476,7 +475,7 @@ function setUpRedirectListener() {
   });
 }
 
-
+var justreloaded;
 //Firefox doesn't allow the "content script" which is actually privileged
 //to access the objects it gets from chrome.storage directly, so we
 //proxy it through here
@@ -545,6 +544,28 @@ chrome.runtime.onMessage.addListener(
       };
       sendResponse(c);
 
+    } else if (request.type == "openAllLinks") {
+      delete request.type;
+      log(JSON.stringify(request));
+      let urls = request.data;
+
+      for (let i = 0; i < urls.length; i++) {
+        if (request.selector.length != 0 && urls[i].indexOf(request.selector) > -1) {
+          if (urls[i].indexOf("http") != 0) {
+
+            if (urls[i].indexOf("/web") == 0) {
+              urls[i] = "https://web.archive.org" + urls[i];
+              //console.log(urls[i]);
+            }
+          }
+          log("Opening this url in new tab -> " + urls[i]);
+
+          chrome.tabs.create({
+            url: urls[i]
+          });
+        }
+      }
+
     } else {
       log('Unexpected message: ' + JSON.stringify(request));
       return false;
@@ -553,6 +574,27 @@ chrome.runtime.onMessage.addListener(
     return true; //This tells the browser to keep sendResponse alive because
     //we're sending the response asynchronously.
   });
+
+
+function reloadPage(tabId, tabUrl) {
+  if (tabUrl !== justreloaded) {
+    chrome.tabs.reload(tabId, {
+      bypassCache: true
+    }, function() {
+      justreloaded = tabUrl;
+    });
+  }
+}
+chrome.webRequest.onCompleted.addListener(function(details) {
+  /*if (details.type == "main_frame") {
+    console.log("status code is " + details.statusCode + " in url " + details.url);
+  } */
+  if (details.statusCode == 504 && details.type == "main_frame") {
+    reloadPage(details.tabId, details.url);
+  }
+}, {
+  urls: ["*://web.archive.org/*"]
+});
 
 
 //First time setup
@@ -641,57 +683,60 @@ String.prototype.replaceAll = function(searchStr, replaceStr) {
 };
 var isReaderModeEnabled = false;
 
-var updateWorker = new Worker(chrome.extension.getURL('js/readData.js'));
 
 function handleUpdate() {
+  let updateWorker = new Worker(chrome.extension.getURL('js/readData.js'));
+
   let type = 'update';
   let updateJson = 'settings/updates.json';
   let absUrl = chrome.extension.getURL(updateJson);
   updateWorker.postMessage([absUrl, 'json', type]);
-}
+  updateWorker.onmessage = function(e) {
+    let changeInAddList = e.data.workerResult.changeInAddList;
+    let changeInRemoveList = e.data.workerResult.changeInRemoveList;
+    let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
+    let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
+    updateWorker.terminate();
+    // Add or remove from Excludes
+    STORAGE.get({
+      redirects: []
+    }, function(response) {
+      log("handleUpdate-  updating default excludes if needed");
+      let redirects = response.redirects;
+      // Add to redirects
 
-updateWorker.onmessage = function(e) {
-  let changeInAddList = e.data.workerResult.changeInAddList;
-  let changeInRemoveList = e.data.workerResult.changeInRemoveList;
-  let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
-  let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
-  updateWorker.terminate();
-  updateWorker=undefined;
-  // Add or remove from Excludes
-  STORAGE.get({
-    redirects: []
-  }, function(response) {
-    log("handleUpdate-  updating default excludes if needed");
-    let redirects = response.redirects;
-    // Add to redirects
-
-    if (changeInAddList && addToDefaultExcludes != null) {
-      redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
-      log("the new excludes list is..." + redirects[0].excludePattern);
-    }
-    if (changeInRemoveList && removeFromDefaultExcludes != null) {
-      for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
-        if (removeFromDefaultExcludes[i].indexOf("web.archive.org") > -1) {
-          continue;
-        }
-        let pattern = "|*" + removeFromDefaultExcludes[i] + "*";
-        //log("removing this from excludest list" + pattern);  
-        redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(pattern, '');
+      if (changeInAddList && addToDefaultExcludes != null) {
+        redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
+        log("the new excludes list is..." + redirects[0].excludePattern);
       }
-      log("the new excludes list is. ." + redirects[0].excludePattern);
-    }
-    if (changeInAddList || changeInRemoveList) {
-      STORAGE.set({
-        redirects: redirects
-      }, function() {
-        // just do a onstartup function once to set some values..
+      if (changeInRemoveList && removeFromDefaultExcludes != null) {
+        for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
+          if (removeFromDefaultExcludes[i].indexOf("web.archive.org") > -1) {
+            continue;
+          }
+          let pattern = "|*" + removeFromDefaultExcludes[i] + "*";
+          //log("removing this from excludest list" + pattern);
+          redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(pattern, '');
+        }
+        log("the new excludes list is. ." + redirects[0].excludePattern);
+      }
+      if (changeInAddList || changeInRemoveList) {
+        STORAGE.set({
+          redirects: redirects
+        }, function() {
+          // just do a onstartup function once to set some values..
+          handleStartup();
+        });
+      } else {
         handleStartup();
-      });
-    }
+      }
 
-  });
+    });
 
+  }
 }
+
+
 
 function handleStartup() {
   log("Handle startup - fetch counts, fetch readermode setting, fetch appdisabled setting, clear out any temp excludes or temp includes");

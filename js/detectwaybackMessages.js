@@ -21,6 +21,79 @@
 */
 
 
+var sendBgMessage = function(type, category) {
+  chrome.runtime.sendMessage({
+      type: type,
+      subtype: "fromContent",
+      category: category
+    },
+    function(response) {
+      // console.log('returnned to content script' + response.message);
+    });
+}
+
+function handleWMErrors() {
+
+  let error = document.getElementById('error');
+  if (error != null) {
+    let fullString = '';
+    for (let i = 0; i < error.childElementCount; i++) {
+      fullString = fullString + ' ' + error.children[i].innerText;
+    };
+    //  console.log(fullString);
+    let canSave = fullString.indexOf("Save this url in the Wayback Machine");
+    let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11;
+    e1 = fullString.indexOf('Page cannot');
+    e2 = fullString.indexOf('excluded from the Wayback Machine');
+    e3 = fullString.indexOf('not be archived');
+    e4 = fullString.indexOf('Hrm');
+    e5 = fullString.indexOf('Wayback Machine doesn\'t have that page archived');
+    e6 = fullString.indexOf('Bummer');
+    e7 = fullString.indexOf('not available on the live web or can not be archived')
+    e8 = fullString.indexOf('retrieve all the files we need to display that page');
+    e9 = fullString.indexOf('Wayback Exception');
+    e10 = fullString.indexOf('unknown exception has occured');
+    e11 = fullString.indexOf('snapshot cannot be displayed due to an internal error');
+
+    //console.log(canSave, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
+    if (canSave > -1) {
+      //  console.log('detected save this page');
+      sendBgMessage("savetoWM", "save");
+    } else if (e1 > -1 || e2 > -1 || e3 > -1) {
+      //  console.log('robot txt detected or page is excluded');
+      sendBgMessage('excludethisSite', 'AddtoExcludesList');
+    } else if (e4 > -1 && e5 > -1) {
+      //  console.log('Not other errors like robots.txt or excluded, we will try saving this page');
+      sendBgMessage("savetoWM", "save");
+    } else if (e6 > -1 && e7 > -1) {
+      sendBgMessage('excludethisSite', 'AddtoTempExcludesList');
+    } else if (e8 > -1 || e9 > -1 || e10 > -1 || e11 > -1) {
+      sendBgMessage('excludethisSite', 'AddtoTempExcludesList');
+
+    } else {
+      //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
+    }
+  }
+}
+
+handleWMErrors();
+
+
+//to hide wayback hideWaybackToolbat
+// We hide for 2 cases
+// 1. In desktop firefox user clicks save as pdf button
+// 2. In Firefox Android, as there`s limited screen space,  let's hide it
+// Below is for case2, case 1 handled by hideWMtoolbar.js called from popup.js
+
+if (navigator.userAgent.match(/Android/i)) {
+  let c = document.getElementById("wm-tb-close");
+  if (c != null) {
+    c.click();
+  }
+}
+
+/*
+
 var sendSaveMessage = function() {
   chrome.runtime.sendMessage({
       type: "savetoWM",
@@ -44,56 +117,4 @@ var sendExcludeMessage = function(category) {
 
 };
 
-var error = document.getElementById('error');
-if (error != null) {
-  let fullString = '';
-  for (let i = 0; i < error.childElementCount; i++) {
-    fullString = fullString + ' ' + error.children[i].innerText;
-  };
-  //  console.log(fullString);
-  let canSave = fullString.indexOf("Save this url in the Wayback Machine");
-  let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10;
-  e1 = fullString.indexOf('Page cannot');
-  e2 = fullString.indexOf('excluded from the Wayback Machine');
-  e3 = fullString.indexOf('not be archived');
-  e4 = fullString.indexOf('Hrm');
-  e5 = fullString.indexOf('Wayback Machine doesn\'t have that page archived');
-  e6 = fullString.indexOf('Bummer');
-  e7 = fullString.indexOf('not available on the live web or can not be archived')
-  e8 = fullString.indexOf('retrieve all the files we need to display that page');
-  e9 = fullString.indexOf('Wayback Exception');
-  e10 = fullString.indexOf('unknown exception has occured');
-  e11 = fullString.indexOf('snapshot cannot be displayed due to an internal error');
-
-  //console.log(canSave, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
-  if (canSave > -1) {
-    //  console.log('detected save this page');
-    sendSaveMessage();
-  } else if (e1 > -1 || e2 > -1 || e3 > -1) {
-    //  console.log('robot txt detected or page is excluded');
-    sendExcludeMessage('AddtoExcludesList');
-  } else if (e4 > -1 && e5 > -1) {
-    //  console.log('Not other errors like robots.txt or excluded, we will try saving this page');
-    sendSaveMessage();
-  } else if (e6 > -1 && e7 > -1) {
-    sendExcludeMessage('AddtoTempExcludesList');
-  } else if (e8 > -1 || e9 > -1 || e10 > -1 || e11 > -1) {
-    sendExcludeMessage('AddtoTempExcludesList');
-
-  } else {
-    //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
-  }
-}
-
-//to hide wayback hideWaybackToolbat
-// We hide for 2 cases
-// 1. In desktop firefox user clicks save as pdf button
-// 2. In Firefox Android, as there`s limited screen space,  let's hide it
-// Below is for case2, case 1 handled by hideWMtoolbar.js called from popup.js
-
-if (navigator.userAgent.match(/Android/i)) {
-  let c = document.getElementById("wm-tb-close");
-  if (c != null) {
-    c.click();
-  }
-}
+*/
