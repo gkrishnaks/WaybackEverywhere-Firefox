@@ -108,9 +108,9 @@ Default Excludes List
 *   Some sites that may not work fine with Wayback Machine - ft.com for example.
 *   Some URL shortener sites.
 *   Some Search engines to help the user avoid seeing Wayback redirects when she searches
-*   Some local address like 127.0.0 * and 192.168.* so that user can browse these without routing
-P.S : There's no other agenda behind this bundled list made available during install :)
-
+*   Some reserved addresses like 127.0.0 * and 0.0.0* so that user can browse these without routing
+*   Some online education learning course sites as they host video content and also need login to work
+*   Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box) P.S : There's no other agenda behind this bundled list made available during install :)
 
 If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
 
