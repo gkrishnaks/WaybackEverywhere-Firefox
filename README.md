@@ -95,7 +95,7 @@ Open all links in a archived page as new tabs
 *   From Settings page has an option to enable "open all links in page" button to Popup menu.
 *   Once enabled, this adds a button and input field to Popup Menu.
 *   You need to enter a selector in input field before you click Open all links.
-*   For example, open this page [Free as in Freedom - Book in wikisource]( href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002))
+*   For example, open this page [Free as in Freedom - Book in wikisource](https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002))
 *   All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs
 *   This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs
 
