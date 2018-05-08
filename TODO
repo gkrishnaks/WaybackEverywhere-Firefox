@@ -2,3 +2,7 @@
 2. Update Settings page's Add to Exclude/Remove to Exclude buttons to handle different types of links/URLs
 3. Make Popup menu display buttons based on if a hostname is in Temporary excluded/temporary included list or not
    (currently we just check and display include/exclude buttons based on currently loaded URL)
+
+Add these URL shorterers to defaultexcludes: 
+
+|*scifri.me*|*clckhl.co*|*on.msnbc.com*|*wapo.st*|*on.natgeo.com*|*vine.co*|*qklnk.co*|*dld.bz*|*cnet.co*|*dlvr.it*|*hulu.com*|*pandora.com*|*crackle.com*|*pscp.tv*|*csmo.us*|*red.ht*|*periscope.tv*|*rsport.me*|*win.gs*|*email.instapaper.com*|*s.hbr.org*|*s.500.co*|*stanford.io*|*bizj.us*|*mitsloan.co/*|*whr.tn*|*adafru.it*|*fal.cn*|*eepurl.com*|*tmblr.co*|*vntyfr.com*|*hill.cm*|*smarturl.it*|*n.pr/*|*on.si.com*|*pge.sx*|*fxn.ws*|*mitsha.re/*|*on.io9.com*|*tnvge.co/*|*nydn.us*|*money.us*|*cnn.it*|*pewrsr.ch*|*go.es.io*|*openg.is*|*snr.stanford.edu*
