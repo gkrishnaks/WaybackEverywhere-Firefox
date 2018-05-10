@@ -581,6 +581,13 @@ chrome.runtime.onMessage.addListener(
     //we're sending the response asynchronously.
   });
 
+// Added the below to hande a very rare case where Wayback throws "504" error when Saving page.
+// Manually reloading the page was enough to display the saved page 
+// This will just reload the page once and stop reloading after that if it continues as 
+// .. it assigned url to justreloaded variable
+
+// Find out if 504 is thrown by saved page or by WM itself -
+// Need to Comment out the below if WM is actually the one that shows this 504
 
 function reloadPage(tabId, tabUrl) {
   if (tabUrl !== justreloaded) {
