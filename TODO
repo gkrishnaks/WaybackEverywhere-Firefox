@@ -5,14 +5,14 @@
 
 Add these URL shorterers to defaultexcludes: 
 
-|*scifri.me*|*clckhl.co*|*on.msnbc.com*|*wapo.st*|*on.natgeo.com*|*vine.co*|*qklnk.co*|*dld.bz*|*cnet.co*|*dlvr.it*|*hulu.com*|*pandora.com*|*crackle.com*|*pscp.tv*|*csmo.us*|*red.ht*|*periscope.tv*|*rsport.me*|*win.gs*|*email.instapaper.com*|*s.hbr.org*|*s.500.co*|*stanford.io*|*bizj.us*|*mitsloan.co/*|*whr.tn*|*adafru.it*|*fal.cn*|*eepurl.com*|*tmblr.co*|*vntyfr.com*|*hill.cm*|*smarturl.it*|*n.pr/*|*on.si.com*|*pge.sx*|*fxn.ws*|*mitsha.re/*|*on.io9.com*|*tnvge.co/*|*nydn.us*|*money.us*|*cnn.it*|*pewrsr.ch*|*go.es.io*|*openg.is*|*snr.stanford.edu*
+|*scifri.me*|*clckhl.co*|*on.msnbc.com*|*wapo.st*|*on.natgeo.com*|*vine.co*|*qklnk.co*|*dld.bz*|*cnet.co*|*dlvr.it*|*hulu.com*|*pandora.com*|*crackle.com*|*pscp.tv*|*csmo.us*|*red.ht*|*periscope.tv*|*rsport.me*|*win.gs*|*email.instapaper.com*|*s.hbr.org*|*s.500.co*|*stanford.io*|*bizj.us*|*mitsloan.co/*|*whr.tn*|*adafru.it*|*fal.cn*|*eepurl.com*|*tmblr.co*|*vntyfr.com*|*hill.cm*|*smarturl.it*|*n.pr/*|*on.si.com*|*pge.sx*|*fxn.ws*|*mitsha.re/*|*on.io9.com*|*tnvge.co/*|*nydn.us*|*money.us*|*cnn.it*|*pewrsr.ch*|*go.es.io*|*openg.is*|*snr.stanford.edu*|*twitch.tv*|*bloom.bg*|*inc.com*|*g.co/*|*go.ey.com*|*sched.co*|*go.nasa.gov*|*flic.kr*|*go.nature.com*
 
 Mark Graham from Internet Archive requested that we send a useragent identifier for SAVE requests.
  
  This should be fine :
  --------------------
   var requestFilter = {
-    urls: [ "<all_urls>" ]
+    urls: [ "https://web.archive.org/save*" ]
   },
   
   extraInfoSpec = ['requestHeaders','blocking'],
