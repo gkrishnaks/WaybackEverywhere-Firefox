@@ -44,6 +44,28 @@ function onError(error) {
   log(error);
 }
 
+// headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere" 
+// Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests 
+// that are sent from this extension/addon - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/4
+
+function headerHandler( details ) {
+  let headers = details.requestHeaders;
+  let blockingResponse = {};
+  for(let i = 0, l = headers.length; i < l; ++i ) {
+    if( headers[i].name == 'User-Agent' ) {
+      headers[i].value = headers[i].value + " WaybackEverywhere";
+      break;
+    }
+  }
+  blockingResponse.requestHeaders = headers;
+  log(JSON.stringify(blockingResponse));
+  return blockingResponse;
+};
+
+chrome.webRequest.onBeforeSendHeaders.addListener( headerHandler, {
+    urls: [ "https://web.archive.org/save*" ]
+  }, ['requestHeaders','blocking'] );
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
   if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 &&
