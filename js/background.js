@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(onInstalledfn);
 chrome.runtime.onStartup.addListener(handleStartup);
 const STORAGE = chrome.storage.local;
 
-var justUpdatedReader = "";
+var justUpdatedReader = ["archive.org"]; 
 
 function log(msg) {
   if (log.enabled) {
@@ -78,10 +78,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 
   if (tab.url.indexOf("web.archive.org/web/") > -1 &&
-    changeInfo.isArticle && tab.url !== justUpdatedReader &&
+    changeInfo.isArticle && (justUpdatedReader.indexOf(tab.url) < 0) &&
     isReaderModeEnabled) {
     chrome.tabs.toggleReaderMode(tabId);
-    justUpdatedReader = tab.url; // without this check, user will not be able to exit reader mode
+    justUpdatedReader.push(tab.url); // without this check, user will not be able to exit reader mode
     //as it will keep toggling back to Reader mode whem user tries to exit, since page loads again resulting in onUpdated
   }
 
