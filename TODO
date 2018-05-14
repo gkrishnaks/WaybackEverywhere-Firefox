@@ -5,43 +5,4 @@
 
 Add these URL shorterers to defaultexcludes: 
 
-|*scifri.me*|*clckhl.co*|*on.msnbc.com*|*wapo.st*|*on.natgeo.com*|*vine.co*|*qklnk.co*|*dld.bz*|*cnet.co*|*dlvr.it*|*hulu.com*|*pandora.com*|*crackle.com*|*pscp.tv*|*csmo.us*|*red.ht*|*periscope.tv*|*rsport.me*|*win.gs*|*email.instapaper.com*|*s.hbr.org*|*s.500.co*|*stanford.io*|*bizj.us*|*mitsloan.co/*|*whr.tn*|*adafru.it*|*fal.cn*|*eepurl.com*|*tmblr.co*|*vntyfr.com*|*hill.cm*|*smarturl.it*|*n.pr/*|*on.si.com*|*pge.sx*|*fxn.ws*|*mitsha.re/*|*on.io9.com*|*tnvge.co/*|*nydn.us*|*money.us*|*cnn.it*|*pewrsr.ch*|*go.es.io*|*openg.is*|*snr.stanford.edu*|*twitch.tv*|*bloom.bg*|*inc.com*|*g.co/*|*go.ey.com*|*sched.co*|*go.nasa.gov*|*flic.kr*|*go.nature.com*
-
-Mark Graham from Internet Archive requested that we send a useragent identifier for SAVE requests.
- 
- This should be fine :
- --------------------
-  var requestFilter = {
-    urls: [ "https://web.archive.org/save*" ]
-  },
-  
-  extraInfoSpec = ['requestHeaders','blocking'],
-  
-  handler = function( details ) {
-   
-    var headers = details.requestHeaders,
-      blockingResponse = {};
-
-    
-   // var referer;
-    for( var i = 0, l = headers.length; i < l; ++i ) {
-      // if(headers[i].name== "Referer"){
-      //   referer=i;
-      // }
-      if( headers[i].name == 'User-Agent' ) {
-       // if(headers[referer].value.indexOf("web.archive")>-1){
-        headers[i].value = headers[i].value + " WaybackEverywhere";
-        break;
-     //   }
-      }
-
-    }
-
-    blockingResponse.requestHeaders = headers;
-  // log(JSON.stringify(blockingResponse));
-    return blockingResponse;
-  };
-
-chrome.webRequest.onBeforeSendHeaders.addListener( handler, requestFilter, extraInfoSpec );
-
---------------------
+|*scifri.me*|*clckhl.co*|*on.msnbc.com*|*wapo.st*|*on.natgeo.com*|*vine.co*|*qklnk.co*|*dld.bz*|*cnet.co*|*dlvr.it*|*hulu.com*|*pandora.com*|*crackle.com*|*pscp.tv*|*csmo.us*|*red.ht*|*periscope.tv*|*rsport.me*|*win.gs*|*email.instapaper.com*|*s.hbr.org*|*s.500.co*|*stanford.io*|*bizj.us*|*mitsloan.co/*|*whr.tn*|*adafru.it*|*fal.cn*|*eepurl.com*|*tmblr.co*|*vntyfr.com*|*hill.cm*|*smarturl.it*|*n.pr/*|*on.si.com*|*pge.sx*|*fxn.ws*|*mitsha.re/*|*on.io9.com*|*tnvge.co/*|*nydn.us*|*money.us*|*cnn.it*|*pewrsr.ch*|*go.es.io*|*openg.is*|*snr.stanford.edu*|*twitch.tv*|*bloom.bg*|*inc.com*|*g.co/*|*go.ey.com*|*sched.co*|*go.nasa.gov*|*flic.kr*|*go.nature.com*|*huffp.st*|*pw-ne.ws*|*glblctzn.me*|*kng.ht*|*socsi.in*|*ctrylv.co*|*f1.com*|*manutd.co*|*arsn.al*|*chroni.cl*|*share.ew.com*|*on.nrdc.org*|*lnkclik.com*|*nyer.cm*|*deadsp.in*|*go.theinformation.com*|*pjblack.me*|*cnb.cx*|*nbcnews.to*|*inv.rs*|*scifri.me*|*d.shpg.org*
