@@ -441,8 +441,8 @@ function monitorChanges(changes, namespace) {
   }
 
   if (changes.redirects) {
-
-
+    let newRedirects=changes.redirects.newValue;
+    excludePatterns=newRedirects[0].excludePattern.replace(/\*/g, ''); 
     if (!appDisabled) {
       log('Wayback Everywhere Excludes list have changed, setting up listener again');
       setUpRedirectListener();
