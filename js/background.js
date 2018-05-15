@@ -321,31 +321,35 @@ function checkRedirects(details) {
   if (details.method != 'GET') {
     return {};
   }
-  // Once wayback redirect url is loaded, we can just return it..
+
   if (details.url.indexOf("web.archive.org/") > -1) {
     let urlDetails = getHostfromUrl(details.url);
-      // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
-      // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
-      // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
-      // Using this, we load live page of github since it's in excludes list. 
-      // we may add a switch to Settings page to disable this behaviour at a later time if needed.
-      
-      // Need to use once we make Excludepattern array of hosts instead of regex 
-      //if(excludePatterns.indexOf(host))
-      
+    // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
+    // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
+    // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
+    // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
+    // Using this, we load live page of github since it's in excludes list. 
+    // we may add a switch to Settings page to disable this behaviour at a later time if needed.
+    
+    // Need to use once we make Excludepattern array of hosts instead of regex 
+    //if(excludePatterns.indexOf(host))
+    
+    if(tempIncludes == null){
       if(excludePatterns.indexOf(urlDetails.hostname)>-1){
-          if(tempIncludes == null){
-              return {redirectUrl: urlDetails.url};
-          }
-          else if (tempIncludes.indexOf(urlDetails.hostname) > -1){
-            return {};
-          }
-          else{ 
-              return {redirectUrl: urlDetails.url}; 
-          }
+        return {redirectUrl: urlDetails.url};
       }
-    return {};
-  }
+        return {};
+    } else
+    {
+      if (tempIncludes.indexOf(urlDetails.hostname) > -1){
+        return {};
+      }
+      if(excludePatterns.indexOf(urlDetails.hostname)>-1){
+        return {redirectUrl: urlDetails.url};
+      }
+    }    
+  return {};
+}
     
   log(' Checking: ' + details.type + ': ' + details.url);
 
