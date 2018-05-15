@@ -40,9 +40,6 @@ var tempExcludes = [];
 var tempIncludes = [];
 var isLoadAllLinksEnabled = false;
 
-function onError(error) {
-  log(error);
-}
 
 // headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere" 
 // Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests 
@@ -537,7 +534,7 @@ function setUpRedirectListener() {
     redirects: []
   }, function(obj) {
     var redirects = obj.redirects;
-      excludePatterns=redirects.excludePattern.replace(/\*/g, ''); 
+      excludePatterns=redirects[0].excludePattern.replace(/\*/g, ''); 
            // (we need to make ExcludePattern an array of hosts, currently it's regex)
     if (redirects.length == 0) {
       log(' No redirects defined, not setting up listener');
