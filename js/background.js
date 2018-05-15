@@ -88,8 +88,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 });
 
-chrome.tabs.onRemoved.addListener(handleRemoved);
-
 function handleRemoved(tabId, removeInfo) {
     // in android, until Mozilla enables reader mode api for android firefox, this is not needed. 
     // but hasOwnProperty will return false always if object does not have any property
@@ -441,7 +439,14 @@ function monitorChanges(changes, namespace) {
   if (changes.readermode) {
     log('readermode is changed to ' + changes.readermode.newValue);
     isReaderModeEnabled = changes.readermode.newValue;
+       if(isReaderModeEnabled && !chrome.tabs.onRemoved.hasListener(handleRemoved) ){
+        chrome.tabs.onRemoved.addListener(handleRemoved);
+      }
+      if(!isReaderModeEnabled && chrome.tabs.onRemoved.hasListener(handleRemoved)){
+        chrome.tabs.onRemoved.removeListener(handleRemoved);
 
+      }
+      
   }
   if (changes.isLoadAllLinksEnabled) {
     log("load all 1p links setting changed to " + changes.isLoadAllLinksEnabled.newValue);
@@ -814,6 +819,9 @@ function handleStartup() {
     readermode: false
   }, function(obj) {
     isReaderModeEnabled = obj.readermode;
+      if(isReaderModeEnabled){
+        chrome.tabs.onRemoved.addListener(handleRemoved);
+      }
   });
 
 
