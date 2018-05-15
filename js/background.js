@@ -78,14 +78,19 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 
   if (tab.url.indexOf("web.archive.org/web/") > -1 &&
-    changeInfo.isArticle && justUpdatedReader[tabId] == undefined) &&
+    changeInfo.isArticle &&
     isReaderModeEnabled) {
-    chrome.tabs.toggleReaderMode(tabId);
-    justUpdatedReader[tabId]=tab.url;
-    // without this check, user will not be able to exit reader mode
+     // without this check, user will not be able to exit reader mode
     //as it will keep toggling back to Reader mode whem user tries to exit, since page loads again resulting in onUpdated
+      if( justUpdatedReader[tabId] == undefined){
+        chrome.tabs.toggleReaderMode(tabId);
+        justUpdatedReader[tabId]=tab.url;
+      }
+      else if ( justUpdatedReader[tabId] !== tab.url){
+        chrome.tabs.toggleReaderMode(tabId);
+        justUpdatedReader[tabId]=tab.url;
+      }
   }
-
 });
 
 function handleRemoved(tabId, removeInfo) {
