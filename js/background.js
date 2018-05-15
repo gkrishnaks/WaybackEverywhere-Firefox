@@ -337,12 +337,19 @@ function checkRedirects(details) {
       //if(excludePatterns.indexOf(host))
       
       if(excludePatterns.indexOf(urlDetails.hostname)>-1){
-          if(tempIncludes!= null && tempIncludes.indexOf(urlDetails.hostname) < -1){
-            return {redirectUrl: urlDetails.url};
+          if(tempIncludes == null){
+              return {redirectUrl: urlDetails.url};
+          }
+          else if (tempIncludes.indexOf(urlDetails.hostname) > -1){
+            return {};
+          }
+          else{ 
+              return {redirectUrl: urlDetails.url}; 
           }
       }
     return {};
   }
+    
   log(' Checking: ' + details.type + ': ' + details.url);
 
   var list = partitionedRedirects[details.type];
