@@ -2,6 +2,9 @@
 2. Update Settings page's Add to Exclude/Remove to Exclude buttons to handle different types of links/URLs
 3. Make Popup menu display buttons based on if a hostname is in Temporary excluded/temporary included list or not
    (currently we just check and display include/exclude buttons based on currently loaded URL)
+4. Move the "Include this page" (Temporary or remove from excludes) logic to Background.js 
+   (currently it's in popup.js - moved "add To excludes" logic to background.js - 
+   'Include' (i.e remove from exclude) logic should also be moved , so popup.js can have less unless unused code upon popup load)
 
 Add these URL shorterers to defaultexcludes: 
 
