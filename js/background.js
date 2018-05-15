@@ -334,7 +334,7 @@ function checkRedirects(details) {
     // Need to use once we make Excludepattern array of hosts instead of regex 
     //if(excludePatterns.indexOf(host))
     
-    if(tempIncludes == null){
+    if(tempIncludes.length == 0){
       if(excludePatterns.indexOf(urlDetails.hostname)>-1){
         return {redirectUrl: urlDetails.url};
       }
