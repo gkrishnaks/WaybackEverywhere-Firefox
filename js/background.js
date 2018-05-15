@@ -78,7 +78,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 
   if (tab.url.indexOf("web.archive.org/web/") > -1 &&
-    changeInfo.isArticle && justUpdatedReader[tabId] !== undefined) &&
+    changeInfo.isArticle && justUpdatedReader[tabId] == undefined) &&
     isReaderModeEnabled) {
     chrome.tabs.toggleReaderMode(tabId);
     justUpdatedReader[tabId]=tab.url;
@@ -91,6 +91,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 chrome.tabs.onRemoved.addListener(handleRemoved);
 
 function handleRemoved(tabId, removeInfo) {
+    // in android, until Mozilla enables reader mode api for android firefox, this is not needed. 
+    // but hasOwnProperty will return false always if object does not have any property
+    // so we can leave it as such below 
     if(justUpdatedReader.hasOwnProperty(tabId)){
         delete justUpdatedReader[tabId];
         log("cleared the value from justUpdatedReader list of URLs upon closing tab " + tabId);
