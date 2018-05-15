@@ -337,7 +337,9 @@ function checkRedirects(details) {
       //if(excludePatterns.indexOf(host))
       
       if(excludePatterns.indexOf(urlDetails.hostname)>-1){
-          return {redirectUrl: urlDetails.url};
+          if(tempIncludes!= null && tempIncludes.indexOf(urlDetails.hostname) < -1){
+            return {redirectUrl: urlDetails.url};
+          }
       }
     return {};
   }
