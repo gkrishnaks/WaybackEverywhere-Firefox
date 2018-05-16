@@ -50,7 +50,7 @@ function headerHandler( details ) {
   let blockingResponse = {};
   for(let i = 0, l = headers.length; i < l; ++i ) {
     if( headers[i].name == 'User-Agent' ) {
-      headers[i].value = headers[i].value + " WaybackEverywhere";
+      headers[i].value =  "Save Page Request from WaybackEverywhere Browser Extension";
       break;
     }
   }
