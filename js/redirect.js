@@ -311,7 +311,12 @@ Redirect.prototype = {
       log('returning false as this._rxExclude is false');
       return false;
     }
-    var shouldExclude = !!this._rxExclude.exec(url);
+    // fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/3
+    // Url might have tracking parts after ? that might be in excludes
+    // In that case, it shouldn't be excluded
+    // for example, if url has http://example.com/some/page?utm=twitter.com -> though twitter.com is in Excludes list, shouldn't exclude that as it's in tracking part
+    let url2 = getHostfromUrl(url).hostname;
+    var shouldExclude = !!this._rxExclude.exec(url2);
     log('shouldExclude --> ' + shouldExclude);
     this._rxExclude.lastIndex = 0;
     return shouldExclude;
