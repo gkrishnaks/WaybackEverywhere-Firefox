@@ -27,7 +27,7 @@ Features
 *   **Automatic Detection of Wayback Machine Site's Error Messages** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information on Automatic Detection of WM Error Messages available here [Auto-detect Wayback Machine Error Messages](#auto-detect-wayback-machine-error-messages)
 *   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#edit-settings)
 *   **Auto-enable Reader mode for Archived pages** \- From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode.
-*   **Load all links in a archived page as new tabs** \- From Settings page, enable the option to open all links of an archived page based on a "selector" that user enters in popup menu - intended to be used for opening all "chapters" in new tabs when reading a html book format pages. Example : Wikisource or wikibooks
+*   **Load all links in a archived page as new tabs** \- From Settings page, enable the option to open all links of an archived page based on a "selector" that user enters in popup menu - intended to be used for opening all "chapters" in new tabs when reading a html book format pages. Example : Wikisource or wikibooks. EXPERIMENTAL FEATURE disabled by default.
 
 Auto-Detect Wayback Machine Error Messages
 -----------------------------
@@ -91,7 +91,7 @@ Export/Import Settings
 
 Open all links in a archived page as new tabs
 ---------------------------------------------
-*   This feature is for advanced users only, hence not enabled by default. Please read the below before using it
+*   This feature is for advanced users only and is in EXPERIMENTAL STATE, hence not enabled by default. Please read the below before using it
 *   From Settings page has an option to enable "open all links in page" button to Popup menu.
 *   Once enabled, this adds a button and input field to Popup Menu.
 *   You need to enter a selector in input field before you click Open all links.

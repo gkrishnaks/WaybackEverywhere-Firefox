@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(onInstalledfn);
 chrome.runtime.onStartup.addListener(handleStartup);
 const STORAGE = chrome.storage.local;
 
-var justUpdatedReader = "";
+var justUpdatedReader = {}; 
 
 function log(msg) {
   if (log.enabled) {
@@ -40,9 +40,6 @@ var tempExcludes = [];
 var tempIncludes = [];
 var isLoadAllLinksEnabled = false;
 
-function onError(error) {
-  log(error);
-}
 
 // headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere" 
 // Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests 
@@ -52,8 +49,8 @@ function headerHandler( details ) {
   let headers = details.requestHeaders;
   let blockingResponse = {};
   for(let i = 0, l = headers.length; i < l; ++i ) {
-    if( headers[i].name == 'User-Agent' ) {
-      headers[i].value = headers[i].value + " WaybackEverywhere";
+    if( headers[i].name.toLowerCase() === 'user-agent' ) {
+      headers[i].value =  "Save Page Request from WaybackEverywhere Browser Extension";
       break;
     }
   }
@@ -78,14 +75,37 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   }
 
   if (tab.url.indexOf("web.archive.org/web/") > -1 &&
-    changeInfo.isArticle && tab.url !== justUpdatedReader &&
+    changeInfo.isArticle &&
     isReaderModeEnabled) {
-    chrome.tabs.toggleReaderMode(tabId);
-    justUpdatedReader = tab.url; // without this check, user will not be able to exit reader mode
+     // without this check, user will not be able to exit reader mode
     //as it will keep toggling back to Reader mode whem user tries to exit, since page loads again resulting in onUpdated
+      if( justUpdatedReader[tabId] == undefined){
+        log("Toggling reader mode in tab " + tabId + " url: " + tab.url);
+        chrome.tabs.toggleReaderMode(tabId);
+        justUpdatedReader[tabId]=tab.url;
+      }
+      else if ( justUpdatedReader[tabId] !== tab.url){
+        log("Toggling reader mode in tab " + tabId + " url: " + tab.url);
+        chrome.tabs.toggleReaderMode(tabId);
+        justUpdatedReader[tabId]=tab.url;
+      }
+      else{
+        log("Did not toggle to Readermode. This case is possible when user tries to manually exit reader mode - we need to let the user do that. Otherwise, firefox will keep toggling back to readermode");
+      }
   }
-
 });
+
+function handleRemoved(tabId, removeInfo) {
+    // in android, until Mozilla enables reader mode api for android firefox, this is not needed. 
+    // but hasOwnProperty will return false always if object does not have any property
+    // so we can leave it as such below 
+    if(justUpdatedReader.hasOwnProperty(tabId)){
+      log("cleared the value from justUpdatedReader list of URLs upon closing tab " + tabId + " -> " + justUpdatedReader[tabId]);
+        delete justUpdatedReader[tabId];
+    }
+}
+
+
 /*
 chrome.pageAction.onClicked.addListener(function(tab) {
 
@@ -306,10 +326,42 @@ function checkRedirects(details) {
   if (details.method != 'GET') {
     return {};
   }
-  // Once wayback redirect url is loaded, we can just return it..
-  if (details.url.indexOf("web.archive.org/") > -1) {
+
+  //Return save page requests right away
+  if (details.url.indexOf("web.archive.org/save") > -1) {
     return {};
   }
+
+  if (details.url.indexOf("web.archive.org/web") > -1) {
+    let urlDetails = getHostfromUrl(details.url);
+    // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
+    // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
+    // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
+    // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
+    // Using this, we load live page of github since it's in excludes list. 
+    // we may add a switch to Settings page to disable this behaviour at a later time if needed.
+    
+    // Need to use once we make Excludepattern array of hosts instead of regex 
+    //if(excludePatterns.indexOf(host))
+    log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
+    let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
+    if(tempIncludes.length == 0){
+      if(shouldExclude){
+        return {redirectUrl: urlDetails.url};
+      }
+        return {};
+    } else
+    {
+      if (tempIncludes.indexOf(urlDetails.hostname) > -1){
+        return {};
+      }
+      if(shouldExclude){
+        return {redirectUrl: urlDetails.url};
+      }
+    }    
+  return {};
+}
+    
   log(' Checking: ' + details.type + ': ' + details.url);
 
   var list = partitionedRedirects[details.type];
@@ -400,8 +452,9 @@ function monitorChanges(changes, namespace) {
   }
 
   if (changes.redirects) {
-
-
+    let newRedirects=changes.redirects.newValue;
+    excludePatterns=getRegex(newRedirects[0].excludePattern);
+      
     if (!appDisabled) {
       log('Wayback Everywhere Excludes list have changed, setting up listener again');
       setUpRedirectListener();
@@ -426,7 +479,14 @@ function monitorChanges(changes, namespace) {
   if (changes.readermode) {
     log('readermode is changed to ' + changes.readermode.newValue);
     isReaderModeEnabled = changes.readermode.newValue;
+       if(isReaderModeEnabled && !chrome.tabs.onRemoved.hasListener(handleRemoved) ){
+        chrome.tabs.onRemoved.addListener(handleRemoved);
+      }
+      if(!isReaderModeEnabled && chrome.tabs.onRemoved.hasListener(handleRemoved)){
+        chrome.tabs.onRemoved.removeListener(handleRemoved);
 
+      }
+      
   }
   if (changes.isLoadAllLinksEnabled) {
     log("load all 1p links setting changed to " + changes.isLoadAllLinksEnabled.newValue);
@@ -434,6 +494,21 @@ function monitorChanges(changes, namespace) {
   }
 }
 
+function getRegex(excludePatterns){
+let converted = '^';
+      for (let i = 0; i < excludePatterns.length; i++) {
+        var ch = excludePatterns.charAt(i);
+        if ('()[]{}?.^$\\+'.indexOf(ch) != -1) {
+          converted += '\\' + ch;
+        } else if (ch == '*') {
+          converted += '(.*?)';
+        } else {
+          converted += ch;
+        }
+      }
+      converted += '$';
+      return new RegExp(converted, 'gi');
+    }
 //TODO: move Remove from Excludes from popup.js to here
 // i.e Temporary incldue or Include should go here, currently it's in popup.js
 
@@ -479,6 +554,7 @@ function createPartitionedRedirects(redirects) {
   return partitioned;
 }
 
+var excludePatterns;
 //Sets up the listener, partitions the redirects, creates the appropriate filters etc.
 function setUpRedirectListener() {
   log(' in setUpRedirectListener ..');
@@ -489,10 +565,12 @@ function setUpRedirectListener() {
     redirects: []
   }, function(obj) {
     var redirects = obj.redirects;
-    if (redirects.length == 0) {
+     if (redirects.length == 0) {
       log(' No redirects defined, not setting up listener');
       return;
     }
+    excludePatterns=getRegex(redirects[0].excludePattern);
+           // (we need to make ExcludePattern an array of hosts, currently it's regex)
 
     partitionedRedirects = createPartitionedRedirects(redirects);
     var filter = createFilter(redirects);
@@ -647,7 +725,8 @@ function updateLogging() {
 updateLogging();
 
 function savetoWM(request, sender, sendResponse) {
-  var url1, tabid;
+  let url1=''; 
+  let tabid;
   var activetab = true;
   if (request.subtype == 'fromContent') {
     log('savetoWM message received from content script for ' + sender.tab.url + ' in tabid ' + sender.tab.id);
@@ -799,6 +878,9 @@ function handleStartup() {
     readermode: false
   }, function(obj) {
     isReaderModeEnabled = obj.readermode;
+      if(isReaderModeEnabled){
+        chrome.tabs.onRemoved.addListener(handleRemoved);
+      }
   });
 
 
@@ -910,7 +992,7 @@ function onInstalledfn(details) {
 
   if (details.reason == "update") {
     handleUpdate(details.temporary); // To add or remove from "default excludes - see settings/updates.json
-    console.log(" Wayback Everywhere addon was updated - or the browser was updated");
+    console.log(" Wayback Everywhere addon was updated");
   }
 
   if (details.reason == "install" && details.temporary != true) {
