@@ -112,7 +112,7 @@ Default Excludes List
 *   Some online education learning course sites as they host video content and also need login to work
 *   Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box..)
 *   Some video streaming (netflix..) sites and live streaming sites (Periscope..)
-*   Some audio podcast sites (last 2 in this list will be added to next version of this extension)
+*   Some audio podcast sites 
 
 P.S : There's no other agenda behind this bundled list made available during install :)
 
