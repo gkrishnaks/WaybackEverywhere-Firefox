@@ -49,7 +49,8 @@ function headerHandler( details ) {
   let headers = details.requestHeaders;
   let blockingResponse = {};
   for(let i = 0, l = headers.length; i < l; ++i ) {
-    if( headers[i].name == 'User-Agent' ) {
+    if( headers[i].name.toLowerCase() === 'user-agent' ) {
+      console.log(headers[i].name.toLowerCase());
       headers[i].value =  "Save Page Request from WaybackEverywhere Browser Extension";
       break;
     }
@@ -322,7 +323,12 @@ function checkRedirects(details) {
     return {};
   }
 
-  if (details.url.indexOf("web.archive.org/") > -1) {
+  //Return save page requests right away
+  if (details.url.indexOf("web.archive.org/save") > -1) {
+    return {};
+  }
+
+  if (details.url.indexOf("web.archive.org/web") > -1) {
     let urlDetails = getHostfromUrl(details.url);
     // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
     // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
@@ -698,7 +704,8 @@ function updateLogging() {
 updateLogging();
 
 function savetoWM(request, sender, sendResponse) {
-  var url1, tabid;
+  let url1=''; 
+  let tabid;
   var activetab = true;
   if (request.subtype == 'fromContent') {
     log('savetoWM message received from content script for ' + sender.tab.url + ' in tabid ' + sender.tab.id);
