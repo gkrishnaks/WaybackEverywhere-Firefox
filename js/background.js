@@ -80,12 +80,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
      // without this check, user will not be able to exit reader mode
     //as it will keep toggling back to Reader mode whem user tries to exit, since page loads again resulting in onUpdated
       if( justUpdatedReader[tabId] == undefined){
+        log("Toggling reader mode in tab " + tabId + " url: " + tab.url);
         chrome.tabs.toggleReaderMode(tabId);
         justUpdatedReader[tabId]=tab.url;
       }
       else if ( justUpdatedReader[tabId] !== tab.url){
+        log("Toggling reader mode in tab " + tabId + " url: " + tab.url);
         chrome.tabs.toggleReaderMode(tabId);
         justUpdatedReader[tabId]=tab.url;
+      }
+      else{
+        log("Did not toggle to Readermode. This case is possible when user tries to manually exit reader mode - we need to let the user do that. Otherwise, firefox will keep toggling back to readermode");
       }
   }
 });
@@ -95,8 +100,8 @@ function handleRemoved(tabId, removeInfo) {
     // but hasOwnProperty will return false always if object does not have any property
     // so we can leave it as such below 
     if(justUpdatedReader.hasOwnProperty(tabId)){
+      log("cleared the value from justUpdatedReader list of URLs upon closing tab " + tabId + " -> " + justUpdatedReader[tabId]);
         delete justUpdatedReader[tabId];
-        log("cleared the value from justUpdatedReader list of URLs upon closing tab " + tabId);
     }
 }
 
