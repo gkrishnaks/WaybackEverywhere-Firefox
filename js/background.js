@@ -338,8 +338,10 @@ function checkRedirects(details) {
     
     // Need to use once we make Excludepattern array of hosts instead of regex 
     //if(excludePatterns.indexOf(host))
+    log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
+    let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
     if(tempIncludes.length == 0){
-      if(excludePatterns.indexOf(urlDetails.hostname)>-1){
+      if(shouldExclude){
         return {redirectUrl: urlDetails.url};
       }
         return {};
@@ -348,7 +350,7 @@ function checkRedirects(details) {
       if (tempIncludes.indexOf(urlDetails.hostname) > -1){
         return {};
       }
-      if(excludePatterns.indexOf(urlDetails.hostname)>-1){
+      if(shouldExclude){
         return {redirectUrl: urlDetails.url};
       }
     }    
@@ -446,7 +448,8 @@ function monitorChanges(changes, namespace) {
 
   if (changes.redirects) {
     let newRedirects=changes.redirects.newValue;
-    excludePatterns=newRedirects[0].excludePattern.replace(/\*/g, '');
+    excludePatterns=getRegex(newRedirects[0].excludePattern);
+      
     if (!appDisabled) {
       log('Wayback Everywhere Excludes list have changed, setting up listener again');
       setUpRedirectListener();
@@ -486,6 +489,21 @@ function monitorChanges(changes, namespace) {
   }
 }
 
+function getRegex(excludePatterns){
+let converted = '^';
+      for (let i = 0; i < excludePatterns.length; i++) {
+        var ch = excludePatterns.charAt(i);
+        if ('()[]{}?.^$\\+'.indexOf(ch) != -1) {
+          converted += '\\' + ch;
+        } else if (ch == '*') {
+          converted += '(.*?)';
+        } else {
+          converted += ch;
+        }
+      }
+      converted += '$';
+      return new RegExp(converted, 'gi');
+    }
 //TODO: move Remove from Excludes from popup.js to here
 // i.e Temporary incldue or Include should go here, currently it's in popup.js
 
@@ -531,7 +549,7 @@ function createPartitionedRedirects(redirects) {
   return partitioned;
 }
 
-var excludePatterns="";
+var excludePatterns;
 //Sets up the listener, partitions the redirects, creates the appropriate filters etc.
 function setUpRedirectListener() {
   log(' in setUpRedirectListener ..');
@@ -546,7 +564,7 @@ function setUpRedirectListener() {
       log(' No redirects defined, not setting up listener');
       return;
     }
-      excludePatterns=redirects[0].excludePattern.replace(/\*/g, '');
+    excludePatterns=getRegex(redirects[0].excludePattern);
            // (we need to make ExcludePattern an array of hosts, currently it's regex)
 
     partitionedRedirects = createPartitionedRedirects(redirects);
@@ -969,7 +987,7 @@ function onInstalledfn(details) {
 
   if (details.reason == "update") {
     handleUpdate(details.temporary); // To add or remove from "default excludes - see settings/updates.json
-    console.log(" Wayback Everywhere addon was updated - or the browser was updated");
+    console.log(" Wayback Everywhere addon was updated");
   }
 
   if (details.reason == "install" && details.temporary != true) {
