@@ -50,7 +50,6 @@ function headerHandler( details ) {
   let blockingResponse = {};
   for(let i = 0, l = headers.length; i < l; ++i ) {
     if( headers[i].name.toLowerCase() === 'user-agent' ) {
-      console.log(headers[i].name.toLowerCase());
       headers[i].value =  "Save Page Request from WaybackEverywhere Browser Extension";
       break;
     }
@@ -339,7 +338,6 @@ function checkRedirects(details) {
     
     // Need to use once we make Excludepattern array of hosts instead of regex 
     //if(excludePatterns.indexOf(host))
-    
     if(tempIncludes.length == 0){
       if(excludePatterns.indexOf(urlDetails.hostname)>-1){
         return {redirectUrl: urlDetails.url};
@@ -448,7 +446,7 @@ function monitorChanges(changes, namespace) {
 
   if (changes.redirects) {
     let newRedirects=changes.redirects.newValue;
-    excludePatterns=newRedirects[0].excludePattern.replace(/\*/g, ''); 
+    excludePatterns=newRedirects[0].excludePattern.replace(/\*/g, '');
     if (!appDisabled) {
       log('Wayback Everywhere Excludes list have changed, setting up listener again');
       setUpRedirectListener();
@@ -544,12 +542,12 @@ function setUpRedirectListener() {
     redirects: []
   }, function(obj) {
     var redirects = obj.redirects;
-      excludePatterns=redirects[0].excludePattern.replace(/\*/g, ''); 
-           // (we need to make ExcludePattern an array of hosts, currently it's regex)
-    if (redirects.length == 0) {
+     if (redirects.length == 0) {
       log(' No redirects defined, not setting up listener');
       return;
     }
+      excludePatterns=redirects[0].excludePattern.replace(/\*/g, '');
+           // (we need to make ExcludePattern an array of hosts, currently it's regex)
 
     partitionedRedirects = createPartitionedRedirects(redirects);
     var filter = createFilter(redirects);
