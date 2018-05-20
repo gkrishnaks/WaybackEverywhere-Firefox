@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Wayback Everywhere",
   "description": "Automatically redirect every page to its archived version in Wayback Machine, except the sites in Excludes List",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "homepage_url": "https://github.com/gkrishnaks/WaybackEverywhere-Firefox",
   "icons": {
     "16": "images/icon.png",
