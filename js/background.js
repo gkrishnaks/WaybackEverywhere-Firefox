@@ -315,7 +315,21 @@ setInterval(storeCountstoStorage, 240000);
 // 4 minutes once, write counts to disk
 // Not a critical value, does not matter if user closes browser before an interval
 
+setInterval(clearJustSaved, 240000);
+// 4 Minutes once, clear JustSaved based on time.
 
+function clearJustSaved(){
+    if(justSaved.length == 0){
+        return; 
+    }
+    else{
+        for(let j=0; j<justSaved.length; j++){
+            if(Date.now() - Number(justSaved[j].split("==WBE==")[1]) >= 240000 ) {
+                justSaved.splice[j,1];
+            }
+        }
+    }
+}
 
 //This is the actual function that gets called for each request and must
 //decide whether or not we want to redirect.
@@ -326,14 +340,7 @@ function checkRedirects(details) {
   if (details.method != 'GET') {
     return {};
   }
-
-  //Return save page requests right away
-  if (details.url.indexOf("web.archive.org/save") > -1) {
-    return {};
-  }
-
-  if (details.url.indexOf("web.archive.org/web") > -1) {
-    let urlDetails = getHostfromUrl(details.url);
+       
     // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
     // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
     // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
@@ -343,6 +350,28 @@ function checkRedirects(details) {
     
     // Need to use once we make Excludepattern array of hosts instead of regex 
     //if(excludePatterns.indexOf(host))
+    
+    
+    //Return save page requests right away
+  if (details.url.indexOf("web.archive.org/save") > -1) {
+    return {};
+  }
+
+  if (details.url.indexOf("web.archive.org/web") > -1) {
+    let urlDetails = getHostfromUrl(details.url);
+    
+    // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
+    let isJustSaved=false;  
+    for(let k=0; k < justSaved.length; k++){
+        if(urlDetails == justSaved[i].split("==WBE==").pop()){
+            isJustSaved=true;
+            break;
+        }
+    }
+    if(isJustSaved){
+        return {};
+    } 
+    
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
     let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
     if(tempIncludes.length == 0){
@@ -723,7 +752,7 @@ function updateLogging() {
 }
 
 updateLogging();
-
+var justSaved=[];
 function savetoWM(request, sender, sendResponse) {
   let url1=''; 
   let tabid;
@@ -740,6 +769,7 @@ function savetoWM(request, sender, sendResponse) {
     tabid = request.tabid;
     url1 = request.url;
   }
+  justSaved.push(url1 + "==WBE==" + Date.now());
   let wmSaveUrl;
   if (url1.indexOf('web.archive.org') > -1) {
     let obj = getHostfromUrl(url1);
