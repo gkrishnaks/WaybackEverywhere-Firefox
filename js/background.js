@@ -345,6 +345,8 @@ function checkRedirects(details) {
     //if(excludePatterns.indexOf(host))
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
     let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
+    excludePatterns.lastIndex = 0; 
+      //since getRegex uses /g
     if(tempIncludes.length == 0){
       if(shouldExclude){
         return {redirectUrl: urlDetails.url};
