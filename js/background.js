@@ -344,7 +344,7 @@ function checkRedirects(details) {
     // Need to use once we make Excludepattern array of hosts instead of regex 
     //if(excludePatterns.indexOf(host))
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
-    let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
+    let shouldExclude = excludePatterns.test(urlDetails.hostname);
     excludePatterns.lastIndex = 0; 
       //since getRegex uses /g
     if(tempIncludes.length == 0){
