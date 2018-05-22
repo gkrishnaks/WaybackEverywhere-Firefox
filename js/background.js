@@ -363,7 +363,7 @@ function checkRedirects(details) {
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
     let isJustSaved=false;  
     for(let k=0; k < justSaved.length; k++){
-        if(urlDetails.url == justSaved[i].split("==WBE==").pop()){
+        if(urlDetails.url == justSaved[k].split("==WBE==").shift()){
             isJustSaved=true;
             break;
         }
