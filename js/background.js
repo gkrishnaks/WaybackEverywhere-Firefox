@@ -462,7 +462,18 @@ function checkRedirects(details) {
         counts: counts
       });*/
       counts.archivedPageLoadsCount += 1;
-      log(" redirectTo is......" + result.redirectTo);
+      //Issue 10 - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/10
+      // Remove ?utm and others and redirect only direct clean URL to wayback machine
+      let removelist=["?utm","?smid","?feedType","?CMP","?uc=","?ncid","?smtyp=","?__source"];
+      let index=-1;
+      for(let p=0; p<removelist.length; p++){
+          index=result.redirectTo.indexOf(removelist[p]);
+          if(index > -1){
+          result.redirectTo=result.redirectTo.substring(0,index);
+          break;
+          }
+      }
+      log("Redirecting to ......" + result.redirectTo);
       return {
         redirectUrl: result.redirectTo
       };
