@@ -716,7 +716,7 @@ chrome.runtime.onMessage.addListener(
     } else if(request.type == "seeFirstVersion"){
         delete request.type;
         let urlDetails=getHostfromUrl(request.url);
-        firstVersionURL = 'https://web.archive.org/web/1/' + urlDetails.url;
+        firstVersionURL = 'https://web.archive.org/web/0/' + urlDetails.url;
         chrome.tabs.update(request.tabid, {
             active: true,
             url: firstVersionURL
