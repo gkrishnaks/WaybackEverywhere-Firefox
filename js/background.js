@@ -203,9 +203,21 @@ var addSitetoExclude = function(request, sender) {
     log(obj.hostname + ' and outputurl ' + obj.url + ' received from parseUrl.js for input Url ' + url1);
 
     //check if already exists in ExcludePattern
-    let str = redirectslist[0].excludePattern;
-    let array = str.split('*');
-    if (array.indexOf(obj.hostname) < 0) {
+    let array = redirectslist[0].excludePattern.split('*|*');
+    let alreadyExistsinExcludes=false;
+     // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
+     // Instead of checking via array.indexOf, let's do string.indexOf - as we have some url shorterens with a forward slash
+     // Issue caused by t.co getting added to Excludes List (t.co/ was already there to exclude t.co/*)
+     // Since t.co got added to Excludes, sites that had domainname as "*t.com" got excluded. 
+      
+    for(let g=0;g < array.length; g++){
+        if(array[g].indexOf(obj.hostname) > -1 ){
+            alreadyExistsinExcludes = true;
+            break;
+        }
+    }
+    array = null; 
+    if (!alreadyExistsinExcludes) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
       log('Now the new redirects is' + JSON.stringify(redirectslist));
