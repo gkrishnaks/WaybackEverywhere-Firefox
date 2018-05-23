@@ -104,7 +104,13 @@
         <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="saveAsPDF()">Save Page as PDF</button>
       </td>
     </tr>
-
+    
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+      <td>
+        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="seefirstversion()">See first archived</button>
+      </td>
+    </tr>
+    
     <tr class="spaceUnder" align="center">
       <td>
         <button type="button" class="btn btn-info btn-sm formfineleft" id="about_support_button" ng-click="openHelp()">Help</button>
