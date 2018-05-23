@@ -1031,9 +1031,19 @@ function onInstalledfn(details) {
       archivedPageLoadsCount: 0,
       waybackSavescount: 0
     };
-    STORAGE.set({
-      counts: counts
+    //Fix for Issue 11 https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/11
+    // Looks like Disabling addon from About:addons and enabling causes onInstalled event to trigger
+    // This was the reason why counts got reset to zero on this issue. 
+    // The below should fix the issue by not storing zeros upon addon disable enable.
+      
+    STORAGE.get("counts",function(obj){
+        if(obj.counts == undefined){
+        STORAGE.set({
+        counts: counts
+        });
+        }    
     });
+      
     let tempExcludes = [];
     STORAGE.set({
       tempExcludes: tempExcludes
