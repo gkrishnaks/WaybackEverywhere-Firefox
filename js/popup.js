@@ -367,6 +367,15 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   if (navigator.userAgent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
+    
+  $s.seefirstversion=function(){
+   chrome.runtime.sendMessage({
+      type: "seeFirstVersion",
+      subtype: "fromPopup",
+      url: currentUrl,
+      tabid: tabid
+    });
+  }  
 
   $s.toggleDisabled = function() {
 
