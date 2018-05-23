@@ -713,7 +713,18 @@ chrome.runtime.onMessage.addListener(
         }
       }
 
-    } else {
+    } else if(request.type == "seeFirstVersion"){
+        delete request.type;
+        let urlDetails=getHostfromUrl(request.url);
+        firstVersionURL = 'https://web.archive.org/web/1/' + urlDetails.url;
+        chrome.tabs.update(request.tabid, {
+            active: true,
+            url: firstVersionURL
+        }, function(tab) {
+         log("first version url loaded in browser in tab " + request.tabid + " as " + firstVersionURL);
+        });
+        
+    }else {
       log('Unexpected message: ' + JSON.stringify(request));
       return false;
     }
