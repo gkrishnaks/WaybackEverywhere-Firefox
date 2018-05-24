@@ -222,12 +222,12 @@ var addSitetoExclude = function(request, sender) {
       }, function(a) {
         log('Finished saving redirects to storage from url');
         log('Need to reload page with excluded url.. ' + obj.url);
-        tabsUpdate(obj.url,activetab);
+        tabsUpdate(obj.url,activetab,tabid);
       });
     }
       else{        
           log('domainname already exists in excludes list.. when does this case happen?');
-          tabsUpdate(obj.url,activetab); 
+          tabsUpdate(obj.url,activetab,tabid); 
       }
    
     // Check if it's a temporary exclude request and put in temp exclude list too
@@ -237,7 +237,7 @@ var addSitetoExclude = function(request, sender) {
   });
 };
 
-function tabsUpdate(url,activetab){
+function tabsUpdate(url,activetab,tabid){
     chrome.tabs.update(tabid, {
       active: activetab,
       url: url
