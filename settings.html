@@ -226,6 +226,16 @@
 							<p><button class="btn blue" ng-click="showExcludes=!showExcludes" ng-show="!showExcludes">Excludes list</button>
 								<span ng-if="showExcludes">{{ReadableExcludePattern}}</span></p>
 						</div>
+						
+						<div ng-if="tempExcludes">
+							<label>Temporary Excludes:</label>
+							<p>{{tempExcludes}}</p>
+						</div>
+						<div ng-if="tempIncludes">
+							<label>Temporary Includes:</label>
+							<p>{{tempIncludes}}</p>
+						</div>
+				
 					</div>
 
 
