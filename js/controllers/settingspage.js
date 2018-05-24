@@ -104,6 +104,18 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
    
   getTemps(); 
     
+  $s.clearTemps=function(){
+      chrome.runtime.sendMessage({
+        type: "clearTemps",
+      },
+      function(response) {
+          if(response.message == "successfullyclearedTemps"){
+            $s.tempExcludes = "";
+            $s.tempIncludes = "";
+          }
+      });
+  }
+    
   $s.removefromExclude = function(url) {
     url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
     $s.message = null;
