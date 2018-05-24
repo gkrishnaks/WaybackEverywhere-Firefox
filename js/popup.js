@@ -77,7 +77,8 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       tabid = tabs[0].id;
       currentUrl = tabs[0].url;
       url2 = currentUrl;
-      $s.domain = getHostfromUrl(url2).hostname;
+      let urlDetails = getHostfromUrl(url2);
+      $s.domain = urlDetails.hostname;
       if (url2.indexOf('-extension://') < 0) {
         $s.webextpagesExcluded = false;
       }
@@ -86,7 +87,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.webextpagesExcluded = true;
 
       }
-      if ($s.domain === "web.archive.org"){
+      if (urlDetails.url.indexOf("web.archive.org") > -1 ){
          $s.hideIncludebutton = true;
       }
       if (url2.indexOf('file:/') > -1) {
