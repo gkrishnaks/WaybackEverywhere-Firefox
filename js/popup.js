@@ -87,7 +87,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.webextpagesExcluded = true;
 
       }
-      if (urlDetails.url.indexOf("web.archive.org") > -1 ){
+      if ($s.domain == "web.archive.org"){
          $s.hideIncludebutton = true;
       }
       if (url2.indexOf('file:/') > -1) {
