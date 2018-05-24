@@ -871,14 +871,16 @@ function clearAllTemps(){
       // remove "temporarily exclude sites" on startup
 
   STORAGE.get({
-    tempExcludes: []
+    tempExcludes: [],tempIncludes: []
   }, function(obj) {
+      let isChanged=false;
     var excarray = obj.tempExcludes;
     log("exclude array on startup is..." + excarray);
     if (excarray.length > 0) {
       STORAGE.get({
         redirects: []
       }, function(response) {
+        isChanged=true;  
         let redirects = response.redirects;
         for (let i = 0; i < excarray.length; i++) {
           let toReplace = excarray[i];
@@ -886,21 +888,11 @@ function clearAllTemps(){
           redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(toReplace, '');
         };
         log(JSON.stringify(redirects));
-        let temp = [];
-        STORAGE.set({
-          redirects: redirects,
-          tempExcludes: temp
-        });
+       
       });
     }
   });
-
-
-
-  //add "temporary includes" back to Exclude Pattern on startup
-  STORAGE.get({
-    tempIncludes: []
-  }, function(obj) {
+    
     var incarray = obj.tempIncludes;
     log("include array on startup that need to be added back to Exclude pattern..." + incarray);
     if (incarray.length > 0) {
@@ -913,16 +905,21 @@ function clearAllTemps(){
           redirects[0].excludePattern = redirects[0].excludePattern + toAdd;
         };
         log(JSON.stringify(redirects));
+        isChanged=true;  
 
-        STORAGE.set({
-          redirects: redirects
-        });
-        STORAGE.remove(
-          "tempIncludes"
-        );
       });
     }
-  });
+if(isChanged){
+ let temp = [];
+        STORAGE.set({
+          redirects: redirects,
+          tempExcludes: temp,
+            tempIncludes:temp
+        });
+}
+  //add "temporary includes" back to Exclude Pattern on startup
+
+
 }
 
 function handleUpdate(istemporary) {
