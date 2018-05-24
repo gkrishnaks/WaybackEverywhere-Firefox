@@ -737,16 +737,17 @@ chrome.runtime.onMessage.addListener(
         
     } else if(request.type == "clearTemps"){
         delete request.type;
-        let tempExcludes = [];
+        let temp = [];
         STORAGE.set({
-            tempExcludes:tempExcludes,
-            tempIncludes:tempExcludes 
-        }, function(){
-            sendResponse({
+          tempExcludes: temp
+        });
+        STORAGE.set({
+        tempIncludes: temp
+        });
+        sendResponse({
             message: 'successfullyclearedTemps'
-            });
-        });   
-    }else {
+        });
+     }else {
       log('Unexpected message: ' + JSON.stringify(request));
       return false;
     }
