@@ -226,7 +226,7 @@ var addSitetoExclude = function(request, sender) {
       });
     }
       else{        
-          log('domainname already exists in excludes list.. when does this case happen?');
+          log('domainname already exists in excludes list, just loading live page');
           tabsUpdate(obj.url,activetab,tabid); 
       }
    
