@@ -112,6 +112,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
           if(response.message == "successfullyclearedTemps"){
             $s.tempExcludes = "";
             $s.tempIncludes = "";
+            $s.$apply();
           }
       });
   }
