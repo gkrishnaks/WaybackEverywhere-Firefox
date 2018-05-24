@@ -205,19 +205,14 @@ var addSitetoExclude = function(request, sender) {
     //check if already exists in ExcludePattern
     let array = redirectslist[0].excludePattern.split('*|*');
     let alreadyExistsinExcludes=false;
-     // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
-     // Instead of checking via array.indexOf, let's do string.indexOf - as we have some url shorterens with a forward slash
-     // Issue caused by t.co getting added to Excludes List (t.co/ was already there to exclude t.co/*)
-     // Since t.co got added to Excludes, sites that had domainname as "*t.com" got excluded. 
-      
-    for(let g=0;g < array.length; g++){
-        if(array[g].indexOf(obj.hostname) > -1 ){
-            alreadyExistsinExcludes = true;
-            break;
-        }
+    if(array.indexOf(obj.hostname) > -1){
+      alreadyExistsinExcludes = true;  
     }
     array = null; 
-    if (!alreadyExistsinExcludes) {
+     // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
+     // t.co seems to be the only hostname that causes problems with other sites that has "somenamet.com" in url where "t.co" gets a match against t.co
+ 
+    if (!alreadyExistsinExcludes && "t.co" !== obj.hostname) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
       log('Now the new redirects is' + JSON.stringify(redirectslist));
@@ -226,23 +221,28 @@ var addSitetoExclude = function(request, sender) {
         redirects: redirectslist
       }, function(a) {
         log('Finished saving redirects to storage from url');
+        log('Need to reload page with excluded url.. ' + obj.url);
+        tabsUpdate(obj.url,activetab);
       });
     }
-
-
-    // reload the page with excludedurl
-
-    log('Need to reload page with excluded url.. ' + obj.url);
-    chrome.tabs.update(tabid, {
-      active: activetab,
-      url: obj.url
-    });
+      else{        
+          log('domainname already exists in excludes list.. when does this case happen?');
+          tabsUpdate(obj.url,activetab); 
+      }
+   
     // Check if it's a temporary exclude request and put in temp exclude list too
     if (request.category == 'AddtoTempExcludesList') {
       checkTempExcludes(obj.hostname);
     }
   });
 };
+
+function tabsUpdate(url,activetab){
+    chrome.tabs.update(tabid, {
+      active: activetab,
+      url: url
+    });
+}
 
 function checkTempExcludes(domain) {
   // Check and add TempExcludes if Category is AddtoTempExcludesList
