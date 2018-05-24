@@ -737,13 +737,7 @@ chrome.runtime.onMessage.addListener(
         
     } else if(request.type == "clearTemps"){
         delete request.type;
-        let temp = [];
-        STORAGE.set({
-          tempExcludes: temp
-        });
-        STORAGE.set({
-        tempIncludes: temp
-        });
+        clearAllTemps();
         sendResponse({
             message: 'successfullyclearedTemps'
         });
@@ -873,6 +867,63 @@ String.prototype.replaceAll = function(searchStr, replaceStr) {
 };
 var isReaderModeEnabled = false;
 
+function clearAllTemps(){
+      // remove "temporarily exclude sites" on startup
+
+  STORAGE.get({
+    tempExcludes: []
+  }, function(obj) {
+    var excarray = obj.tempExcludes;
+    log("exclude array on startup is..." + excarray);
+    if (excarray.length > 0) {
+      STORAGE.get({
+        redirects: []
+      }, function(response) {
+        let redirects = response.redirects;
+        for (let i = 0; i < excarray.length; i++) {
+          let toReplace = excarray[i];
+          log(toReplace + ' need to be removed from exclude pattern');
+          redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(toReplace, '');
+        };
+        log(JSON.stringify(redirects));
+        let temp = [];
+        STORAGE.set({
+          redirects: redirects,
+          tempExcludes: temp
+        });
+      });
+    }
+  });
+
+
+
+  //add "temporary includes" back to Exclude Pattern on startup
+  STORAGE.get({
+    tempIncludes: []
+  }, function(obj) {
+    var incarray = obj.tempIncludes;
+    log("include array on startup that need to be added back to Exclude pattern..." + incarray);
+    if (incarray.length > 0) {
+      STORAGE.get({
+        redirects: []
+      }, function(response) {
+        let redirects = response.redirects;
+        for (let i = 0; i < incarray.length; i++) {
+          let toAdd = incarray[i];
+          redirects[0].excludePattern = redirects[0].excludePattern + toAdd;
+        };
+        log(JSON.stringify(redirects));
+
+        STORAGE.set({
+          redirects: redirects
+        });
+        STORAGE.remove(
+          "tempIncludes"
+        );
+      });
+    }
+  });
+}
 
 function handleUpdate(istemporary) {
   let updateWorker = new Worker(chrome.extension.getURL('js/readData.js'));
@@ -998,61 +1049,7 @@ function handleStartup() {
   STORAGE.set({
     logging: false
   });
-  // remove "temporarily exclude sites" on startup
-
-  STORAGE.get({
-    tempExcludes: []
-  }, function(obj) {
-    var excarray = obj.tempExcludes;
-    log("exclude array on startup is..." + excarray);
-    if (excarray.length > 0) {
-      STORAGE.get({
-        redirects: []
-      }, function(response) {
-        let redirects = response.redirects;
-        for (let i = 0; i < excarray.length; i++) {
-          let toReplace = excarray[i];
-          log(toReplace + ' need to be removed from exclude pattern');
-          redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(toReplace, '');
-        };
-        log(JSON.stringify(redirects));
-        let temp = [];
-        STORAGE.set({
-          redirects: redirects,
-          tempExcludes: temp
-        });
-      });
-    }
-  });
-
-
-
-  //add "temporary includes" back to Exclude Pattern on startup
-  STORAGE.get({
-    tempIncludes: []
-  }, function(obj) {
-    var incarray = obj.tempIncludes;
-    log("include array on startup that need to be added back to Exclude pattern..." + incarray);
-    if (incarray.length > 0) {
-      STORAGE.get({
-        redirects: []
-      }, function(response) {
-        let redirects = response.redirects;
-        for (let i = 0; i < incarray.length; i++) {
-          let toAdd = incarray[i];
-          redirects[0].excludePattern = redirects[0].excludePattern + toAdd;
-        };
-        log(JSON.stringify(redirects));
-
-        STORAGE.set({
-          redirects: redirects
-        });
-        STORAGE.remove(
-          "tempIncludes"
-        );
-      });
-    }
-  });
+  clearAllTemps();
 };
 
  
