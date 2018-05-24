@@ -698,8 +698,9 @@ chrome.runtime.onMessage.addListener(
         appDisabled: appDisabled,
         tempExcludes: tempExcludes,
         tempIncludes: tempIncludes,
-        isLoadAllLinksEnabled: isLoadAllLinksEnabled
-      };
+        isLoadAllLinksEnabled: isLoadAllLinksEnabled,
+        justSaved: justSaved
+       };
       sendResponse(c);
 
     } else if (request.type == "openAllLinks") {
