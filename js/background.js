@@ -927,16 +927,28 @@ function openUpdatehtml() {
   });
 }
 
-
-function handleStartup() {
-  log("Handle startup - fetch counts, fetch readermode setting, fetch appdisabled setting, clear out any temp excludes or temp includes");
-  STORAGE.get({
+// Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/11
+// This will run once when background script runs so that counts are set correctly when addon is disabled and then enabled from about:addons
+STORAGE.get({
     counts: counts
   }, function(response) {
     counts.archivedPageLoadsCount = response.counts.archivedPageLoadsCount;
     counts.waybackSavescount = response.counts.waybackSavescount;
     oldcounts = JSON.parse(JSON.stringify(counts));
   });
+
+function handleStartup() {
+  log("Handle startup - fetch counts, fetch readermode setting, fetch appdisabled setting, clear out any temp excludes or temp includes");
+  //For issue 11 fix, we moved this to background script - so that counts can get set to global variables correctly..
+    // .. when addon is disabled and enabled from about:addons . Commenting the below 
+ /*   
+   STORAGE.get({
+    counts: counts
+  }, function(response) {
+    counts.archivedPageLoadsCount = response.counts.archivedPageLoadsCount;
+    counts.waybackSavescount = response.counts.waybackSavescount;
+    oldcounts = JSON.parse(JSON.stringify(counts));
+  });  */
 
   STORAGE.get({
     readermode: false
@@ -1031,6 +1043,7 @@ function handleStartup() {
   });
 };
 
+ 
 
 function onInstalledfn(details) {
   log(JSON.stringify(details));
@@ -1047,14 +1060,10 @@ function onInstalledfn(details) {
     // This was the reason why counts got reset to zero on this issue. 
     // The below should fix the issue by not storing zeros upon addon disable enable.
       
-    STORAGE.get("counts",function(obj){
-        if(obj.counts == undefined){
-        STORAGE.set({
+     STORAGE.set({
         counts: counts
         });
-        }    
-    });
-      
+   
     let tempExcludes = [];
     STORAGE.set({
       tempExcludes: tempExcludes
