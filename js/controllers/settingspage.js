@@ -94,8 +94,8 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
         $s.savecount = counts.waybackSavescount;
         $s.loadcount = counts.archivedPageLoadsCount;
         $s.disabled = response.appDisabled; */
-        $s.tempExcludes = response.tempExcludes.join();
-        $s.tempIncludes = response.tempIncludes.join();
+        $s.tempExcludes = response.tempExcludes.join().replace(/\*/g, '').replace(/\|/g, ', ');
+        $s.tempIncludes = response.tempIncludes.join().replace(/\*/g, '').replace(/\|/g, ', ');
         //$s.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
         //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
         $s.$apply();
