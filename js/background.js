@@ -870,45 +870,34 @@ var isReaderModeEnabled = false;
 function clearAllTemps(){
     // remove "temporarily exclude sites" on startup
     // Or user opeted to clear Temporary settings from Settings page
-let isChanged=false;
-STORAGE.get({
-  tempExcludes: [],tempIncludes: []
-}, function(obj) {
-   
+    let isChanged=false;
+    STORAGE.get({
+    tempExcludes: [],tempIncludes: [], redirects:[]
+    }, function(obj) {
+  let redirects = obj.redirects;
   var excarray = obj.tempExcludes;
   log("exclude array on startup is..." + excarray);
   if (excarray.length > 0) {
-    STORAGE.get({
-      redirects: []
-    }, function(response) {
+  
       isChanged=true;  
-      let redirects = response.redirects;
       for (let i = 0; i < excarray.length; i++) {
         let toReplace = excarray[i];
         log(toReplace + ' need to be removed from exclude pattern');
         redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(toReplace, '');
-      };
-      log(JSON.stringify(redirects));
-     
-    });
-  }
-});
   
+      log(JSON.stringify(redirects));  
+  }
+}
+ 
   var incarray = obj.tempIncludes;
   log("include array on startup that need to be added back to Exclude pattern..." + incarray);
   if (incarray.length > 0) {
-    STORAGE.get({
-      redirects: []
-    }, function(response) {
-      let redirects = response.redirects;
-      for (let i = 0; i < incarray.length; i++) {
+     for (let i = 0; i < incarray.length; i++) {
         let toAdd = incarray[i];
         redirects[0].excludePattern = redirects[0].excludePattern + toAdd;
-      };
+      }
       log(JSON.stringify(redirects));
       isChanged=true;  
-
-    });
   }
 if(isChanged){
 let temp = [];
@@ -918,7 +907,7 @@ let temp = [];
           tempIncludes:temp
       });
 }
-//add "temporary includes" back to Exclude Pattern on startup
+});
 }
 
 function handleUpdate(istemporary) {
