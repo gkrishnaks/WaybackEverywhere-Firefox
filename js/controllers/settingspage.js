@@ -80,7 +80,30 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
       $s.showMessage(msg, 'success', 10, 1);
     }
   };
-
+    $s.tempExcludes = "";
+    $s.tempIncludes = "";
+    
+  var getTemps=function() {
+    chrome.runtime.sendMessage({
+        type: "appDetails",
+      },
+      function(response) {
+       /* log.enabled = response.logstatus;
+        let counts = JSON.parse(response.counts);
+        // {"archivedPageLoadsCount":0,"waybackSavescount":0}
+        $s.savecount = counts.waybackSavescount;
+        $s.loadcount = counts.archivedPageLoadsCount;
+        $s.disabled = response.appDisabled; */
+        $s.tempExcludes = response.tempExcludes.join();
+        $s.tempIncludes = response.tempIncludes.join();
+        //$s.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
+        //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
+        $s.$apply();
+      });
+  } 
+   
+  getTemps(); 
+    
   $s.removefromExclude = function(url) {
     url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
     $s.message = null;
