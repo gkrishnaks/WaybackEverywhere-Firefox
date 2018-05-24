@@ -67,7 +67,7 @@
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
 
 
       <td>
@@ -76,7 +76,7 @@
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
       <td>
         <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()"><strong>Add {{domain}} to Excludes List</strong></button>
         <BR>
