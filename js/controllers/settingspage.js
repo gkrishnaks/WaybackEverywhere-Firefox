@@ -82,7 +82,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   };
     $s.tempExcludes = "";
     $s.tempIncludes = "";
-    
+    $s.justSaved= "";
   var getTemps=function() {
     chrome.runtime.sendMessage({
         type: "appDetails",
@@ -98,6 +98,8 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
         $s.tempIncludes = response.tempIncludes.join('').replace(/\*/g, '').substring(1).replace(/\|/g, ', ');
         //$s.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
         //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
+        if(response.justSaved.length>0){
+        $s.justSaved = response.justSaved.join(', '); }
         $s.$apply();
       });
   } 
