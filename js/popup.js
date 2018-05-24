@@ -248,6 +248,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
+    if($s.domain != "web.archive.org"){
     var tempInc = [];
     storage.get({
       tempIncludes: []
@@ -261,12 +262,13 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       });
       $s.removeSitefromexclude();
     });
-
+   }
   }
 
   // TODO : Move the below to Background script similar to AddtoExcludes
 
   $s.removeSitefromexclude = function() {
+    if($s.domain != "web.archive.org"){
     $s.issiteexcluded = false;
     let incUrl = getPattern();
     //console.log('Remove from exclude url is ' + incUrl);
@@ -297,6 +299,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         window.close();
       });
     });
+   }
   }
 
   // Getting alltabs each time and using it for openUrl seems to cause flickering effect
