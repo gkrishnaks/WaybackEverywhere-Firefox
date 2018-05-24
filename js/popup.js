@@ -37,7 +37,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   var tempIncludes = [];
   var tempExcludes = [];
   $s.isLoadAllLinksEnabled = false;
-
+  $s.hideIncludebutton = false;
   getCurrentUrl(updateDetails);
 
   function updateDetails() {
@@ -85,6 +85,9 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       if (url2.indexOf('view-source:') > -1) {
         $s.webextpagesExcluded = true;
 
+      }
+      if ($s.domain === "web.archive.org"){
+         $s.hideIncludebutton = true;
       }
       if (url2.indexOf('file:/') > -1) {
         $s.webextpagesExcluded = true;
