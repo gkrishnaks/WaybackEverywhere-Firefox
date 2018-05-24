@@ -735,6 +735,17 @@ chrome.runtime.onMessage.addListener(
          log("first version url loaded in browser in tab " + request.tabid + " as " + firstVersionURL);
         });
         
+    } else if(request.type == "clearTemps"){
+        delete request.type;
+        let tempExcludes = [];
+        STORAGE.set({
+            tempExcludes:tempExcludes,
+            tempIncludes:tempExcludes 
+        }, function(){
+            sendResponse({
+            message: 'successfullyclearedTemps'
+            });
+        });   
     }else {
       log('Unexpected message: ' + JSON.stringify(request));
       return false;
