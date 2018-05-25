@@ -794,7 +794,7 @@ function updateLogging() {
 }
 
 updateLogging();
-var justSaved=[];
+var justSaved=["http://examples.com"]; 
 function savetoWM(request, sender, sendResponse) {
   let url1=''; 
   let tabid;
@@ -814,12 +814,17 @@ function savetoWM(request, sender, sendResponse) {
   let wmSaveUrl;
   if (url1.indexOf('web.archive.org') > -1) {
     let obj = getHostfromUrl(url1);
-    justSaved.push(obj.url.replace("#close",'') + "==WBE==" + Date.now());
+    let toSave=obj.url.replace("#close",'');
+    if(justSaved.indexOf(toSave) < 0){
+    justSaved.push(obj.url.replace("#close",'') + "==WBE==" + Date.now()); 
+    }
     wmSaveUrl = 'https://web.archive.org/save/' + obj.url;
     log('call parseUrl.js getHostfromUrl with url as ' + url1 + ' received url back as ' + obj.url + ' and save url to be loaded is ' + wmSaveUrl);
   } else {
     wmSaveUrl = 'https://web.archive.org/save/' + url1;
+    if(justSaved.indexOf(url1) < 0){
     justSaved.push(url1.replace("#close",'') + "==WBE==" + Date.now());
+    }
   }
   chrome.tabs.update(tabid, {
     active: activetab,
