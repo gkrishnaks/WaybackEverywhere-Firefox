@@ -240,9 +240,11 @@
 						<p><button class="btn blue" ng-click="clearTemps()">Clear </button>
 							
 						</div>
-						<div ng-if="justSaved && logging">
+						<div ng-if="logging">
 							<!-- Show JustSaved only when logging is enabled - used during development -->
 							<label>Just saved urls: </label><p>{{justSaved}}</p>
+							<label>Filters for cleaning URLS before Redirecting to Wayback Machine</label>
+							<p>{{filters}}<p>
 						</div>
 							
 					</div>
