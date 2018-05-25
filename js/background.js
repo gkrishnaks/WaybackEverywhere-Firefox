@@ -155,6 +155,7 @@ function loadinitialdata(type) {
     initialsettings = e.data.workerResult.redirects;
     var isReset = e.data.type;
     log(JSON.stringify(initialsettings));
+    log(JSON.stringify(e.data.workerResult.filters));
     readworker.terminate();
     STORAGE.set({
       redirects: initialsettings,
