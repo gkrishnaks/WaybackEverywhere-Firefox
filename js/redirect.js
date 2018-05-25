@@ -316,7 +316,7 @@ Redirect.prototype = {
     // In that case, it shouldn't be excluded
     // for example, if url has http://example.com/some/page?utm=twitter.com -> though twitter.com is in Excludes list, shouldn't exclude that as it's in tracking part
     let url2 = getHostfromUrl(url).hostname;
-    var shouldExclude = !!this._rxExclude.exec(url2);
+    var shouldExclude = this._rxExclude.test(url2);
     log('shouldExclude --> ' + shouldExclude);
     this._rxExclude.lastIndex = 0;
     return shouldExclude;
