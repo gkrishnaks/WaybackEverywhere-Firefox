@@ -944,6 +944,10 @@ function handleUpdate(istemporary) {
     let addToDefaultExcludes = e.data.workerResult.addToDefaultExcludes;
     let removeFromDefaultExcludes = e.data.workerResult.removeFromDefaultExcludes;
     let showUpdatehtml = e.data.workerResult.showUpdatehtml;
+    let changeInAddtoFiltersList = e.data.workerResult.changeInAddtoFiltersList;
+    let changeInRemovefromFiltersList = e.data.workerResult.changeInRemovefromFiltersList;
+    let addtoFiltersList = e.data.workerResult.addtoFiltersList;
+    let removefromFiltersList =  e.data.workerResult.removefromFiltersList;
     updateWorker.terminate();
     // Add or remove from Excludes
     STORAGE.get({
@@ -954,11 +958,11 @@ function handleUpdate(istemporary) {
       let filterlist = response.filters;
       // Add to redirects
 
-      if (changeInAddList && addToDefaultExcludes != null) {
+      if (changeInAddList && addToDefaultExcludes != null && addToDefaultExcludes.length > 0) {
         redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
         log("the new excludes list is..." + redirects[0].excludePattern);
       }
-      if (changeInRemoveList && removeFromDefaultExcludes != null) {
+      if (changeInRemoveList && removeFromDefaultExcludes != null && removeFromDefaultExcludes.length > 0) {
         for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
           if (removeFromDefaultExcludes[i].indexOf("web.archive.org") > -1) {
             continue;
@@ -969,14 +973,14 @@ function handleUpdate(istemporary) {
         }
         log("the new excludes list is. ." + redirects[0].excludePattern);
       }
-      if(changeInAddtoFiltersList && addtoFiltersList!= null){
+      if(changeInAddtoFiltersList && addtoFiltersList!= null && addtoFiltersList.length > 0){
           for(let i=0; i<addtoFiltersList.length; i++){
             if(filterlist.indexOf(addtoFiltersList[i]) < 0){
             filterlist.push(addtoFiltersList[i]);
             }
           }
       }
-      if(changeInRemovefromFiltersList && removefromFiltersList!= null){
+      if(changeInRemovefromFiltersList && removefromFiltersList!= null && removefromFiltersList.length > 0){
         let index=-1;
          for(let i=0; i<removefromFiltersList.length; i++){
              index=filterlist.indexOf(removefromFiltersList[i]);
