@@ -374,8 +374,9 @@ function checkRedirects(details) {
     
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
     let isJustSaved=false;  
+    let toSaveurl=urlDetails.url.replace("#close",'');
     for(let k=0; k < justSaved.length; k++){
-        if(urlDetails.url == justSaved[k].split("==WBE==")[0]){
+        if( toSaveurl == justSaved[k].split("==WBE==")[0]){
             isJustSaved=true;
             break;
         }
