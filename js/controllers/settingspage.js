@@ -326,21 +326,18 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   $s.ReadableExcludePattern = 'web.archive.org';
   //Need to proxy this through the background page,because Firefox gives us dead objects
   //nonsense when accessing chrome.storage directly.
-  function getRules(){  
+  (function getRules(){  
   chrome.runtime.sendMessage({
     type: "getredirects"
   }, function(response) {
-    for (var i = 0; i < response.redirects.length; i++) {
-      $s.redirects.push(normalize(response.redirects[i]));
+    if($s.redirects.length == 0){
+    $s.redirects.push(normalize(response.redirects[0]));
     }
-    var exc = $s.redirects[0].excludePattern;
-    $s.ReadableExcludePattern = exc.replace(/\*/g, '');
-    $s.ReadableExcludePattern = $s.ReadableExcludePattern.replace(/\|/g, ', ');
-
+    $s.ReadableExcludePattern = response.redirects[0].replace(/\*/g, '').replace(/\|/g, ', ');
     $s.$apply();
   });
-  }
-  getRules();
+  })();
+
   $s.logging = false;
 
   storage.get({
