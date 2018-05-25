@@ -338,7 +338,7 @@ function clearJustSaved(){
         for(let j=0; j<justSaved.length; j++){
             if(Date.now() - Number(justSaved[j].split("==WBE==")[1]) >= 240000 ) {
                 justSaved.splice(j,1);
-                break; // Since we check if url exists in justSaved before adding, no need to continue..
+                // Do not 'break' here, just clear out all old links in justSaved.
             }
         }
     }
@@ -795,7 +795,7 @@ function updateLogging() {
 }
 
 updateLogging();
-var justSaved=["http://examples.com"]; 
+var justSaved=["http://examples.com==WBE==123456789"]; 
 function savetoWM(request, sender, sendResponse) {
   let url1=''; 
   let tabid;
@@ -816,16 +816,12 @@ function savetoWM(request, sender, sendResponse) {
   if (url1.indexOf('web.archive.org') > -1) {
     let obj = getHostfromUrl(url1);
     let toSave=obj.url.replace("#close",'');
-    if(justSaved.indexOf(toSave) < 0){
     justSaved.push(obj.url.replace("#close",'') + "==WBE==" + Date.now()); 
-    }
     wmSaveUrl = 'https://web.archive.org/save/' + obj.url;
     log('call parseUrl.js getHostfromUrl with url as ' + url1 + ' received url back as ' + obj.url + ' and save url to be loaded is ' + wmSaveUrl);
   } else {
     wmSaveUrl = 'https://web.archive.org/save/' + url1;
-    if(justSaved.indexOf(url1) < 0){
     justSaved.push(url1.replace("#close",'') + "==WBE==" + Date.now());
-    }
   }
   chrome.tabs.update(tabid, {
     active: activetab,
