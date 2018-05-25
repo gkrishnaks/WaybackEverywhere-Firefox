@@ -274,12 +274,8 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     }, function(response) {
       $s.redirects = [];
       $s.redirects = arr;
-      var exc1 = $s.redirects[0].excludePattern;
-      $s.ReadableExcludePattern = exc1.replace(/\*/g, '');
-      $s.ReadableExcludePattern = $s.ReadableExcludePattern.replace(/\|/g, ', ');
-
+      $s.ReadableExcludePattern = $s.redirects[0].excludePattern.replace(/\*/g, '').replace(/\|/g, ', ');
       $s.$apply();
-
     });
 
   }
@@ -333,7 +329,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     if($s.redirects.length == 0){
     $s.redirects.push(normalize(response.redirects[0]));
     }
-    $s.ReadableExcludePattern = response.redirects[0].replace(/\*/g, '').replace(/\|/g, ', ');
+    $s.ReadableExcludePattern = response.redirects[0].excludePattern.replace(/\*/g, '').replace(/\|/g, ', ');
     $s.$apply();
   });
   }
