@@ -365,6 +365,28 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.isMobilefirefox = true;
   }
 
+  $s.clearAllHostnamesFromExcludes = function(){
+     storage.get({
+    redirects: []
+  }, function(obj) {
+         let redirectslist=obj.redirects;
+         redirectslist[0].excludePattern = "*web.archive.org*|*archive.org*";
+         storage.set({redirects:redirectslist});
+     });
+  }
+  
+  $s.clearAllStats = function(){
+    var counts = {
+     archivedPageLoadsCount: 0,
+     waybackSavescount: 0
+    };
+    storage.set({counts: counts});
+  }
+  
+  $s.clearAllFilters = function(){
+      let filters=[];
+      storage.set({filters: filters});
+  }
 
   storage.get({
     readermode: false
