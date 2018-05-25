@@ -406,7 +406,8 @@ function checkRedirects(details) {
         return {};
     }       
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
-    let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
+    let shouldExclude = excludePatterns.test(urlDetails.hostname);
+    excludePatterns.lastIndex=0;  
     if(tempIncludes.length == 0){
       if(shouldExclude){
         return {redirectUrl: urlDetails.url};
