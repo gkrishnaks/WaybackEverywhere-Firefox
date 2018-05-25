@@ -302,7 +302,12 @@ var oldcounts = {
   waybackSavescount: 0
 };
 
+var filters=[];
 
+STORAGE.get({filters:[]},function(obj){
+log("filters from storage is .. " + JSON.stringify(obj.filters));
+filters = obj.filters;    
+});
 
 function storeCountstoStorage() {
 
@@ -346,6 +351,15 @@ function clearJustSaved(){
     }
 }
 
+function cleanUrlsOnFilters(url){
+    if(filters.length > 0){
+        for(let i=0; i<filters.length; i++){
+            url=url.subtring(0,filters[i]);
+        }
+     log("cleaned url is " + url);   
+    }
+    return url;
+}
 //This is the actual function that gets called for each request and must
 //decide whether or not we want to redirect.
 function checkRedirects(details) {
@@ -386,8 +400,7 @@ function checkRedirects(details) {
     }
     if(isJustSaved){
         return {};
-    } 
-    
+    }       
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
     let shouldExclude = !!excludePatterns.exec(urlDetails.hostname);
     if(tempIncludes.length == 0){
@@ -543,6 +556,10 @@ function monitorChanges(changes, namespace) {
 
       }
       
+  }
+  if(changes.filters){
+      log('filters changed in storage to' + changes.filters.newValue);
+       filters = changes.filters.newValue;
   }
   if (changes.isLoadAllLinksEnabled) {
     log("load all 1p links setting changed to " + changes.isLoadAllLinksEnabled.newValue);
