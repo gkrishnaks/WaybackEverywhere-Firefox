@@ -337,7 +337,8 @@ function clearJustSaved(){
     else{
         for(let j=0; j<justSaved.length; j++){
             if(Date.now() - Number(justSaved[j].split("==WBE==")[1]) >= 240000 ) {
-                justSaved.splice[j,1];
+                justSaved.splice(j,1);
+                break; // Since we check if url exists in justSaved before adding, no need to continue..
             }
         }
     }
