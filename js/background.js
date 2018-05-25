@@ -716,7 +716,8 @@ chrome.runtime.onMessage.addListener(
         tempExcludes: tempExcludes,
         tempIncludes: tempIncludes,
         isLoadAllLinksEnabled: isLoadAllLinksEnabled,
-        justSaved: justSaved
+        justSaved: justSaved,
+        filters: filters.join(", ")
        };
       sendResponse(c);
 
