@@ -1,6 +1,6 @@
 {
   "changeInAddList": true,
-  "changeInRemoveList": false,
+  "changeInRemoveList": true,
   "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*",
   "removeFromDefaultExcludes": ["t.co"],
   "showUpdatehtml": false
