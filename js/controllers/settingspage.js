@@ -83,6 +83,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.tempExcludes = "";
     $s.tempIncludes = "";
     $s.justSaved= "";
+    $s.filters ="";
   var getTemps=function() {
     chrome.runtime.sendMessage({
         type: "appDetails",
@@ -100,6 +101,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
         //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
         if(response.justSaved.length>0){
         $s.justSaved = response.justSaved.join(', '); }
+        $s.filters= response.filters;
         $s.$apply();
       });
   } 
