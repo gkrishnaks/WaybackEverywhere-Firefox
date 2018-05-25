@@ -3,9 +3,9 @@
   "changeInRemoveList": true,
   "changeInAddtoFiltersList": true,
   "changeInRemovefromFiltersList": false,
-  "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*",
+  "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*|*haveibeenpwned.com*|*syfy.tv*|*act.gp*|*sndcdn.com*|*msft.social*|*bbc.in*|*go.myogc.org*|*fullstackradio.com*|*docusign.net*|*list-manage.com*|*econ.st*|*politi.co*|*pe.ga*|*fbcdn.net*|*whatsapp.com*|*.slack.com*|*.typeform.com*|*un.org*|*hrvd.me*",
   "removeFromDefaultExcludes": ["t.co"],
-  "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc"],
+  "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi"],
   "removefromFiltersList":[],
   "showUpdatehtml": true
 }
