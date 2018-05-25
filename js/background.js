@@ -951,7 +951,7 @@ function handleUpdate(istemporary) {
     }, function(response) {
       log("handleUpdate-  updating default excludes if needed");
       let redirects = response.redirects;
-      let filters = response.filters;
+      let filterlist = response.filters;
       // Add to redirects
 
       if (changeInAddList && addToDefaultExcludes != null) {
@@ -971,26 +971,27 @@ function handleUpdate(istemporary) {
       }
       if(changeInAddtoFiltersList && addtoFiltersList!= null){
           for(let i=0; i<addtoFiltersList.length; i++){
-            if(filters.indexOf(addtoFiltersList[i]) < 0){
-            filters.push(addtoFiltersList[i]);
+            if(filterlist.indexOf(addtoFiltersList[i]) < 0){
+            filterlist.push(addtoFiltersList[i]);
             }
           }
       }
       if(changeInRemovefromFiltersList && removefromFiltersList!= null){
         let index=-1;
          for(let i=0; i<removefromFiltersList.length; i++){
-             index=filters.indexOf(removefromFiltersList[i]);
+             index=filterlist.indexOf(removefromFiltersList[i]);
              if(index > -1){
-                 filters.splice(index,1);
+                 filterlist.splice(index,1);
              }
          } 
       }
       
       if(changeInAddtoFiltersList || changeInRemovefromFiltersList){
+           filters = filterlist;
            STORAGE.set({
-          filters: filters
+          filters: filterlist
         },function(){
-           log("filters saved as .. " + JSON.stringify(filters));
+           log("filters saved as .. " + JSON.stringify(filterlist));
            });
       }
         
