@@ -157,7 +157,8 @@ function loadinitialdata(type) {
     log(JSON.stringify(initialsettings));
     readworker.terminate();
     STORAGE.set({
-      redirects: initialsettings
+      redirects: initialsettings,
+      filters: e.data.workerResult.filters
     }, function() {
       if (isReset == 'doFullReset') {
         log('full reset completed, refrreshing tab to show changes');
@@ -931,10 +932,11 @@ function handleUpdate(istemporary) {
     updateWorker.terminate();
     // Add or remove from Excludes
     STORAGE.get({
-      redirects: []
+      redirects: [],filters : []
     }, function(response) {
       log("handleUpdate-  updating default excludes if needed");
       let redirects = response.redirects;
+      let filters = response.filters;
       // Add to redirects
 
       if (changeInAddList && addToDefaultExcludes != null) {
@@ -952,6 +954,31 @@ function handleUpdate(istemporary) {
         }
         log("the new excludes list is. ." + redirects[0].excludePattern);
       }
+      if(changeInAddtoFiltersList && addtoFiltersList!= null){
+          for(let i=0; i<addtoFiltersList.length; i++){
+            if(filters.indexOf(addtoFiltersList[i]) < 0){
+            filters.push(addtoFiltersList[i]);
+            }
+          }
+      }
+      if(changeInRemovefromFiltersList && removefromFiltersList!= null){
+        let index=-1;
+         for(let i=0; i<removefromFiltersList.length; i++){
+             index=filters.indexOf(removefromFiltersList[i]);
+             if(index > -1){
+                 filters.splice(index,1);
+             }
+         } 
+      }
+      
+      if(changeInAddtoFiltersList || changeInRemovefromFiltersList){
+           STORAGE.set({
+          filters: filters
+        },function(){
+           log("filters saved as .. " + JSON.stringify(filters));
+           });
+      }
+        
       if (changeInAddList || changeInRemoveList) {
         STORAGE.set({
           redirects: redirects
