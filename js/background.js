@@ -810,14 +810,15 @@ function savetoWM(request, sender, sendResponse) {
     tabid = request.tabid;
     url1 = request.url;
   }
-  justSaved.push(url1 + "==WBE==" + Date.now());
   let wmSaveUrl;
   if (url1.indexOf('web.archive.org') > -1) {
     let obj = getHostfromUrl(url1);
+    justSaved.push(obj.url.replace("#close",'') + "==WBE==" + Date.now());
     wmSaveUrl = 'https://web.archive.org/save/' + obj.url;
     log('call parseUrl.js getHostfromUrl with url as ' + url1 + ' received url back as ' + obj.url + ' and save url to be loaded is ' + wmSaveUrl);
   } else {
     wmSaveUrl = 'https://web.archive.org/save/' + url1;
+    justSaved.push(url1.replace("#close",'') + "==WBE==" + Date.now());
   }
   chrome.tabs.update(tabid, {
     active: activetab,
