@@ -15,5 +15,6 @@
     "appliesTo": [
       "main_frame"
     ]
-  }]
+  }],
+  "filters": ["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc"]
 }
