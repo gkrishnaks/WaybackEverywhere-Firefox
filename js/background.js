@@ -353,8 +353,12 @@ function clearJustSaved(){
 
 function cleanUrlsOnFilters(url){
     if(filters.length > 0){
+        let index=-1;
         for(let i=0; i<filters.length; i++){
-            url=url.substring(0,filters[i]);
+            index=url.indexOf(filters[i]);
+            if(index>-1){
+            url=url.substring(0,index);
+            }
         }
      log("cleaned url is " + url);   
     }
