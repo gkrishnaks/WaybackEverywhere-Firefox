@@ -838,6 +838,7 @@ function savetoWM(request, sender, sendResponse) {
     wmSaveUrl = 'https://web.archive.org/save/' + url1;
     justSaved.push(url1.replace("#close",'') + "==WBE==" + Date.now());
   }
+  wmSaveUrl = cleanUrlsOnFilters(wmSaveUrl);
   chrome.tabs.update(tabid, {
     active: activetab,
     url: wmSaveUrl
