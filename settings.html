@@ -244,8 +244,8 @@
 							<!-- Show JustSaved only when logging is enabled - used during development -->
 							<label>Just saved urls: </label><p>{{justSaved}}</p>
 						</div>
-						<div>
-							<label>Filters for cleaning URLS before Redirecting to Wayback Machine</label>
+						<div ng-if="logging">
+							<label>Filters to clean URLS:</label>
 							<p>{{filters}}<p>
 						</div>
 							
