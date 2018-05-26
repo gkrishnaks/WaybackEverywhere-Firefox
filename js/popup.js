@@ -87,8 +87,8 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.webextpagesExcluded = true;
 
       }
-      if ($s.domain == "web.archive.org"){
-         $s.hideIncludebutton = true;
+      if ($s.domain == "web.archive.org") {
+        $s.hideIncludebutton = true;
       }
       if (url2.indexOf('file:/') > -1) {
         $s.webextpagesExcluded = true;
@@ -252,58 +252,58 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
-   if($s.domain != "web.archive.org"){  
-    var tempInc = [];
-    storage.get({
-      tempIncludes: []
-    }, function(obj) {
-      log('Temp includes before..' + obj.tempIncludes);
-      tempInc = obj.tempIncludes;
-      tempInc.push(getPattern());
-      log('Temp includes before..' + obj.tempIncludes);
-      storage.set({
-        tempIncludes: tempInc
+    if ($s.domain != "web.archive.org") {
+      var tempInc = [];
+      storage.get({
+        tempIncludes: []
+      }, function(obj) {
+        log('Temp includes before..' + obj.tempIncludes);
+        tempInc = obj.tempIncludes;
+        tempInc.push(getPattern());
+        log('Temp includes before..' + obj.tempIncludes);
+        storage.set({
+          tempIncludes: tempInc
+        });
+        $s.removeSitefromexclude();
       });
-      $s.removeSitefromexclude();
-    });
-   }
+    }
   }
 
   // TODO : Move the below to Background script similar to AddtoExcludes
 
   $s.removeSitefromexclude = function() {
-   if($s.domain != "web.archive.org"){
-   $s.issiteexcluded = false;
-    let incUrl = getPattern();
-    //console.log('Remove from exclude url is ' + incUrl);
-    chrome.runtime.sendMessage({
-      type: "getredirects"
-    }, function(response) {
-      for (var i = 0; i < response.redirects.length; i++) {
-        $s.redirectslist.push(response.redirects[i]);
-      }
-      log('exclude pattern before removing site from exclude..' + $s.redirectslist[0].excludePattern);
-      $s.redirectslist[0].excludePattern = $s.redirectslist[0].excludePattern.replaceAll(incUrl, '');
-      log('exclude pattern after removing site from exclude..' + $s.redirectslist[0].excludePattern);
-
+    if ($s.domain != "web.archive.org") {
+      $s.issiteexcluded = false;
+      let incUrl = getPattern();
+      //console.log('Remove from exclude url is ' + incUrl);
       chrome.runtime.sendMessage({
-        type: "saveredirects",
-        redirects: $s.redirectslist
+        type: "getredirects"
       }, function(response) {
-        log('Saved ' + $s.redirectslist.length + ' redirects at ' + new Date() +
-          '. Message from background page:' +
-          response.message);
-        var wmurl = 'https://web.archive.org/web/2/' + currentUrl;
-        //chrome.tabs.reload({bypassCache: true});
-        //using updare instead of just a reload as it didn't seem to work in android firefox - either works in desktop firefox
-        chrome.tabs.update(tabid, {
-          active: true,
-          url: wmurl
-        }); //.then(onUpdated, onupError);
-        window.close();
+        for (var i = 0; i < response.redirects.length; i++) {
+          $s.redirectslist.push(response.redirects[i]);
+        }
+        log('exclude pattern before removing site from exclude..' + $s.redirectslist[0].excludePattern);
+        $s.redirectslist[0].excludePattern = $s.redirectslist[0].excludePattern.replaceAll(incUrl, '');
+        log('exclude pattern after removing site from exclude..' + $s.redirectslist[0].excludePattern);
+
+        chrome.runtime.sendMessage({
+          type: "saveredirects",
+          redirects: $s.redirectslist
+        }, function(response) {
+          log('Saved ' + $s.redirectslist.length + ' redirects at ' + new Date() +
+            '. Message from background page:' +
+            response.message);
+          var wmurl = 'https://web.archive.org/web/2/' + currentUrl;
+          //chrome.tabs.reload({bypassCache: true});
+          //using updare instead of just a reload as it didn't seem to work in android firefox - either works in desktop firefox
+          chrome.tabs.update(tabid, {
+            active: true,
+            url: wmurl
+          }); //.then(onUpdated, onupError);
+          window.close();
+        });
       });
-    });
-  }
+    }
   }
 
   // Getting alltabs each time and using it for openUrl seems to cause flickering effect
@@ -374,15 +374,15 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   if (navigator.userAgent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
-    
-  $s.seefirstversion=function(){
-   chrome.runtime.sendMessage({
+
+  $s.seefirstversion = function() {
+    chrome.runtime.sendMessage({
       type: "seeFirstVersion",
       subtype: "fromPopup",
       url: currentUrl,
       tabid: tabid
     });
-  }  
+  }
 
   $s.toggleDisabled = function() {
 

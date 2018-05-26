@@ -246,7 +246,7 @@ Redirect.prototype = {
 
   _init: function(o) {
     this.description = o.description || '';
-      this.exampleUrl = o.exampleUrl || '';
+    this.exampleUrl = o.exampleUrl || '';
     this.exampleResult = o.exampleResult || '';
     this.error = o.error || null;
     this.includePattern = o.includePattern || '';
@@ -322,7 +322,7 @@ Redirect.prototype = {
     //but just to be sure endless redirect won't happen, we will retain the below
     if (url2 == "t.co") {
       shouldExclude = true;
-    }  
+    }
     log('shouldExclude --> ' + shouldExclude + 'for url ' + url);
     return shouldExclude;
   }
