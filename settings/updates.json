@@ -3,9 +3,9 @@
   "changeInRemoveList": true,
   "changeInAddtoFiltersList": true,
   "changeInRemovefromFiltersList": false,
-  "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*|*haveibeenpwned.com*|*syfy.tv*|*act.gp*|*sndcdn.com*|*msft.social*|*bbc.in*|*go.myogc.org*|*fullstackradio.com*|*docusign.net*|*list-manage.com*|*econ.st*|*politi.co*|*pe.ga*|*fbcdn.net*|*whatsapp.com*|*.slack.com*|*.typeform.com*|*un.org*|*hrvd.me*|*mozilla.com*|*boutiques.com*",
-  "removeFromDefaultExcludes": ["t.co"],
-  "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi"],
+  "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*|*haveibeenpwned.com*|*syfy.tv*|*act.gp*|*sndcdn.com*|*msft.social*|*bbc.in*|*go.myogc.org*|*fullstackradio.com*|*docusign.net*|*list-manage.com*|*econ.st*|*politi.co*|*pe.ga*|*fbcdn.net*|*whatsapp.com*|*.slack.com*|*.typeform.com*|*un.org*|*hrvd.me*|*mozilla.com*|*boutiques.com*|*amn.st*|*ora.cl*|*satpa.pe*|*hbbl.us*|*mths.be*",
+  "removeFromDefaultExcludes": ["t.co","t.co/"],
+  "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid"],
   "removefromFiltersList":[],
   "showUpdatehtml": true
 }

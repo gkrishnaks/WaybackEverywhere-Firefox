@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(onInstalledfn);
 chrome.runtime.onStartup.addListener(handleStartup);
 const STORAGE = chrome.storage.local;
 
-var justUpdatedReader = {}; 
+var justUpdatedReader = {};
 
 function log(msg) {
   if (log.enabled) {
@@ -41,8 +41,8 @@ var tempIncludes = [];
 var isLoadAllLinksEnabled = false;
 
 
-// headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere" 
-// Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests 
+// headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere"
+// Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests
 // that are sent from this extension/addon - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/4
 
 function headerHandler( details ) {
@@ -96,9 +96,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 function handleRemoved(tabId, removeInfo) {
-    // in android, until Mozilla enables reader mode api for android firefox, this is not needed. 
+    // in android, until Mozilla enables reader mode api for android firefox, this is not needed.
     // but hasOwnProperty will return false always if object does not have any property
-    // so we can leave it as such below 
+    // so we can leave it as such below
     if(justUpdatedReader.hasOwnProperty(tabId)){
       log("cleared the value from justUpdatedReader list of URLs upon closing tab " + tabId + " -> " + justUpdatedReader[tabId]);
         delete justUpdatedReader[tabId];
@@ -208,12 +208,12 @@ var addSitetoExclude = function(request, sender) {
     let array = redirectslist[0].excludePattern.split('*|*');
     let alreadyExistsinExcludes=false;
     if(array.indexOf(obj.hostname) > -1){
-      alreadyExistsinExcludes = true;  
+      alreadyExistsinExcludes = true;
     }
-    array = null; 
+    array = null;
      // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
      // t.co seems to be the only hostname that causes problems with other sites that has "somenamet.com" in url where "t.co" gets a match against t.co
- 
+
     if (!alreadyExistsinExcludes && "t.co" !== obj.hostname) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
@@ -227,11 +227,11 @@ var addSitetoExclude = function(request, sender) {
         tabsUpdate(obj.url,activetab,tabid);
       });
     }
-      else{        
+      else{
           log('domainname already exists in excludes list, just loading live page');
-          tabsUpdate(obj.url,activetab,tabid); 
+          tabsUpdate(obj.url,activetab,tabid);
       }
-   
+
     // Check if it's a temporary exclude request and put in temp exclude list too
     if (request.category == 'AddtoTempExcludesList') {
       checkTempExcludes(obj.hostname);
@@ -306,7 +306,7 @@ var filters=[];
 
 STORAGE.get({filters:[]},function(obj){
 log("filters from storage is .. " + JSON.stringify(obj.filters));
-filters = obj.filters;    
+filters = obj.filters;
 });
 
 function storeCountstoStorage() {
@@ -338,17 +338,19 @@ setInterval(clearJustSaved, 240000);
 // 4 Minutes once, clear JustSaved based on time.
 
 function clearJustSaved(){
-    if(justSaved.length == 0){
-        return; 
-    }
-    else{
-        for(let j=0; j<justSaved.length; j++){
+      for(let j=0; j<justSaved.length; j++){
             if(Date.now() - Number(justSaved[j].split("==WBE==")[1]) >= 240000 ) {
                 justSaved.splice(j,1);
                 // Do not 'break' here, just clear out all old links in justSaved.
             }
         }
-    }
+        for(let m=0; m<justreloaded.length; m++){
+              if(Date.now() - Number(justreloaded[m].split("==WBE==")[1]) >= 240000 ) {
+                  justreloaded.splice(m,1);
+                  // Do not 'break' here, just clear out all old links in justreloaded.
+              }
+          }
+
 }
 
 function cleanUrlsOnFilters(url){
@@ -360,7 +362,7 @@ function cleanUrlsOnFilters(url){
             url=url.substring(0,index);
             }
         }
-     log("cleaned url is " + url);   
+     log("cleaned url is " + url);
     }
     return url;
 }
@@ -373,23 +375,23 @@ function checkRedirects(details) {
   if (details.method != 'GET') {
     return {};
   }
-       
+
     // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
     // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
     // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
     // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
-    // Using this, we load live page of github since it's in excludes list. 
+    // Using this, we load live page of github since it's in excludes list.
     // we may add a switch to Settings page to disable this behaviour at a later time if needed.
-    
-    // Need to use once we make Excludepattern array of hosts instead of regex 
+
+    // Need to use once we make Excludepattern array of hosts instead of regex
     //if(excludePatterns.indexOf(host))
-    
-    
+
+
     //Return save page requests right away
   if (details.url.indexOf("web.archive.org/save") > -1) {
     return {};
   }
-  
+
   let urlDetails = getHostfromUrl(details.url);
 
   //since "t.co" shoterner matches with sites that have "..t.com" in the url as we use RegExp
@@ -397,26 +399,27 @@ function checkRedirects(details) {
   // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
   if (urlDetails.hostname == "t.co") {
     return {};
-  }  
-    
-    
+  }
+
+
   if (details.url.indexOf("web.archive.org/web") > -1) {
-       
+
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
-    let isJustSaved=false;  
+    let isJustSaved=false;
     let toSaveurl=urlDetails.url.replace("#close",'');
     for(let k=0; k < justSaved.length; k++){
-        if( toSaveurl == justSaved[k].split("==WBE==")[0]){
+        if( justSaved[k].indexOf(toSaveurl) > -1){
             isJustSaved=true;
             break;
         }
     }
     if(isJustSaved){
+        log("this page is in justSaved, so loading archived version");
         return {};
-    }       
+    }
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
     let shouldExclude = excludePatterns.test(urlDetails.hostname);
-    excludePatterns.lastIndex=0;  
+    excludePatterns.lastIndex=0;
     if(tempIncludes.length == 0){
       if(shouldExclude){
         return {redirectUrl: urlDetails.url};
@@ -430,10 +433,10 @@ function checkRedirects(details) {
       if(shouldExclude){
         return {redirectUrl: urlDetails.url};
       }
-    }    
+    }
   return {};
 }
-    
+
   log(' Checking: ' + details.type + ': ' + details.url);
 
   var list = partitionedRedirects[details.type];
@@ -529,7 +532,7 @@ function monitorChanges(changes, namespace) {
   if (changes.redirects) {
     let newRedirects=changes.redirects.newValue;
     excludePatterns=getRegex(newRedirects[0].excludePattern);
-      
+
     if (!appDisabled) {
       log('Wayback Everywhere Excludes list have changed, setting up listener again');
       setUpRedirectListener();
@@ -561,7 +564,7 @@ function monitorChanges(changes, namespace) {
         chrome.tabs.onRemoved.removeListener(handleRemoved);
 
       }
-      
+
   }
   if(changes.filters){
       log('filters changed in storage to' + changes.filters.newValue);
@@ -659,7 +662,7 @@ function setUpRedirectListener() {
   });
 }
 
-var justreloaded;
+var justreloaded=[];
 //Firefox doesn't allow the "content script" which is actually privileged
 //to access the objects it gets from chrome.storage directly, so we
 //proxy it through here
@@ -756,14 +759,14 @@ chrome.runtime.onMessage.addListener(
     } else if(request.type == "seeFirstVersion"){
         delete request.type;
         let urlDetails=getHostfromUrl(request.url);
-        firstVersionURL = 'https://web.archive.org/web/0/' + urlDetails.url;
+        let firstVersionURL = 'https://web.archive.org/web/0/' + urlDetails.url;
         chrome.tabs.update(request.tabid, {
             active: true,
             url: firstVersionURL
         }, function(tab) {
          log("first version url loaded in browser in tab " + request.tabid + " as " + firstVersionURL);
         });
-        
+
     } else if(request.type == "clearTemps"){
         delete request.type;
         clearAllTemps();
@@ -780,19 +783,27 @@ chrome.runtime.onMessage.addListener(
   });
 
 // Added the below to hande a very rare case where Wayback throws "504" error when Saving page.
-// Manually reloading the page was enough to get it work next time. 
-// This will just reload the page once and stop reloading after that if it continues as 
+// Manually reloading the page was enough to get it work next time.
+// This will just reload the page once and stop reloading after that if it continues as
 // .. it assigned url to justreloaded variable
 
 // Find out if 504 is thrown by the saved page or by WM itself -
 // Need to Comment out the below if WM is actually the one that shows this 504
 
 function reloadPage(tabId, tabUrl) {
-  if (tabUrl !== justreloaded) {
+  let shouldReload=false;
+  for(let i=0; i< justreloaded.length; i++){
+    if (justreloaded[i].indexOf(tabUrl)<0) {
+      shouldReload=true;
+      justreloaded.push(tabUrl + "==WBE==" + Date.now());
+      break;
+  }
+ }
+ if(shouldReload){
     chrome.tabs.reload(tabId, {
       bypassCache: true
     }, function() {
-      justreloaded = tabUrl;
+      log("Page reloaded");
     });
   }
 }
@@ -800,13 +811,12 @@ chrome.webRequest.onCompleted.addListener(function(details) {
   /*if (details.type == "main_frame") {
     console.log("status code is " + details.statusCode + " in url " + details.url);
   } */
-  if (details.statusCode == 504 && details.type == "main_frame") {
+  if (details.type == "main_frame" && (details.statusCode == 504 || details.statusCode == 503)) {
     reloadPage(details.tabId, details.url);
   }
 }, {
   urls: ["*://web.archive.org/*"]
 });
-
 
 //First time setup
 //updateIcon();
@@ -821,9 +831,9 @@ function updateLogging() {
 }
 
 updateLogging();
-var justSaved=["http://examples.com==WBE==9999999999999"]; 
+var justSaved=["http://examples.com==WBE==9999999999999"];
 function savetoWM(request, sender, sendResponse) {
-  let url1=''; 
+  let url1='';
   let tabid;
   var activetab = true;
   if (request.subtype == 'fromContent') {
@@ -839,17 +849,17 @@ function savetoWM(request, sender, sendResponse) {
     url1 = request.url;
   }
   let wmSaveUrl;
+  let toSave;
   if (url1.indexOf('web.archive.org') > -1) {
     let obj = getHostfromUrl(url1);
-    let toSave=obj.url.replace("#close",'');
-    justSaved.push(obj.url.replace("#close",'') + "==WBE==" + Date.now()); 
-    wmSaveUrl = 'https://web.archive.org/save/' + obj.url;
-    log('call parseUrl.js getHostfromUrl with url as ' + url1 + ' received url back as ' + obj.url + ' and save url to be loaded is ' + wmSaveUrl);
+    toSave=obj.url.replace("#close",'');
   } else {
-    wmSaveUrl = 'https://web.archive.org/save/' + url1;
-    justSaved.push(url1.replace("#close",'') + "==WBE==" + Date.now());
+    toSave = url1.replace("#close",'');
   }
-  wmSaveUrl = cleanUrlsOnFilters(wmSaveUrl);
+  toSave = cleanUrlsOnFilters(toSave);
+  justSaved.push(toSave + "==WBE==" + Date.now());
+  wmSaveUrl = 'https://web.archive.org/save/' + toSave;
+  log('save url to be loaded is -- also cleaned with filters --' + wmSaveUrl);
   chrome.tabs.update(tabid, {
     active: activetab,
     url: wmSaveUrl
@@ -910,17 +920,17 @@ function clearAllTemps(){
   var excarray = obj.tempExcludes;
   log("exclude array on startup is..." + excarray);
   if (excarray.length > 0) {
-  
-      isChanged=true;  
+
+      isChanged=true;
       for (let i = 0; i < excarray.length; i++) {
         let toReplace = excarray[i];
         log(toReplace + ' need to be removed from exclude pattern');
         redirects[0].excludePattern = redirects[0].excludePattern.replaceAll(toReplace, '');
-  
-      log(JSON.stringify(redirects));  
+
+      log(JSON.stringify(redirects));
   }
 }
- 
+
   var incarray = obj.tempIncludes;
   log("include array on startup that need to be added back to Exclude pattern..." + incarray);
   if (incarray.length > 0) {
@@ -929,7 +939,7 @@ function clearAllTemps(){
         redirects[0].excludePattern = redirects[0].excludePattern + toAdd;
       }
       log(JSON.stringify(redirects));
-      isChanged=true;  
+      isChanged=true;
   }
 if(isChanged){
 let temp = [];
@@ -998,9 +1008,9 @@ function handleUpdate(istemporary) {
              if(index > -1){
                  filterlist.splice(index,1);
              }
-         } 
+         }
       }
-      
+
       if(changeInAddtoFiltersList || changeInRemovefromFiltersList){
            filters = filterlist;
            STORAGE.set({
@@ -1009,7 +1019,7 @@ function handleUpdate(istemporary) {
            log("filters saved as .. " + JSON.stringify(filterlist));
            });
       }
-        
+
       if (changeInAddList || changeInRemoveList) {
         STORAGE.set({
           redirects: redirects
@@ -1051,8 +1061,8 @@ STORAGE.get({
 function handleStartup() {
   log("Handle startup - fetch counts, fetch readermode setting, fetch appdisabled setting, clear out any temp excludes or temp includes");
   //For issue 11 fix, we moved this to background script - so that counts can get set to global variables correctly..
-    // .. when addon is disabled and enabled from about:addons . Commenting the below 
- /*   
+    // .. when addon is disabled and enabled from about:addons . Commenting the below
+ /*
    STORAGE.get({
     counts: counts
   }, function(response) {
@@ -1100,7 +1110,7 @@ function handleStartup() {
   clearAllTemps();
 };
 
- 
+
 
 function onInstalledfn(details) {
   log(JSON.stringify(details));
@@ -1112,15 +1122,10 @@ function onInstalledfn(details) {
       archivedPageLoadsCount: 0,
       waybackSavescount: 0
     };
-    //Fix for Issue 11 https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/11
-    // Looks like Disabling addon from About:addons and enabling causes onInstalled event to trigger
-    // This was the reason why counts got reset to zero on this issue. 
-    // The below should fix the issue by not storing zeros upon addon disable enable.
-      
-     STORAGE.set({
+   STORAGE.set({
         counts: counts
         });
-   
+
     let tempExcludes = [];
     STORAGE.set({
       tempExcludes: tempExcludes

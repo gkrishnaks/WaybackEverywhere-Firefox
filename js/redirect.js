@@ -297,7 +297,6 @@ Redirect.prototype = {
         }
         repl = atob(repl);
       }
-      finalurl = repl;
       resultUrl = resultUrl.replace(new RegExp('\\$' + i, 'gi'), repl);
       log('finalurl --> ' + repl + ' resultUrl -->' + resultUrl);
     }
@@ -322,7 +321,7 @@ Redirect.prototype = {
     //but just to be sure endless redirect won't happen, we will retain the below
     if (url2 == "t.co") {
       shouldExclude = true;
-    }  
+    }
     log('shouldExclude --> ' + shouldExclude + 'for url ' + url);
     return shouldExclude;
   }
