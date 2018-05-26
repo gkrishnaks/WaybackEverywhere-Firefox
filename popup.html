@@ -47,13 +47,13 @@
     </tr>
 
 
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
       <td>
         <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="removeSitefromexclude()"><strong> Include {{domain}} </strong></button>
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
 
       <td>
         <button type="button" class="btn btn-outline-info btn-sm" id="recent_capture" tabindex='-1' ng-click="removeSitefromexcludeTemp()"><strong>Temporarily Include {{domain}}</strong></button>
@@ -67,7 +67,7 @@
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
 
 
       <td>
@@ -76,7 +76,7 @@
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
       <td>
         <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()"><strong>Add {{domain}} to Excludes List</strong></button>
         <BR>
@@ -104,7 +104,13 @@
         <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="saveAsPDF()">Save Page as PDF</button>
       </td>
     </tr>
-
+    
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+      <td>
+        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="seefirstversion()">See first archived</button>
+      </td>
+    </tr>
+    
     <tr class="spaceUnder" align="center">
       <td>
         <button type="button" class="btn btn-info btn-sm formfineleft" id="about_support_button" ng-click="openHelp()">Help</button>

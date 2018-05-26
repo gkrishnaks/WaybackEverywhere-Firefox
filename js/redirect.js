@@ -245,7 +245,7 @@ Redirect.prototype = {
   },
 
   _init: function(o) {
-    this.description = o.description || '',
+    this.description = o.description || '';
       this.exampleUrl = o.exampleUrl || '';
     this.exampleResult = o.exampleResult || '';
     this.error = o.error || null;
@@ -308,7 +308,7 @@ Redirect.prototype = {
   _excludeMatch: function(url) {
     log('inside _excludeMatch.. for url -->' + url);
     if (!this._rxExclude) {
-      log('returning false as this._rxExclude is false');
+      log('returning false');
       return false;
     }
     // fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/3
@@ -316,9 +316,14 @@ Redirect.prototype = {
     // In that case, it shouldn't be excluded
     // for example, if url has http://example.com/some/page?utm=twitter.com -> though twitter.com is in Excludes list, shouldn't exclude that as it's in tracking part
     let url2 = getHostfromUrl(url).hostname;
-    var shouldExclude = !!this._rxExclude.exec(url2);
-    log('shouldExclude --> ' + shouldExclude);
+    var shouldExclude = this._rxExclude.test(url2);
     this._rxExclude.lastIndex = 0;
+    // The below may not happen at all as background.js just returns when hostname is "t.co"
+    //but just to be sure endless redirect won't happen, we will retain the below
+    if (url2 == "t.co") {
+      shouldExclude = true;
+    }  
+    log('shouldExclude --> ' + shouldExclude + 'for url ' + url);
     return shouldExclude;
   }
 };

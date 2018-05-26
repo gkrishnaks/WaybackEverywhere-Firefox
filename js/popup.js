@@ -37,7 +37,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   var tempIncludes = [];
   var tempExcludes = [];
   $s.isLoadAllLinksEnabled = false;
-
+  $s.hideIncludebutton = false;
   getCurrentUrl(updateDetails);
 
   function updateDetails() {
@@ -77,7 +77,8 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       tabid = tabs[0].id;
       currentUrl = tabs[0].url;
       url2 = currentUrl;
-      $s.domain = getHostfromUrl(url2).hostname;
+      let urlDetails = getHostfromUrl(url2);
+      $s.domain = urlDetails.hostname;
       if (url2.indexOf('-extension://') < 0) {
         $s.webextpagesExcluded = false;
       }
@@ -85,6 +86,9 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       if (url2.indexOf('view-source:') > -1) {
         $s.webextpagesExcluded = true;
 
+      }
+      if ($s.domain == "web.archive.org"){
+         $s.hideIncludebutton = true;
       }
       if (url2.indexOf('file:/') > -1) {
         $s.webextpagesExcluded = true;
@@ -248,6 +252,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
+   if($s.domain != "web.archive.org"){  
     var tempInc = [];
     storage.get({
       tempIncludes: []
@@ -261,12 +266,17 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       });
       $s.removeSitefromexclude();
     });
+<<<<<<< HEAD
+=======
+   }
+>>>>>>> fix-issue16
   }
 
   // TODO : Move the below to Background script similar to AddtoExcludes
 
   $s.removeSitefromexclude = function() {
-    $s.issiteexcluded = false;
+   if($s.domain != "web.archive.org"){
+   $s.issiteexcluded = false;
     let incUrl = getPattern();
     //console.log('Remove from exclude url is ' + incUrl);
     chrome.runtime.sendMessage({
@@ -296,6 +306,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         window.close();
       });
     });
+  }
   }
 
   // Getting alltabs each time and using it for openUrl seems to cause flickering effect
@@ -366,6 +377,15 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   if (navigator.userAgent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
+    
+  $s.seefirstversion=function(){
+   chrome.runtime.sendMessage({
+      type: "seeFirstVersion",
+      subtype: "fromPopup",
+      url: currentUrl,
+      tabid: tabid
+    });
+  }  
 
   $s.toggleDisabled = function() {
 
