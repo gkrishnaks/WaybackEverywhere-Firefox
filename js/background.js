@@ -389,10 +389,19 @@ function checkRedirects(details) {
   if (details.url.indexOf("web.archive.org/save") > -1) {
     return {};
   }
+  
+  let urlDetails = getHostfromUrl(details.url);
 
-  if (details.url.indexOf("web.archive.org/web") > -1) {
-    let urlDetails = getHostfromUrl(details.url);
+  //since "t.co" shoterner matches with sites that have "..t.com" in the url as we use RegExp
+  //As t.co is the most common for links clicked from tweets - let's check and return t.co without further processing
+  // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
+  if (urlDetails.hostname == "t.co") {
+    return {};
+  }  
     
+    
+  if (details.url.indexOf("web.archive.org/web") > -1) {
+       
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
     let isJustSaved=false;  
     let toSaveurl=urlDetails.url.replace("#close",'');
