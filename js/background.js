@@ -251,7 +251,6 @@ function checkTempExcludes(domain) {
   // Check and add TempExcludes if Category is AddtoTempExcludesList
   log('Temp excludes before..' + tempExcludes);
   let temp = [];
-  let isnew = true;
   let tempExc = tempExcludes;
   if (tempExc != null) {
     temp = tempExcludes.map(function(item, index) {
@@ -260,19 +259,17 @@ function checkTempExcludes(domain) {
       return item;
     });
     if (temp.indexOf(domain) > -1) {
-      isnew = false;
-      log('already exists in tempexcludes, just calling addsitetoexclude without saving');
+      log(domain + ' already exists in tempexcludes, just calling addsitetoexclude without saving');
       return;
     }
-  }
-  if (isnew) {
     tempExc.push('|*' + domain + '*');
-    log('does not exist in tempexcludes, saving to storage tempExcludes' + tempExc);
+    log(domain + ' does not exist in tempexcludes, saving to storage tempExcludes' + tempExc);
 
     STORAGE.set({
       tempExcludes: tempExc
     });
   }
+
 }
 
 
@@ -401,9 +398,34 @@ function checkRedirects(details) {
   //As t.co is the most common for links clicked from tweets - let's check and return t.co without further processing
   // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
   if (urlDetails.hostname == "t.co") {
+    //We need this if condition to avoid infinite redirects of t.co url into itself.
+    //That is, if web.archive.org is prefixed to t.co, just load t.co live url so that this shortener can expand to actual URL
+    //If web.archive.org is NOT prefixed, just return as it can continue to expand to live URL which will get redirected to WM later.
+    if(details.url.replace("#close",'') != urlDetails.url.replace("#close",'')){
+      return {redirectUrl: urlDetails.url};
+    }
     return {};
   }
 
+// https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/20
+// Issue happens when a blog redirects to medium globalidentify for some reason
+// .. as we don't have medium in Excludes list - since medium.com articles work fine with Wayback machine
+// .. just programatically add these redirect blogs to excludes list and load live page.
+// ,, do this programatically instead of adding to settings.json, so that user can keep building her Excludes list using this too.
+// Example :
+// https://medium.com/m/global-identity?redirectUrl=https://blog.mapbox.com/hd-vector-maps-open-standard-335a49a45210
+
+  if(urlDetails.hostname=="medium.com" && urlDetails.url.indexOf("global-identity?redirect")>-1 && details.url.indexOf("web.archive.org")>-1){
+    let request={};
+    request.subtype="fromContent";
+    request.category="addtoExclude";
+    let sender={tab:{}};
+    sender.tab={};
+    sender.tab.id=details.tabId;
+    let index=urlDetails.url.indexOf("redirectUrl=") + 12;
+    sender.tab.url="https://web.archive.org/web/2/" + decodeURIComponent(urlDetails.url.substring(index));
+    addSitetoExclude(request,sender);
+  }
 
   if (details.url.indexOf("web.archive.org/web") > -1) {
 

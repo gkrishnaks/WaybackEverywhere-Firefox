@@ -30,7 +30,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   $s.issiteexcluded = true;
   $s.SettingsInAboutConfig = true;
   log.enabled = false;
-  var currentUrl, tabid, url2, domain;
+  var currentUrl, tabid, url2;
   $s.showstat = false;
   $s.savecount = 0;
   $s.loadcount = 0;
@@ -105,7 +105,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.SettingsInAboutConfig = false;
 
       }
-      if (url2.indexOf('settings.html') > 0) {
+      if (url2.indexOf('settings.html') >= 0) {
         $s.settingspagehide = true;
       }
 
@@ -252,19 +252,17 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
-    if ($s.domain != "web.archive.org") {
-      var tempInc = [];
-      storage.get({
-        tempIncludes: []
-      }, function(obj) {
-        log('Temp includes before..' + obj.tempIncludes);
-        tempInc = obj.tempIncludes;
-        tempInc.push(getPattern());
-        log('Temp includes before..' + obj.tempIncludes);
-        storage.set({
-          tempIncludes: tempInc
-        });
-        $s.removeSitefromexclude();
+   if($s.domain != "web.archive.org"){
+    var tempInc = [];
+    storage.get({
+      tempIncludes: []
+    }, function(obj) {
+      log('Temp includes before..' + obj.tempIncludes);
+      tempInc = obj.tempIncludes;
+      tempInc.push(getPattern());
+      log('Temp includes before..' + obj.tempIncludes);
+      storage.set({
+        tempIncludes: tempInc
       });
 
     }
@@ -376,8 +374,8 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
     $s.isMobilefirefox = true;
   }
 
-  $s.seefirstversion = function() {
-    chrome.runtime.sendMessage({
+  $s.seefirstversion=function(){
+   chrome.runtime.sendMessage({
       type: "seeFirstVersion",
       subtype: "fromPopup",
       url: currentUrl,
