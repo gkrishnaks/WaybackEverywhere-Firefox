@@ -228,11 +228,6 @@ var addSitetoExclude = function(request, sender) {
       log('domainname already exists in excludes list, just loading live page');
       tabsUpdate(obj.url, activetab, tabid);
     }
-      else{
-          log('domainname already exists in excludes list, just loading live page');
-          tabsUpdate(obj.url,activetab,tabid);
-      }
-
     // Check if it's a temporary exclude request and put in temp exclude list too
     if (request.category == 'AddtoTempExcludesList') {
       checkTempExcludes(obj.hostname);
