@@ -105,7 +105,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.SettingsInAboutConfig = false;
 
       }
-      if (url2.indexOf('settings.html') > 0) {
+      if (url2.indexOf('settings.html') >= 0) {
         $s.settingspagehide = true;
       }
 
@@ -252,7 +252,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
-   if($s.domain != "web.archive.org"){  
+   if($s.domain != "web.archive.org"){
     var tempInc = [];
     storage.get({
       tempIncludes: []
@@ -374,7 +374,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   if (navigator.userAgent.match(/Android/i)) {
     $s.isMobilefirefox = true;
   }
-    
+
   $s.seefirstversion=function(){
    chrome.runtime.sendMessage({
       type: "seeFirstVersion",
@@ -382,7 +382,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       url: currentUrl,
       tabid: tabid
     });
-  }  
+  }
 
   $s.toggleDisabled = function() {
 

@@ -141,7 +141,7 @@ Redirect.prototype = {
         result.isExcludeMatch = true;
       } else {
         result.isMatch = true;
-        result.redirectTo = redirectTo; 
+        result.redirectTo = redirectTo;
       }
     }
     log('returning result as ' + result);
@@ -274,7 +274,7 @@ Redirect.prototype = {
   },
 
   _includeMatch: function(url) {
-    var finalurl = "";
+    //var finalurl = "";
     if (!this._rxInclude) {
       return null;
     }
