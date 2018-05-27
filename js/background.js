@@ -357,8 +357,6 @@ function cleanUrlsOnFilters(url){
         }
      log("cleaned url is " + url);
     }
-    log("cleaned url is " + url);
-  }
   return url;
 }
 //This is the actual function that gets called for each request and must
@@ -588,7 +586,6 @@ function monitorChanges(changes, namespace) {
 
       }
 
-  }
   if (changes.filters) {
     log('filters changed in storage to' + changes.filters.newValue);
     filters = changes.filters.newValue;
@@ -1079,6 +1076,8 @@ function handleUpdate(istemporary) {
       });
 
   }
+});
+}
 }
 
 function openUpdatehtml() {

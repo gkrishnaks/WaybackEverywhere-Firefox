@@ -51,8 +51,9 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         $s.savecount = counts.waybackSavescount;
         $s.loadcount = counts.archivedPageLoadsCount;
         $s.disabled = response.appDisabled;
-        tempExcludes = response.tempExcludes;
-        tempIncludes = response.tempIncludes;
+        // Later when we need, we will take and use the TempExcludes and TempIncludes, commenting for now.
+        //tempExcludes = response.tempExcludes;
+        //tempIncludes = response.tempIncludes;
         $s.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
         //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
 
@@ -265,8 +266,9 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         tempIncludes: tempInc
       });
 
-    }
+    });
   }
+}
 
   // TODO : Move the below to Background script similar to AddtoExcludes
 
