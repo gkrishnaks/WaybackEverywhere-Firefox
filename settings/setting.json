@@ -16,5 +16,5 @@
       "main_frame"
     ]
   }],
-  "filters": ["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid","?tid","?__twitter_impress"]
+  "filters": ["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid","?tid","?__twitter_impress","&utm_"]
 }
