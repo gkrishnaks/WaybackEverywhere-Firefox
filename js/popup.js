@@ -30,7 +30,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   $s.issiteexcluded = true;
   $s.SettingsInAboutConfig = true;
   log.enabled = false;
-  var currentUrl, tabid, url2, domain;
+  var currentUrl, tabid, url2;
   $s.showstat = false;
   $s.savecount = 0;
   $s.loadcount = 0;
