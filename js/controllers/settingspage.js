@@ -143,7 +143,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     let str = $s.redirects[0].excludePattern;
     let array = str.split('*');
     // Using >0 because we shouldn't let remove web.archive.org from excludeslist - avoiding endless redirect loop
-    if (array.indexOf(inclPattrn.domain) > 0) {
+    if (array.indexOf(inclPattrn.domain) > -1) {
       $s.newIncludeSite = "";
 
       var obj = replaceAll($s.redirects[0].excludePattern, inclPattrn.domain);
