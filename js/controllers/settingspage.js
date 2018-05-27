@@ -104,10 +104,10 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
         $s.filters= response.filters;
         $s.$apply();
       });
-  } 
-   
-  getTemps(); 
-    
+  }
+
+  getTemps();
+
   $s.clearTemps=function(){
       chrome.runtime.sendMessage({
         type: "clearTemps",
@@ -117,13 +117,13 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
             $s.tempExcludes = "";
             $s.tempIncludes = "";
             $s.$apply();
-            getRules();  
+            getRules();
           }
       });
   }
-    
+
   $s.removefromExclude = function(url) {
-    url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
+    let url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
     $s.message = null;
     var inclPattrn = getPattern(url1);
     var msg;
@@ -261,8 +261,6 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     });
   };
 
-  var storage = chrome.storage.local; //TODO: Change to sync when Firefox supports it...
-
   function normalize(r) {
     return new Redirect(r).toObject(); //Cleans out any extra props, and adds default values for missing ones.
   }
@@ -324,7 +322,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   $s.ReadableExcludePattern = 'web.archive.org';
   //Need to proxy this through the background page,because Firefox gives us dead objects
   //nonsense when accessing chrome.storage directly.
-  function getRules(){  
+  function getRules(){
   chrome.runtime.sendMessage({
     type: "getredirects"
   }, function(response) {
@@ -372,9 +370,11 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
          let redirectslist=obj.redirects;
          redirectslist[0].excludePattern = "*web.archive.org*|*archive.org*";
          storage.set({redirects:redirectslist});
+         $s.ReadableExcludePattern = "web.archive.org, archive.org";
+         $s.$apply();
      });
   }
-  
+
   $s.clearAllStats = function(){
     var counts = {
      archivedPageLoadsCount: 0,
@@ -382,10 +382,14 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     };
     storage.set({counts: counts});
   }
-  
+
   $s.clearAllFilters = function(){
       let filters=[];
-      storage.set({filters: filters});
+      storage.set({filters: filters},function(){
+        $s.filters="";
+        $s.$apply();
+      });
+
   }
 
   storage.get({
@@ -402,16 +406,16 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.readermode = !$s.readermode;
     $s.$apply();
   };
-    
+
   $s.operationmode=false; // we consider false as Default ON, true as disable on browser startup..
-  
+
   storage.get({
     operationMode: false
   }, function(obj) {
   $s.operationmode=obj.operationMode;
       $s.$apply();
   });
-    
+
   $s.toggleOperationMode=function(){
       storage.set({
       operationMode:!$s.operationmode
@@ -420,7 +424,7 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
          $s.$apply();
       });
     }
-    
+
   $s.doFactoryReset = function() {
     chrome.runtime.sendMessage({
       type: "doFullReset",

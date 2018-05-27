@@ -141,7 +141,7 @@ Redirect.prototype = {
         result.isExcludeMatch = true;
       } else {
         result.isMatch = true;
-        result.redirectTo = redirectTo; //-- Gokul : for now, only setting redirectTo url only for the closest time match from wayback, otherwise not setting, let's see
+        result.redirectTo = redirectTo; 
       }
     }
     log('returning result as ' + result);

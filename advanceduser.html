@@ -24,28 +24,14 @@
 </head>
 
 <body class="container" ng-app="waybackEverywhereApp" ng-controller="WBESettingsPageControl" class="private">
-<div>
-		<label>Clear All hostnames from Excludes:</label>
-			<p><button class="btn blue" ng-click="clearAllHostnamesFromExcludes()">Clear Excludes!</button></p>
-</div>
 
- <div>
-		<label>Reset Stats to Zero:</label>
-			<p><button class="btn blue" ng-click="clearAllStats()">Clear Stats!</button></p>
-</div>
-  
-   <div>
-		<label>Clear all filters</label>
-			<p><button class="btn blue" ng-click="clearAllFilters()">Clear Filters!</button></p>
-</div>
-  
-  
+
   <div>
- 
-  
+
+
 	<div id="blur-wrapper" ng-class="{blur: showEditForm || showDeleteForm}">
 
-		<h1>Wayback Everywhere</h1>
+		<h2><strong>Advanced user</strong></h2>
 
 		<!--<h5>Go where <em>YOU</em> want!</h5>-->
 
@@ -54,14 +40,30 @@
 			<!--	<a class="btn blue large" ng-click="createNewRedirect()">Create new redirect</a>-->
 			<!-- Importing/Exporting of redirects -->
 
-			
+
 		</div>
 
 
 
 		<!-- List of existing redirects -->
 		<div ng-controller="ListRedirectsCtrl">
+
 			<div class="redirect-table" ng-show="true">
+				<div>
+						<label>Clear All hostnames from Excludes:</label>
+							<button class="btn blue" ng-click="clearAllHostnamesFromExcludes()">Clear Excludes!</button>
+				</div>
+
+				 <div>
+						<label>Reset Stats to Zero:</label>
+					<button class="btn blue" ng-click="clearAllStats()">Clear Stats!</button>
+				</div>
+
+				   <div>
+						<label>Clear all filters</label>
+				<button class="btn blue" ng-click="clearAllFilters()">Clear Filters!</button>
+				</div>
+
 				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
 					{{message}}
 					<a ng-click="message=null">&#x2716;</a>
@@ -83,7 +85,7 @@
 							<p><button class="btn blue" ng-click="showExcludes=!showExcludes" ng-show="!showExcludes">Excludes list</button>
 								<span ng-if="showExcludes">{{ReadableExcludePattern}}</span></p>
 						</div>
-						
+
 						<div ng-if="tempExcludes">
 							<label>Temporary Excludes:</label>
 							<p>{{tempExcludes}}</p>
@@ -95,17 +97,17 @@
 						<div ng-if="tempExcludes || tempIncludes">
 						<label>Clear Temporary rules:</label>
 						<p><button class="btn blue" ng-click="clearTemps()">Clear </button>
-							
+
 						</div>
-						<div ng-if="logging">
+						<div>
 							<!-- Show JustSaved only when logging is enabled - used during development -->
 							<label>Just saved urls: </label><p>{{justSaved}}</p>
 						</div>
-						<div ng-if="logging">
+						<div>
 							<label>Filters to clean URLS:</label>
 							<p>{{filters}}<p>
 						</div>
-							
+
 					</div>
 
 
@@ -121,37 +123,10 @@
 					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
 				</div>
 				<br/>
-				<div ng-if="!isMobilefirefox">
-					<label><input type="checkbox" ng-model="readermode" ng-click="togglereadermode()" /> Use Reader mode for all archived webpages, if supported</label>
-
-					<br/></div>
-
-				<label><input type="checkbox" ng-model="operationmode" ng-click="toggleOperationMode()" /> Disable Wayback Everywhere when browser starts (you can enable it whenever needed, from popup menu)</label>
 
 				<br/>
 
-				<label><input type="checkbox" ng-model="isLoadAllLinksEnabled" ng-click="toggleLoadAllLinksSettings()" /> (EXPERIMENTAL FEATURE) Show "Open all links"  button in Popup menu for archived pages (opens only the links that match a user-entered 'selector' - <em><a ng-click="showExampleOpenall()">Click here to Read more about this feature before using it</a></em>
 
-				</label>
-
-				<div ng-if="showExampleOpen"><br/>
-					<ul>
-						<li>This feature is for advanced users only and in EXPERIMENTAL state, hence not enabled by default. Please read the below before using it </li>
-						<li>Setting page has an option to enable "open all links in page" button to Popup menu.</li>
-						<li>Once enabled, this adds a button and input field to Popup Menu.</li>
-						<li>You need to enter a selector in input field before you click Open all links.</li><br/>
-						<li>For example, open this page <a href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002)" target="_blank">Free as in Freedom</a>
-
-							<br/>All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs</li>
-						<li>This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs</li>
-					</ul>
-				</div>
-
-				<br/>
-
-				<br/>
-
-				<label><input type="checkbox" ng-model="logging" ng-click="toggleLogging()" /> Logging</label>
 				<a style="float: right " ng-if="showresetbutton " class="btn red reset " ng-click="toggleResetwarn()">Factory Reset</a>
 				<div style="text-align: center; color:red; " ng-if="showresetConfirmation ">
 					<p style="font-style: italic ">
