@@ -22,20 +22,25 @@
 		<div id="accordion">
 			<div class="card">
 				<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Wayback Everywhere Version 1.0.13</button>
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Wayback Everywhere Version 1.0.14</button>
 				</div>
 				<div id="whatisnew" class="collapse show" data-parent="#accordion">
 					<div class="card-body"> <br/>
 						<ul>
 							<strong>New Features:</strong>
-								<li> Loads live page when an archived page has a link to a page that's present in Excludes List. </li>
-								<li> Request from Wayback Machine team - added a unique useragent for "save page" requests sent to Wayback Machine </li>
-								<li> Updated the Default ExcludesList with even more hostnames. </li>
+								<li> Clean URLs of some ?UTM and other things before redirecting to Wayback Machine  </li>
+								<li> Added "See first archived" button to popup menu </li>
+								<li> "Should Exclude" check is now faster for big list of Excludes</li>
+								<li>Temporary excludes and Temporary excludes are now shown in settings page </li>
+								<li>Settings page has a button to clear out temporary excludes and temporary includes </li>
+								<li>Settings page shows a list of Filters for cleaning URLs (list shows up when logging is enabled - as it's for advanced users only)</li>
+								<li>Added an Advanced Settings page that can be used to clear out 1) all of excludes list 2) stats 3) filters</li>
 								<br/>
 								<strong>Fixes :  </strong>
-								<li> When some brands add tracker parts in the URLs that have "twitter.com" in the URL, now we don't consider that an excluded page - issue 3</li>
-								<li> Now, more than one page in Reader mode in Firefox can be exited as it's now a map that holds tab number and tab url and checks against that - issue 5 </li>
-								
+								<li> Fixes issue with t.co shortener from previous release when we moved to checking pattern against domain instead of whole URL</li>
+								<li>Fixes issue - stats reset to zero when disabled/enabled from about:addons</li>
+								<li>Fixes issue with "save page now" when on an excluded site</li>
+								<li>Fixes issue with medium redirects for non-medium blogs that redirect to medium</li>
 					</div>
 				</div>
 				<br/>
@@ -72,7 +77,7 @@
 						</div>
 					</div>
 		<br/>
-		
+
 					<div class="card">
 						<div class="card-header" style="text-align: center;">
 							<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-Detect WM Error Messages</button>
@@ -97,7 +102,7 @@
 							<div class="card-body">
 		<p style="text-align:center">Popup Menu appearance changes based on in which page you click on the Popup Menu</p>
 		<p style="text-align:center"> Any "Temporary" Exclude/Include are cleared back when the browser is closed and started again.</p>
-		
+
 		<div id="accordion2" data-parent="#accordion">
 			<div class="card">
 					<div class="card-header" style="text-align: center;">
@@ -123,15 +128,15 @@
 											<div class="card-body" style="text-align: center">						 <img src="images/settingspage.png"/></div>
 							</div>
 						</div>
-		
-		
-		
+
+
+
 									</div>
 						</div>
 					</div>
-		
+
 		<br>
-		
+
 						<div class="card">
 							<div class="card-header" style="text-align: center;">
 								<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Excludes List</button>
@@ -142,11 +147,11 @@
 										<li> Sites (hostnames) in the Excludes list are excluded from routing to Wayback Machine. </li>
 										<li> You can use popup menu buttons to add/remove from this Excludes list to suit your browsing habits</li>
 		<li>Temporary exclude/include 'remembers' the selection until the browser is restarted. (See Popup menu)</li>
-		
+
 										<li> You also have the option to add or remove from Excludes list via Settings Page </li>
 										<li> Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in
 											building a Excludes list without manual effort. Read more here :   <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
-		
+
 										<li> The 'Excludes' list excludes at domain level, including subdomains - for example, if we exclude <i>*.google.*</i> - this results in redirect rules not applying to <em>all</em> Google sites - the ones that have 'google' in the url (i.e no redirection
 											to wayback machine) happens across all google domains - <i>docs.google.com, drive.google.com, google.de, google.co.in </i> and so on.</li>
 										<li>Now, in those domains, if there are "public pages" (like Blog posts) which do <em>not</em> need login to view, you can use the popup menu's "Save Page Now" button to save that page alone to the wayback machine - More info on popup menu's features
@@ -154,11 +159,11 @@
 										</li>
 									</ul>
 								</div>
-		
+
 							</div>
 						</div>
 		<br/>
-		
+
 		<div class="card">
 				<div class="card-header" style="text-align: center;">
 				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#settings">Edit Settings</button>
@@ -171,7 +176,7 @@
 								<li>This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : <a data-toggle="collapse" data-parent="#accordion"
 										href="#defaultexcludepattern">Default Excludes list provided during install</a></li>
 						<li>This page has an option to Auto-enable Reader mode for Archived pages - to automatically open "Reader mode" for archived pages which support Firefox's reader mode. (This option is currently not available in Firefox for Android)</li>
-		
+
 							<li> You can export and import settings from this page. More information on this here : <a data-toggle="collapse" data-parent="#accordion"
 												href="#exportimport">Export and Import Settings</a> </li>
 								<li>Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.</li>
@@ -179,9 +184,9 @@
 		</div>
 			</div>
 		</div>
-		
+
 		<br/>
-		
+
 		<div class="card">
 				<div class="card-header" style="text-align: center;">
 				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#exportimport">Export/Import Settings</button>
@@ -196,9 +201,9 @@
 						</div>
 			</div>
 		</div>
-		
+
 		<br/>
-		
+
 		<div class="card">
 				<div class="card-header" style="text-align: center;">
 				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#defaultexcludepattern">Default Excludes List</button>
@@ -207,7 +212,7 @@
 					<div class="card-body">
 						<ul class="list-unstyled">
 											<li> Upon install, a set of predefined rules are loaded into the Excludes List. This is to provide a starting point for the users. This list is prepared by the developer(s) of this addon on purely technical basis:
-		
+
 												<li> &#9658; Some sites that are excluded from Wayback Machine - quora.com for example </li>
 												<li> &#9658; Some sites that use robots.txt file on server to exclude themselves from Wayback Machine - smithsonianmag.com, for example </li>
 												<li> &#9658; Some sites that may need login, as Wayback Machine archives public pages only. For example, docs.google.com or paypal.com , or some sites that host video content which may not work in Waymachine Archived version like youtube.com or vimeo.com </li>
@@ -222,9 +227,9 @@
 		<br/>If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
 				</div>
 			</div>
-		
+
 			<br>
-		
+
 			<div class="card">
 					<div class="card-header" style="text-align: center;">
 					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Loadall1plinks">[EXPERIMENTAL FEATURE] Open all links in a archived page as new tabs</button>
@@ -237,23 +242,23 @@
 								<li>Once enabled, this adds a button and input field to Popup Menu.</li>
 								<li>You need to enter a selector in input field before you click Open all links.</li><br/>
 								<li>For example, open this page <a href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002)" target="_blank">Free as in Freedom</a>
-		
+
 									<br/>All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs</li>
 									<li>This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs</li>
 							</ul>
 							 </div>
 					</div>
 				</div>
-		
+
 				<br>
-		
+
 			<div class="card">
 					<div class="card-header" style="text-align: center;">
 					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#LicenseAndDisclaimer">License</button>
 					</div>
 					<div id="LicenseAndDisclaimer" class="collapse" data-parent="#accordion">
 						<div class="card-body">
-		
+
 							<div class="card-block">The WaybackEverywhere addon is licensed under GPLv3 license. Refer the full license here : <a href="LICENSE.html"  id="licenselink" target="_blank">License</a></div>
 							<br/>
 		---
@@ -265,31 +270,31 @@
 							</p>
 		---
 							<p style="font-weight:bold"> The developer of this addon/extension is <em>NOT</em> affliated with the Internet Archive (archive.org or web.archive.org)</p>
-		
+
 		<br/><p> Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : <a href="privacy.html"  id="privacy" target="_blank">Privacy Policy</a>
 			 </div>
-		
+
 					</div>
 				</div>
-		
+
 				<br>
-		
+
 				<div class="card">
 						<div class="card-header" style="text-align: center;">
 						<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Credits">Credits and Acknowledgements</a></div>
 						<div id="Credits" class="collapse" data-parent="#accordion">
 							<div class="card-body">
-		
+
 							<ul><li>This addon is built based on the 'Redirector' addon developed by  <a href="http://einaregilsson.com/redirector" target="_blank">Einar Regilsson</a>. He published its sourcecode under MIT license.</li> <li>The developer of this addon is <em>NOT</em> affliated to Internet Archive (archive.org) or its Wayback Machine (web.archive.org)- but I thank them for making web.archive.org a freely available resource on the internet for the benefit of general public, and the commons.</li><li> This addon uses libraries/frameworks - AngularJS, Bootstrap (CSS and JS), FontAwesome, and JQuery. These are governed by their respective licenses. You can refer to their websites for the same.</li>
 								<li> This addon uses the icons from https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/. Some parts of popup.html were also taken from this addon.</li></ul>
 				 </div>
-		
+
 						</div>
 					</div>
-		
-		
-		
-		
+
+
+
+
 				</div>
 			</div>
 			<footer><small>
@@ -298,5 +303,5 @@
 				</a> Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a></small>
 					</footer>
 		</body>
-		
+
 		</html>
