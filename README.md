@@ -113,6 +113,7 @@ Default Excludes List
 *   Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box..)
 *   Some video streaming (netflix..) sites and live streaming sites (Periscope..)
 *   Some audio podcast sites 
+*   Some Language learning sites (Duolingo..) as they need login to work. 
 
 P.S : There's no other agenda behind this bundled list made available during install :)
 
