@@ -27,7 +27,7 @@ Features
 *   **Popup menu** \- Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here [Popup Menu](#popup-menu)
 *   **Settings Page** \- Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here [Settings Page](#edit-settings)
 *   **Auto-enable Reader mode for Archived pages** \- From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode.
-*   **Load all links in a archived page as new tabs** \- From Settings page, enable the option to open all links of an archived page based on a "selector" that user enters in popup menu - intended to be used for opening all "chapters" in new tabs when reading a html book format pages. Example : Wikisource or wikibooks. EXPERIMENTAL FEATURE disabled by default.
+*   **Load all links in a archived page as new tabs** \- From Settings page, enable the option to open all links of an archived page based on a "selector" that user enters in popup menu - intended to be used for opening all "chapters" in new tabs when reading a html book format pages. Example : Wikisource or wikibooks. EXPERIMENTAL FEATURE disabled by default. [open-all-links-in-a-archived-page-as-new-tabs](#open-all-links-in-a-archived-page-as-new-tabs)
 
 Auto-Detect Wayback Machine Error Messages
 -----------------------------
