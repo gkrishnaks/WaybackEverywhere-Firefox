@@ -371,7 +371,7 @@ function checkRedirects(details) {
 
     // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
     // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
-    // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
+    // When already in archived page, Wayback Machine appends web.archive.org/web/2/ to all URLs in the page
     // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
     // Using this, we load live page of github since it's in excludes list.
     // we may add a switch to Settings page to disable this behaviour at a later time if needed.
@@ -386,11 +386,16 @@ function checkRedirects(details) {
   }
 
   let urlDetails = getHostfromUrl(details.url);
-
+  let ambiguousExcludes=["t.co","g.co","ft.com","cnet.co","vine.co"]  
   //since "t.co" shoterner matches with sites that have "..t.com" in the url as we use RegExp
   //As t.co is the most common for links clicked from tweets - let's check and return t.co without further processing
   // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
-  if (urlDetails.hostname == "t.co") {
+  
+  // Made the below a loop now after ft.com matched against sites that have ft.com in the URL..
+  // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/22
+  
+  for(let i=0; i<ambiguousExcludes.length;i++){
+  if (urlDetails.hostname == ambiguousExcludes[i]) {
     //We need this if condition to avoid infinite redirects of t.co url into itself.
     //That is, if web.archive.org is prefixed to t.co, just load t.co live url so that this shortener can expand to actual URL
     //If web.archive.org is NOT prefixed, just return as it can continue to expand to live URL which will get redirected to WM later.
@@ -399,6 +404,9 @@ function checkRedirects(details) {
     }
     return {};
   }
+  }
+
+    
 
 // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/20
 // Issue happens when a blog redirects to medium globalidentify for some reason
