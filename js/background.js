@@ -433,9 +433,10 @@ function checkRedirects(details) {
     // Load live url when url ends with common file extensions so that user can download a file easily
     // example.com/path/to/dir/file.zip     
     let isDownloadlink=false;
-    let commonExtensions=[".zip", ".exe", ".deb", ".rpm", ".tar.gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt"]
+    let commonExtensions=[".zip", ".exe", ".deb", ".rpm", ".tar.gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt"];
+    let liveURL=urlDetails.url.toLowerCase();
     for(let j=0; j<commonExtensions.length; j++){
-        if(details.url.endsWith(commonExtensions[j])){
+        if(liveURL.endsWith(commonExtensions[j])){
             isDownloadlink = true;
             break;
         }
