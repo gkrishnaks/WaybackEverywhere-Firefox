@@ -435,6 +435,8 @@ function checkRedirects(details) {
     let isDownloadlink=false;
     let commonExtensions=[".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt"];
     let liveURL=urlDetails.url.toLowerCase();
+    if(liveURL.endsWith("#close")){
+        liveURL=liveURL.split("#close")[0];}
     for(let j=0; j<commonExtensions.length; j++){
         if(liveURL.endsWith(commonExtensions[j])){
             isDownloadlink = true;
