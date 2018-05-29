@@ -3,7 +3,7 @@
   "changeInRemoveList": true,
   "changeInAddtoFiltersList": false,
   "changeInRemovefromFiltersList": false,
-  "addToDefaultExcludes": "|*egghead.io*|*pca.st*|*pluralsight.com*|*codeacademy.com*|*livecoding.tv*|*sololearn.com*|*duolingo.com*|*babbel.com*|*lingualia.com*|*busuu.com*|*audible.*|*zoho.com*|*trello.com*|*office365.com*|*onenote.com*|*sharepoint.com*|*skype.com*|*zendesk.com*|*webex.com*|*sococo.com*|*proofpoint.com*|*join.me*|*gotomeeting.com*|*imeet.com*|*meetingburner.com*|*teamviewer.com*|*zoom.us*|*omegle.com*|*chatroulette.com*|*hbogo.com*|*web.linephone.org*|*meet.jit.si*|*onlyoffice.com*",
+  "addToDefaultExcludes": "|*egghead.io*|*pca.st*|*pluralsight.com*|*codeacademy.com*|*livecoding.tv*|*sololearn.com*|*duolingo.com*|*babbel.com*|*lingualia.com*|*busuu.com*|*audible.*|*zoho.com*|*trello.com*|*office365.com*|*onenote.com*|*sharepoint.com*|*skype.com*|*zendesk.com*|*webex.com*|*sococo.com*|*proofpoint.com*|*join.me*|*gotomeeting.com*|*imeet.com*|*meetingburner.com*|*teamviewer.com*|*zoom.us*|*omegle.com*|*chatroulette.com*|*hbogo.com*|*web.linephone.org*|*meet.jit.si*|*onlyoffice.com*|*login.microsoftonline.com*|*office.com*",
   "removeFromDefaultExcludes": ["t.co","t.co/","medium.com","g.co","ft.com","cnet.co","vine.co"],
   "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid","?tid","?__twitter_impress","&utm_"],
   "removefromFiltersList":[],
