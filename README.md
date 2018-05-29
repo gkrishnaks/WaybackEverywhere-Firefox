@@ -114,7 +114,10 @@ Default Excludes List
 *   Some video streaming (netflix..) sites and live streaming sites (Periscope..)
 *   Some audio podcast sites 
 *   Some Language learning sites (Duolingo..) as they need login to work. 
-
+*   Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download from within archived page 	(example.com/download/file.zip or /file.doc will get auto-excluded only for just the download link) 
+*   Some video conference site links like skype, sococo, jitsi and few other online meeting sites.
+*   Some online office suite sites like office365, zoho and onlyoffice.
+											
 P.S : There's no other agenda behind this bundled list made available during install :)
 
 If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
