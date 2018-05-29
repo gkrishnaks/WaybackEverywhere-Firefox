@@ -429,7 +429,21 @@ function checkRedirects(details) {
   }
 
   if (details.url.indexOf("web.archive.org/web") > -1) {
-
+    // #23 - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23
+    // Load live url when url ends with common file extensions so that user can download a file easily
+    // example.com/path/to/dir/file.zip     
+    let isDownloadlink=false;
+    let commonExtensions=[".zip", ".exe", ".deb", ".rpm", ".tar.gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt"]
+    for(let j=0; j<commonExtensions.length; j++){
+        if(details.url.endsWith(commonExtensions[j])){
+            isDownloadlink = true;
+            break;
+        }
+    }
+    if(isDownloadlink){
+        return {redirectUrl: urlDetails.url};
+    }
+     
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
     let isJustSaved=false;
     let toSaveurl=urlDetails.url.replace("#close",'');
