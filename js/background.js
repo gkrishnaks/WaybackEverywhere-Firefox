@@ -204,6 +204,9 @@ var addSitetoExclude = function(request, sender) {
 
     //check if already exists in ExcludePattern
     let array = redirectslist[0].excludePattern.split('*|*');
+    let lastIndex=array.length - 1;
+    array[lastIndex]=array[lastIndex].replace('*',''); 
+      
     let alreadyExistsinExcludes=false;
     if(array.indexOf(obj.hostname) > -1){
       alreadyExistsinExcludes = true;
@@ -212,7 +215,7 @@ var addSitetoExclude = function(request, sender) {
      // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
      // t.co seems to be the only hostname that causes problems with other sites that has "somenamet.com" in url where "t.co" gets a match against t.co
 
-    if (!alreadyExistsinExcludes && "t.co" != obj.hostname && "web.archive.org" != obj.hostname && obj.hostname.length > 0) {
+    if (!alreadyExistsinExcludes &&  obj.hostname.length > 0 && "t.co" != obj.hostname && "web.archive.org" != obj.hostname) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
       log('Now the new redirects is' + JSON.stringify(redirectslist));
