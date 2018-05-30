@@ -212,7 +212,7 @@ var addSitetoExclude = function(request, sender) {
      // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
      // t.co seems to be the only hostname that causes problems with other sites that has "somenamet.com" in url where "t.co" gets a match against t.co
 
-    if (!alreadyExistsinExcludes && "t.co" !== obj.hostname) {
+    if (!alreadyExistsinExcludes && "t.co" != obj.hostname && "web.archive.org" != obj.hostname && obj.hostname.length > 0) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
       log('Now the new redirects is' + JSON.stringify(redirectslist));
