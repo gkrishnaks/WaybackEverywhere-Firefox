@@ -25,6 +25,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   // get the existing redirect
   $s.redirectslist = [];
   $s.excludethisSite = 'jj';
+  $s.domain="";
   var storage = chrome.storage.local; // TODO: Change to sync when Firefox supports it...
   $s.webextpagesExcluded = true;
   $s.issiteexcluded = true;
@@ -218,7 +219,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   }
 
   $s.addSitetotempExclude = function() {
-
+    
     sendExcludeMessage('AddtoTempExcludesList');
   }
 
@@ -229,6 +230,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   };
 
   function sendExcludeMessage(category) {
+    if($s.domain != "web.archive.org" && $s.domain.length != 0){
     chrome.runtime.sendMessage({
         type: "excludethisSite",
         subtype: "fromPopup",
@@ -240,6 +242,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
         log('returned to popup script ' + response.message);
         window.close();
       });
+  }
   }
 
   String.prototype.replaceAll = function(searchStr, replaceStr) {
@@ -253,7 +256,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
-   if($s.domain != "web.archive.org"){
+   if($s.domain != "web.archive.org" && $s.domain.length != 0){
     var tempInc = [];
     storage.get({
       tempIncludes: []
@@ -273,7 +276,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   // TODO : Move the below to Background script similar to AddtoExcludes
 
   $s.removeSitefromexclude = function() {
-    if ($s.domain != "web.archive.org") {
+    if ($s.domain != "web.archive.org" && $s.domain.length != 0) {
       $s.issiteexcluded = false;
       let incUrl = getPattern();
       //console.log('Remove from exclude url is ' + incUrl);
