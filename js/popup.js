@@ -230,7 +230,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   };
 
   function sendExcludeMessage(category) {
-    if($s.domain != "web.archive.org" && $s.domain.length != 0){
+    if($s.domain.length != 0 && $s.domain != "web.archive.org"){
     chrome.runtime.sendMessage({
         type: "excludethisSite",
         subtype: "fromPopup",
@@ -256,7 +256,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
 
   // TODO : Move the below to Background script similar to AddtoExcludes
   $s.removeSitefromexcludeTemp = function() {
-   if($s.domain != "web.archive.org" && $s.domain.length != 0){
+   if($s.domain.length != 0 && $s.domain != "web.archive.org"){
     var tempInc = [];
     storage.get({
       tempIncludes: []
@@ -276,7 +276,7 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
   // TODO : Move the below to Background script similar to AddtoExcludes
 
   $s.removeSitefromexclude = function() {
-    if ($s.domain != "web.archive.org" && $s.domain.length != 0) {
+    if ($s.domain.length != 0 && $s.domain != "web.archive.org") {
       $s.issiteexcluded = false;
       let incUrl = getPattern();
       //console.log('Remove from exclude url is ' + incUrl);
