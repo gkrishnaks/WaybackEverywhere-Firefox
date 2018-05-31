@@ -215,20 +215,20 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     if (url2.indexOf('web.archive.org') >= 0) {
       if (url2.indexOf('web.archive.org/save') > -1) {
         url2 = url2.replace('.org/save/', '.org/web/2/');
-        log('url2 from save to web/2 ..' + url2);
+        //log('url2 from save to web/2 ..' + url2);
       }
       url2 = url2.split('web.archive.org/').pop();
     }
     if (url2.indexOf('http://') < 0 && url2.indexOf('https://') < 0) {
       url3 = url2;
-      log('url3 set as ' + url3);
+      //log('url3 set as ' + url3);
       obj.domain = url2.toLowerCase();
     } else {
       var pattern = /:\/\/(.[^/]+)/;
       url3 = url2.match(pattern)[1];
       url3 = url3.split('www.').pop();
       obj.domain = url3.toLowerCase();
-      log('excludethisSite after regexpattern is ' + url3);
+      //log('excludethisSite after regexpattern is ' + url3);
     }
     obj.Pattern = '|*' + url3.toLowerCase() + '*';
     return obj;
@@ -399,6 +399,32 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
     $s.$apply();
   });
 
+  $s.addtofilters = function(newFilter){
+      let filterstring = $s.filters + ", " + newFilter;
+      let filter = filterstring.split(", ");
+     storage.set({
+        filters: filter
+    }, function(obj) {
+         $s.filters = filterstring;
+         $s.$apply();
+  });
+  }
+  
+    $s.removefromfilters = function(toRemoveFilter){
+      let filter = $s.filters.split(", ");
+      if(filter.length > 0){
+         let index=filter.indexOf(toRemoveFilter);
+          if(index > -1){
+              filter.splice(index,1);
+                storage.set({filters: filter}, function(obj) {
+                    $s.filters = filter.join(", ");
+                    $s.$apply();
+                });
+          }
+          
+        }
+   }
+  
   $s.togglereadermode = function() {
     storage.set({
       readermode: !$s.readermode
