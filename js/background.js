@@ -435,11 +435,20 @@ function checkRedirects(details) {
     // #23 - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23
     // Load live url when url ends with common file extensions so that user can download a file easily
     // example.com/path/to/dir/file.zip     
-    let isDownloadlink=false;
-    let commonExtensions=[".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt", ".torrent", ".c32", ".cfg", ".xz", ".gpg", ".crt", ".dmg", ".rtf", ".z", ".csv",".lz",".bin",".epub",".mobi",".vdi",".dat",".m4v", ".mkv",".blend",".block",".3mf",".cal3d",".c4d",".ssh",".pub",".ppk",".cer", ".der",".mpp",".3dmf",".dwg",".sqlite", ".psd", ".raw",".tiff",".azw", ".azw3", ".kfx",".h264",".rm",".ai",".ibooks",".kf8",".prc",".djvu", ".djv",".fb2", ".fbz",".srt",".dxf",".cbr",".ovf",".ova",".vhd",".vmdk",".qcow2",".qcow",".vdi",".img"];
-    let liveURL=urlDetails.url.toLowerCase();
+    let isDownloadlink = false;
+    let commonExtensions = [".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt", ".torrent", ".c32", ".cfg", ".xz", ".gpg", ".crt", ".dmg", ".rtf", ".z", ".csv",".lz",".bin",".epub",".mobi",".vdi",".dat",".m4v", ".mkv",".blend",".block",".3mf",".cal3d",".c4d",".ssh",".pub",".ppk",".cer", ".der",".mpp",".3dmf",".dwg",".sqlite", ".psd", ".raw",".tiff",".azw", ".azw3", ".kfx",".h264",".rm",".ai",".ibooks",".kf8",".prc",".djvu", ".djv",".fb2", ".fbz",".srt",".dxf",".cbr",".ovf",".ova",".vhd",".vmdk",".qcow2",".qcow",".vdi",".img", "download.php", "downloads.php"];
+    let liveURL = urlDetails.url.toLowerCase();
     if(liveURL.endsWith("#close")){
-        liveURL=liveURL.split("#close")[0];}
+        liveURL=liveURL.split("#close")[0];
+    }  
+    let slashindex = liveURL.lastIndexOf("/");
+    if(liveURL.length === (slashindex+1)){
+        liveURL = liveURL.substring(0,slashindex);
+    }
+    let Qindex = liveURL.indexOf("?");
+    if(Qindex > -1){
+        liveURL = liveURL.substring(0,Qindex);        
+    }
     for(let j=0; j<commonExtensions.length; j++){
         if(liveURL.endsWith(commonExtensions[j])){
             isDownloadlink = true;
