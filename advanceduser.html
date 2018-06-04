@@ -65,7 +65,7 @@
 		</div>
 	<div><button class="btn blue" ng-disabled="!newfilter" ng-click="addtofilters(newfilter)">Add to Filters</button><input type="text" class="incexcbuttons" ng-model="newfilter" placeholder="Enter a new filter" id="addfilter"/>
 	<br/>
-					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
+					<div><button class="btn green" ng-disabled="!toRemoveFilter" ng-click="removefromfilters(toRemoveFilter)">Remove from Filters</button><input class="incexcbuttons" type="text" ng-model="toRemoveFilter" placeholder="Enter a filter to remove" /></div>
 				</div>
 				<br/>
 				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
