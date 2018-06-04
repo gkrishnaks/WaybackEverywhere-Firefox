@@ -410,7 +410,10 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
   });
   }
   
-    $s.removefromfilters = function(toRemoveFilter){
+  $s.toRemoveFilter="";
+  
+  $s.removefromfilters = function(toRemoveFilter){
+      if(toRemoveFilter.length > 0){
       let filter = $s.filters.split(", ");
       if(filter.length > 0){
          let index=filter.indexOf(toRemoveFilter);
@@ -421,8 +424,8 @@ waybackEverywhereApp.controller('WBESettingsPageControl', ['$scope', '$timeout',
                     $s.$apply();
                 });
           }
-          
-        }
+      }
+    }
    }
   
   $s.togglereadermode = function() {
