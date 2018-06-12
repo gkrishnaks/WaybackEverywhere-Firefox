@@ -1,0 +1,17 @@
+{
+  "name": "Wayback Everywhere",
+  "version": "1.0.0",
+  "description": "Addon to auto-redirect all pages to their archived versions, auto-save if not yet archived. Sites in Excludes list are excluded from redirection",
+  "author": "Gokulakrishna Sudharsan",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "web-ext": "^2.6.9",
+    "dotenv": "^6.0.0",
+    "execa": "^0.10.0",
+    "fs-temp": "^1.1.2",
+    "globby": "^8.0.1",
+    "neodoc": "^2.0.0",
+    "ora": "^2.1.0",
+    "text-stream-search": "^2.1.1"
+    }
+}
