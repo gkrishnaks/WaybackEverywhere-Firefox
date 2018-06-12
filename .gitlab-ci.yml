@@ -1,0 +1,16 @@
+image: node:9.0.0
+
+before_script:
+  - yarn
+
+stages:
+  - deployExtension
+
+deployExtension:
+  stage: deployExtension
+  only:
+    - master
+  script:
+#   - npm run build
+#   - CLIENT_ID=${CLIENT_ID} CLIENT_SECRET=${CLIENT_SECRET} EXTENSION_ID=${EXTENSION_ID} REFRESH_TOKEN=${REFRESH_TOKEN} node ./.deploytoChromeStore.js
+    - node ./.deploytoAMO.js firefox .
