@@ -15,6 +15,9 @@ deployExtension:
 #   - CLIENT_ID=${CLIENT_ID} CLIENT_SECRET=${CLIENT_SECRET} EXTENSION_ID=${EXTENSION_ID} REFRESH_TOKEN=${REFRESH_TOKEN} node ./.deploytoChromeStore.js
     - mv -v yarn.lock .yarn.lock
     - mv -v package.json .package.json
+    - mv -v README.md .README.md
+    - mv -v LICENSE .LICENSE
+    - mv -v TODO .TODO
     - node ./.deploytoAMO.js firefox .
 
 # if file name  starts with a dot, web-ext won't package them into the extension
