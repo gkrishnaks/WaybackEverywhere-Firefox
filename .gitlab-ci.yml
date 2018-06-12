@@ -1,4 +1,4 @@
-image: node:9.0.0
+image: node:8.0.0
 
 before_script:
   - yarn
