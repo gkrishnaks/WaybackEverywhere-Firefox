@@ -17,6 +17,7 @@ deployExtension:
     - mv -v LICENSE .LICENSE
     - mv -v TODO .TODO
     - mv -v 'Privacy Policy' .privacypolicy
+    - mv -v test .test
     - node ./.deploytoAMO.js firefox .
 
 # If file name  starts with a dot, web-ext won't package them into the extension
