@@ -264,6 +264,8 @@ angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
       log('Temp includes before..' + obj.tempIncludes);
       storage.set({
         tempIncludes: tempInc
+      },function(a){
+          $s.removeSitefromexclude();
       });
 
     });
