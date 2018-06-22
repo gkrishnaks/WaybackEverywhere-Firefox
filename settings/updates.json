@@ -1,11 +1,11 @@
 {
-  "changeInAddList": true,
-  "changeInRemoveList": true,
-  "changeInAddtoFiltersList": true,
+  "changeInAddList": false,
+  "changeInRemoveList": false,
+  "changeInAddtoFiltersList": false,
   "changeInRemovefromFiltersList": false,
   "addToDefaultExcludes": "|*jtim.es*|*nrdzm.de*|*rdfrs.net*|*ggbm.at*|*haveibeenpwned.com*|*syfy.tv*|*act.gp*|*sndcdn.com*|*msft.social*|*bbc.in*|*go.myogc.org*|*fullstackradio.com*|*docusign.net*|*list-manage.com*|*econ.st*|*politi.co*|*pe.ga*|*fbcdn.net*|*whatsapp.com*|*.slack.com*|*.typeform.com*|*un.org*|*hrvd.me*|*mozilla.com*|*boutiques.com*|*amn.st*|*ora.cl*|*satpa.pe*|*hbbl.us*|*mths.be*|*mitsloan.co*|*n.pr*|*mitsha.re*|*tnvge.co*|*g.co*|*terc.pt*|*ts.la*|*nym.ag*|*met.org*|*wef.ch*|*glo.bo*|*phi.ms*|*on.nypl.org*|*atxne.ws*|*frontendmasters.com*|*javascriptair.com*",
   "removeFromDefaultExcludes": ["t.co","t.co/","mitsloan.co/","n.pr/","mitsha.re/","tnvge.co/","g.co/","terc.pt/","ts.la/","medium.freecodecamp.org","medium.com"],
   "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid","?tid","?__twitter_impress","&utm_"],
   "removefromFiltersList":[],
-  "showUpdatehtml": true
+  "showUpdatehtml": false
 }
