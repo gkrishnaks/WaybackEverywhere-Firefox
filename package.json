@@ -1,5 +1,5 @@
 {
-  "name": "Wayback Everywhere",
+  "name": "WaybackEverywhere",
   "version": "1.0.0",
   "description": "Addon to auto-redirect all pages to their archived versions, auto-save if not yet archived. Sites in Excludes list are excluded from redirection",
   "author": "Gokulakrishna Sudharsan",
