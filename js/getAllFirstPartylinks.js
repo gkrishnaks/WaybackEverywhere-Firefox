@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Home: https://github.com/gkrishnaks
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {

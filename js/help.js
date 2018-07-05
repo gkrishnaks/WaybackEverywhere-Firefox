@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Home: https://github.com/gkrishnaks
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
 
@@ -29,4 +29,7 @@ $(document).ready(function() {
     }, 500);
     e.stopPropagation();
   });
+  let manifestData = chrome.runtime.getManifest();
+  let versionText = "Version " + manifestData.version;
+  $("#appVersion").text(versionText);
 });

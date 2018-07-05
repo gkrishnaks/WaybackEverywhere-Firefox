@@ -113,13 +113,32 @@ Default Excludes List
 *   Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box..)
 *   Some video streaming (netflix..) sites and live streaming sites (Periscope..)
 *   Some audio podcast sites 
-
+*   Some Language learning sites (Duolingo..) as they need login to work. 
+*   Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download from within archived page 	(example.com/download/file.zip or /file.doc will get auto-excluded only for just the download link) 
+*   Some video conference site links like skype, sococo, jitsi and few other online meeting sites.
+*   Some online office suite sites like office365, zoho and onlyoffice.
+*   Some mailerlist domains so that you can easily unsubscribe from marketing emails ;-)
+																	
 P.S : There's no other agenda behind this bundled list made available during install :)
 
 If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
 
 TODO : [TODO](TODO)
 
+Details on Stats
+----------------
+*   Stats are displayed in popup menu. Stats include total redirects and total pages saved to Wayback Machine using the addon.
+*   Once a page is redirected to wayback machine, all links in the page get web.archive.org/web/2* prefixed by Wayback Machine. Clicking on any link within an archived page will <em>not</em> add to the redirected counts.
+*   Saved counts are updated for both auto-save and also manual saves using "save this page" button in popup menu.
+*   Since the stat counts are per-device (per-install) statistics, it is not included in Export/Import setting feature.
+*   To avoid multiple disk writes, stats are stored to disk once every four minutes. It's fine if browser is closed before a four minute window as stats are not a critical value :)
+
+Advanced Settings page
+----------------------
+*   For ADVANCED USERS only : There are some settings for advanced users in a page that's not directly accessible from Addon UI pages.
+*   To open the advanced settings page, open Settings page or help page -> adjust the URL to <addonID>/advanceduser.html
+*   In the page, you can clear all Excludes, set stats to Zero, and remove all the fitlers
+*   You also have the option to add to filters or remove a specific filter - use this carefully. Avoid using this add filter feature if you aren't sure what UTM or similar things are.
 
 License
 -------

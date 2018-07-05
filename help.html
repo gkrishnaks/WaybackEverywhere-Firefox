@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html>
+<!-- 
+	/*******************************************************************************
 
+    Wayback Everywhere - a browser addon/extension to redirect all pages to
+    archive.org's Wayback Machine except the ones in Excludes List
+    Copyright (C) 2018 Gokulakrishna K S
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
+*/
+-->
 <head>
 	<title>Wayback Everywhere</title>
 	<meta charset="UTF-8">
@@ -196,7 +218,15 @@
 											<li> &#9658; Some Search engines to help the user avoid seeing Wayback redirects when she searches </li>
 											<li> &#9658; Some reserved addresses like 127.0.0 * and 0.0.0* so that user can browse these without routing</li>
 											<li> &#9658; Some online education learning course sites as they host video content and also need login to work</li>
-											<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li> <br/>
+											<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li> 
+											<li> &#9658; Some video streaming (netflix..) sites and live streaming sites (Periscope..)</li>
+											<li> &#9658; Some audio podcast sites </li>
+											<li> &#9658; Some Language learning sites (Duolingo) as they need login to work </li>
+											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page 
+												(example.com/download/file.zip or /file.doc will get auto-excluded only for the download link) </li>
+											<li> &#9658; Some video conference site links like skype, sococo, jitsi and few other online meeting sites.<li></li>
+                                            <li> &#9658; Some online office suite sites like office365, zoho and onlyoffice. </li>
+											<li> &#9658; Some mailerlist domains so that you can easily unsubscribe from marketing emails ;-) </li><br/>
 											<small>P.S : There's no other agenda behind this bundled list made available during install :)</small>
 								</ul> </div>
 <br/>If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
@@ -207,7 +237,7 @@
 
 	<div class="card">
 			<div class="card-header" style="text-align: center;">
-			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Loadall1plinks">[EXPERIMENTAL FEATURE] Open all links in a archived page as new tabs</button>
+			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Loadall1plinks">Open all links as new tabs</button>
 			</div>
 			<div id="Loadall1plinks" class="collapse" data-parent="#accordion">
 				<div class="card-body">
@@ -225,8 +255,44 @@
 			</div>
 		</div>
 
-		<br>
+			<br>
 
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Stats">Details on Stats</a></div>
+				<div id="Stats" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+
+					<ul><li> Stats are displayed in popup menu. Stats include total redirects and total pages saved to Wayback Machine using the addon </li>
+						<li> Once a page is redirected to wayback machine, all links in the page get web.archive.org/web/2* prefixed by Wayback Machine. Clicking on any link within an archived page will <em>not</em> add to the redirected counts.</li>
+						<li> Saved counts are updated for both auto-save and also manual saves using "save this page" button in popup menu</li>
+						<li> Since the stat counts are per-device (per-install) statistics, it is not included in Export/Import setting feature.</li>
+						<li> To avoid multiple disk writes, stats are stored to disk once every four minutes. It's fine if browser is closed before a four minute window as stats are not a critical value :)</li>
+						</ul>
+		 </div>
+
+				</div>
+			</div>
+			
+				<br>
+
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#advancedUser">Advanced Settings</a></div>
+				<div id="advancedUser" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+
+					<ul><li> For ADVANCED USERS only : There are some settings for advanced users in a page that's not directly accessible from Addon UI pages</li>
+						<li> To open the advanced settings page, open Settings page - or this Help page - adjust the URL to <addonID>/advanceduser.html</li>
+						<li> In the page, you can clear all Excludes, set stats to Zero, and remove all the fitlers</li>
+						<li> You also have the option to add to filters or remove a specific filter - use this carefully. Avoid using this add filter feature if you aren't sure what UTM or similar things are</li>
+						</ul>
+		 </div>
+
+				</div>
+			</div>
+
+            <br>
 	<div class="card">
 			<div class="card-header" style="text-align: center;">
 			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#LicenseAndDisclaimer">License</button>
@@ -271,12 +337,20 @@
 
 
 		</div>
-	</div>
-	<footer><small>
+	</div><br>
+	<footer>	<div style="text-align: center;">
+<small>
 			Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
-		gokulakrishnaks@gmail.com
-		</a> Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a></small>
-			</footer>
+gokulakrishnaks@gmail.com
+</a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
+<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
+ <p id="appVersion"></p> 
+
+</small>
+</div>
+
+		</footer>
+			</div>
 </body>
 
 </html>

@@ -1,6 +1,28 @@
 <!doctype html>
 <html>
+<!-- 
+	/*******************************************************************************
 
+    Wayback Everywhere - a browser addon/extension to redirect all pages to
+    archive.org's Wayback Machine except the ones in Excludes List
+    Copyright (C) 2018 Gokulakrishna K S
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
+*/
+-->
 <head>
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
@@ -47,13 +69,13 @@
     </tr>
 
 
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
       <td>
         <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="removeSitefromexclude()"><strong> Include {{domain}} </strong></button>
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
 
       <td>
         <button type="button" class="btn btn-outline-info btn-sm" id="recent_capture" tabindex='-1' ng-click="removeSitefromexcludeTemp()"><strong>Temporarily Include {{domain}}</strong></button>
@@ -67,7 +89,7 @@
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
 
 
       <td>
@@ -76,7 +98,7 @@
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
       <td>
         <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()"><strong>Add {{domain}} to Excludes List</strong></button>
         <BR>
@@ -90,7 +112,6 @@
         <br/><input ng-model="selector" placeholder="Enter a selector" />
         <BR>
       </td>
-      <hr/>
     </tr>
 
     <tr class="spaceUnder" align="center" ng-if="!disabled">
@@ -132,6 +153,9 @@
           <span style="text-align:center;" ng-if="savecount>0 &&
         loadcount>0">Total WM visits: {{savecount+loadcount}}
       <br/></span>
+      <span style="text-align:center;" ng-if="savecount>0 &&
+        loadcount>0">Saved/Redirected: {{savecount*100/loadcount | number:1}}%
+      <br/></span>
           <span style="text-align:center;" ng-if="loadcount==0 && savecount==0">Welcome. Browse for some time! :)
         </span></div><br/>
 
@@ -142,6 +166,7 @@
 
   </table>
   <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
+<footer><small><div style="text-align:center;"> Version {{appVersion}}</div></small></footer>
 </body>
 
 </html>
