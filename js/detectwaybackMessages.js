@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Home: https://github.com/gkrishnaks
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
 
@@ -35,17 +35,17 @@ var sendBgMessage = function(type, category) {
 function handleWMErrors() {
 
   let error = document.getElementById('error');
-  if (error != null) {
+  if (error !== null) {
     let fullString = '';
     for (let i = 0; i < error.childElementCount; i++) {
       fullString = fullString + ' ' + error.children[i].innerText;
-    };
+    }
     //  console.log(fullString);
     let canSave = fullString.indexOf("Save this url in the Wayback Machine");
     let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11;
     e1 = fullString.indexOf('Page cannot');
     e2 = fullString.indexOf('excluded from the Wayback Machine');
-    e3 = fullString.indexOf('not be archived');
+    e3 = fullString.indexOf("doesn't look like an valid URL");
     e4 = fullString.indexOf('Hrm');
     e5 = fullString.indexOf('Wayback Machine doesn\'t have that page archived');
     e6 = fullString.indexOf('Bummer');
@@ -59,7 +59,7 @@ function handleWMErrors() {
     if (canSave > -1) {
       //  console.log('detected save this page');
       sendBgMessage("savetoWM", "save");
-    } else if (e1 > -1 || e2 > -1 || e3 > -1) {
+    } else if (e1 > -1 || e2 > -1) {
       //  console.log('robot txt detected or page is excluded');
       sendBgMessage('excludethisSite', 'AddtoExcludesList');
     } else if (e4 > -1 && e5 > -1) {
@@ -69,7 +69,8 @@ function handleWMErrors() {
       sendBgMessage('excludethisSite', 'AddtoTempExcludesList');
     } else if (e8 > -1 || e9 > -1 || e10 > -1 || e11 > -1) {
       sendBgMessage('excludethisSite', 'AddtoTempExcludesList');
-
+    } else if (e3 > -1){
+      sendBgMessage('excludethisSite', 'AddtoTempExcludesList');
     } else {
       //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
     }
@@ -87,34 +88,7 @@ handleWMErrors();
 
 if (navigator.userAgent.match(/Android/i)) {
   let c = document.getElementById("wm-tb-close");
-  if (c != null) {
+  if (c !== null) {
     c.click();
   }
 }
-
-/*
-
-var sendSaveMessage = function() {
-  chrome.runtime.sendMessage({
-      type: "savetoWM",
-      subtype: "fromContent"
-    },
-    function(response) {
-      // console.log('returnned to content script' + response.message);
-    });
-
-};
-
-var sendExcludeMessage = function(category) {
-  chrome.runtime.sendMessage({
-      type: "excludethisSite",
-      subtype: "fromContent",
-      category: category
-    },
-    function(response) {
-      //console.log('returnned to content script' + response.message);
-    });
-
-};
-
-*/

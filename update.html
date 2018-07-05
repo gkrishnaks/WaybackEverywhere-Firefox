@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html>
+<!-- 
+	/*******************************************************************************
 
+    Wayback Everywhere - a browser addon/extension to redirect all pages to
+    archive.org's Wayback Machine except the ones in Excludes List
+    Copyright (C) 2018 Gokulakrishna K S
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
+*/
+-->
 <head>
 	<title>Wayback Everywhere</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 	<link rel="stylesheet" href="css/help.css" />
 	<link rel="stylesheet" href="css/bootstrap.min.old.css" />
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
@@ -22,286 +43,343 @@
 		<div id="accordion">
 			<div class="card">
 				<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Wayback Everywhere Version 1.0.14</button>
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Version 1.0.16</button>
 				</div>
 				<div id="whatisnew" class="collapse show" data-parent="#accordion">
 					<div class="card-body"> <br/>
 						<ul>
 							<strong>New Features:</strong>
-								<li> Clean URLs of some ?UTM and other things before redirecting to Wayback Machine  </li>
-								<li> Added "See first archived" button to popup menu </li>
-								<li> "Should Exclude" check is now faster for big list of Excludes</li>
-								<li>Temporary excludes and Temporary excludes are now shown in settings page </li>
-								<li>Settings page has a button to clear out temporary excludes and temporary includes </li>
-								<li>Settings page shows a list of Filters for cleaning URLs (list shows up when logging is enabled - as it's for advanced users only)</li>
-								<li>Added an Advanced Settings page that can be used to clear out 1) all of excludes list 2) stats 3) filters</li>
+								<li> Extension will try to auto-exclude download links if the url ends with any of the 100 popular file extensions here <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23" target="_blank">23</a> </li>
+								<li> This will be helpful when trying to click a download link in archived version of page - as Wayback Machine doesn't archive the files themselves - so addon will try to fetch from live site</li>
+								<li> Added more streaming sites and some url shorteners to default excludes <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/35" target="_blank">#35</a> </li>
+								<li> Updated the filters which are used to scrub URLs off trackers before redirecting to Wayback Machine <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/37" target="_blank">#37</a> </li>
+								<li> Reduced the extension size by removing or excluded unused files or files that are not necessary to be bundled within extension <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/41" target="_blank">#41</a></li>
+								<li> In advanceduser.html page - added a way to update or remove filters <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/21" target="_blank">#21</a></li>
+								<li>Stats button displays Saved to Redirected ratio as percentage</li>
+								
 								<br/>
 								<strong>Fixes :  </strong>
-								<li> Fixes issue with t.co shortener from previous release when we moved to checking pattern against domain instead of whole URL</li>
-								<li>Fixes issue - stats reset to zero when disabled/enabled from about:addons</li>
-								<li>Fixes issue with "save page now" when on an excluded site</li>
-								<li>Fixes issue with medium redirects for non-medium blogs that redirect to medium</li>
+								<li> Popup menu icon is no longer shown in about:memory page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/33" target="_blank">#33</a></li>
+							   	<li> Include/Exclude buttons are no longer shown when user is viewing an archived page of Wayback machine itself! <a ="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/17" target="_blank">#17</a></li>
+								<li> Fixed a layout UI bug in help page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/36" target="_blank">#36</a></li>
+								<li> Fix for * (all!) getting added to Excludes when trying to exclude archived version of wayback machine itself - this fix protects against ALL sites getting excluded <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/25" target="_blank">#25</a></li>
+								<li> Fix for ft.com in excluding all sites that *ft.com in domain name<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/22" target="_blank">#22</a></li>
+                    </ul>
 					</div>
 				</div>
 				<br/>
+<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisWaybackEverywhere">What is Wayback Everywhere?</button>
+				</div>
+				<div id="whatisWaybackEverywhere" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+						Wayback Everywhere is a browser extension/addon that allows you to automatically redirect all pages to Internet Archive's <a href="https://web.archive.org" target="_blank">Wayback Machine</a> except the site (domains) that are in 'Excludes' List.
+							<br/><br/>Examples: <ul><li><span class="url">http://example.org</span> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;--> <span class="url">https://web.archive.org/web/2/https://example.org</span>.</li>
+							<li> If <span class="url">http://gnu.org</span> is in 'Excludes' List --> <span class="url">http://gnu.org</span> <br/></li></ul><br/>Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here <a data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Exclude List</a>	</div>
+				</div>
+			</div>
+<br/>
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#features">Features</button>
+				</div>
+				<div id="features" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+						<ul>
+							<li> <strong>Popup menu</strong> - Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here <a data-toggle="collapse" data-parent="#accordion"
+								  href="#popup">Popup Menu</a></li>
+							<li> <strong>Automatic Detection of Wayback Machine Site's Error Messages</strong> - Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message.
+								More information on Automatic Detection of WM Error Messages available here <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
+							<li> <strong>Settings Page </strong> - Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here
+								<a data-toggle="collapse" data-parent="#accordion" href="#settings">Settings Page</a></li>
+							</li>
+						<li><strong>Auto-enable Reader mode for Archived pages </strong> - From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. (This option is currently not available in Firefox for Android)
+						</li>
+						</ul></div>
+				</div>
+			</div>
+<br/>
 
-				<div class="card">
-						<div class="card-header" style="text-align: center;">
-						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisWaybackEverywhere">What is Wayback Everywhere?</button>
-						</div>
-						<div id="whatisWaybackEverywhere" class="collapse" data-parent="#accordion">
-							<div class="card-body">
-								Wayback Everywhere is a browser extension/addon that allows you to automatically redirect all pages to Internet Archive's <a href="https://web.archive.org" target="_blank">Wayback Machine</a> except the site (domains) that are in 'Excludes' List.
-									<br/><br/>Examples: <ul><li><span class="url">http://example.org</span> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;--> <span class="url">https://web.archive.org/web/2/https://example.org</span>.</li>
-									<li> If <span class="url">http://gnu.org</span> is in 'Excludes' List --> <span class="url">http://gnu.org</span> <br/></li></ul><br/>Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here <a data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Exclude List</a>	</div>
-						</div>
+			<div class="card">
+				<div class="card-header" style="text-align: center;">
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-Detect WM Error Messages</button>
+				</div>
+				<div id="AutodetectWayBackMessages" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+						<ul>
+							<li><strong>Auto-save Page to Wayback Machine</strong> - When WaybackMachine site throws error message that says "This page is available on the web, save this page to Wayback to make it more complete", the addon automatically loads the Save page url as
+								https://web.archive.org/save/
+								<<span>URL</span>></li>
+							<li><strong>Auto-add to Excludes List </strong> - When Wayback Machine site throws error message that says it cannot load a page due to the site being excluded from Wayback Machine or if the site excluded itself from Wayback using Robots.txt file,
+								the addon automatically detects this error message and puts the site (domainname) in Excludes list. And then it loads the live webpage. This helps the user to build her Excludes list Automatically over few days of usage.
 					</div>
-		<br/>
-				<div class="card">
-						<div class="card-header" style="text-align: center;">
-						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#features">Features</button>
-						</div>
-						<div id="features" class="collapse" data-parent="#accordion">
-							<div class="card-body">
-								<ul>
-									<li> <strong>Popup menu</strong> - Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here <a data-toggle="collapse" data-parent="#accordion"
-										  href="#popup">Popup Menu</a></li>
-									<li> <strong>Automatic Detection of Wayback Machine Site's Error Messages</strong> - Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message.
-										More information on Automatic Detection of WM Error Messages available here <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
-									<li> <strong>Settings Page </strong> - Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here
-										<a data-toggle="collapse" data-parent="#accordion" href="#settings">Settings Page</a></li>
-									</li>
-								<li><strong>Auto-enable Reader mode for Archived pages </strong> - From settings page, enable the option to automatically open "Reader mode" for archived pages which support Firefox's reader mode. (This option is currently not available in Firefox for Android)
-								</li>
-								</ul></div>
-						</div>
-					</div>
-		<br/>
+				</div>
+			</div>
+			<br/>
+			<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#popup">Popup Menu</button>
+				</div>
+				<div id="popup" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+<p style="text-align:center">Popup Menu appearance changes based on in which page you click on the Popup Menu</p>
+<p style="text-align:center"> Any "Temporary" Exclude/Include are cleared back when the browser is closed and started again.</p>
 
-					<div class="card">
-						<div class="card-header" style="text-align: center;">
-							<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-Detect WM Error Messages</button>
-						</div>
-						<div id="AutodetectWayBackMessages" class="collapse" data-parent="#accordion">
-							<div class="card-body">
-								<ul>
-									<li><strong>Auto-save Page to Wayback Machine</strong> - When WaybackMachine site throws error message that says "This page is available on the web, save this page to Wayback to make it more complete", the addon automatically loads the Save page url as
-										https://web.archive.org/save/
-										<<span>URL</span>></li>
-									<li><strong>Auto-add to Excludes List </strong> - When Wayback Machine site throws error message that says it cannot load a page due to the site being excluded from Wayback Machine or if the site excluded itself from Wayback using Robots.txt file,
-										the addon automatically detects this error message and puts the site (domainname) in Excludes list. And then it loads the live webpage. This helps the user to build her Excludes list Automatically over few days of usage.
-							</div>
-						</div>
-					</div>
-					<br/>
-					<div class="card">
-						<div class="card-header" style="text-align: center;">
-						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#popup">Popup Menu</button>
-						</div>
-						<div id="popup" class="collapse" data-parent="#accordion">
-							<div class="card-body">
-		<p style="text-align:center">Popup Menu appearance changes based on in which page you click on the Popup Menu</p>
-		<p style="text-align:center"> Any "Temporary" Exclude/Include are cleared back when the browser is closed and started again.</p>
-
-		<div id="accordion2" data-parent="#accordion">
+<div id="accordion2" data-parent="#accordion">
+	<div class="card">
+			<div class="card-header" style="text-align: center;">
+			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#alreadyonWayback">When viewing an archived page</button>
+			</div>
+			<div id="alreadyonWayback" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="text-align: center">				 <img src="images/ShowExcludes.png"/></div>
+			</div>
+		</div> <br/>
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onexcludedpage">When viewing an excluded site</button>
+				</div>
+				<div id="Onexcludedpage" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="text-align: center">					 <img src="images/ShowIncludes.png"/></div>
+				</div>
+			</div><br/>
 			<div class="card">
 					<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#alreadyonWayback">When viewing an archived page</button>
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onpreviligedpages">When you are on special pages</button>
 					</div>
-					<div id="alreadyonWayback" class="collapse" data-parent="#accordion">
-											<div class="card-body" style="text-align: center">				 <img src="images/ShowExcludes.png"/></div>
+					<div id="Onpreviligedpages" class="collapse" data-parent="#accordion">
+									<div class="card-body" style="text-align: center">						 <img src="images/settingspage.png"/></div>
 					</div>
-				</div> <br/>
+				</div>
+
+
+
+							</div>
+				</div>
+			</div>
+
+<br>
+
 				<div class="card">
-						<div class="card-header" style="text-align: center;">
-						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onexcludedpage">When viewing an excluded site</button>
-						</div>
-						<div id="Onexcludedpage" class="collapse" data-parent="#accordion">
-											<div class="card-body" style="text-align: center">					 <img src="images/ShowIncludes.png"/></div>
-						</div>
-					</div><br/>
-					<div class="card">
-							<div class="card-header" style="text-align: center;">
-							<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onpreviligedpages">When you are on special pages</button>
-							</div>
-							<div id="Onpreviligedpages" class="collapse" data-parent="#accordion">
-											<div class="card-body" style="text-align: center">						 <img src="images/settingspage.png"/></div>
-							</div>
-						</div>
-
-
-
-									</div>
-						</div>
+					<div class="card-header" style="text-align: center;">
+						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Excludes List</button>
 					</div>
+					<div id="excludepattern" class="collapse" data-parent="#accordion">
+						<div class="card-body">
+							<ul>
+								<li> Sites (hostnames) in the Excludes list are excluded from routing to Wayback Machine. </li>
+								<li> You can use popup menu buttons to add/remove from this Excludes list to suit your browsing habits</li>
+<li>Temporary exclude/include 'remembers' the selection until the browser is restarted. (See Popup menu)</li>
 
-		<br>
+								<li> You also have the option to add or remove from Excludes list via Settings Page </li>
+								<li> Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in
+									building a Excludes list without manual effort. Read more here :   <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
 
-						<div class="card">
-							<div class="card-header" style="text-align: center;">
-								<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Excludes List</button>
-							</div>
-							<div id="excludepattern" class="collapse" data-parent="#accordion">
-								<div class="card-body">
-									<ul>
-										<li> Sites (hostnames) in the Excludes list are excluded from routing to Wayback Machine. </li>
-										<li> You can use popup menu buttons to add/remove from this Excludes list to suit your browsing habits</li>
-		<li>Temporary exclude/include 'remembers' the selection until the browser is restarted. (See Popup menu)</li>
-
-										<li> You also have the option to add or remove from Excludes list via Settings Page </li>
-										<li> Some Wayback Machine site's error messages like "Site excluded" - the addon can automatically detects this and adds the site (hostname) to Excludes list. This helps you in
-											building a Excludes list without manual effort. Read more here :   <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
-
-										<li> The 'Excludes' list excludes at domain level, including subdomains - for example, if we exclude <i>*.google.*</i> - this results in redirect rules not applying to <em>all</em> Google sites - the ones that have 'google' in the url (i.e no redirection
-											to wayback machine) happens across all google domains - <i>docs.google.com, drive.google.com, google.de, google.co.in </i> and so on.</li>
-										<li>Now, in those domains, if there are "public pages" (like Blog posts) which do <em>not</em> need login to view, you can use the popup menu's "Save Page Now" button to save that page alone to the wayback machine - More info on popup menu's features
-											here <a data-toggle="collapse" data-parent="#accordion" href="#popup">Popup Menu</a></li>
-										</li>
-									</ul>
-								</div>
-
-							</div>
-						</div>
-		<br/>
-
-		<div class="card">
-				<div class="card-header" style="text-align: center;">
-				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#settings">Edit Settings</button>
-				</div>
-				<div id="settings" class="collapse" data-parent="#accordion">
-					<div class="card-body">
-						<ul>
-							<li>Click "Edit Settings" from Popup Menu to open Settings Page.</li>
-								<li>Settings page lets you view Existing Excludes list. and add or remove from excludes list manually by using the buttons provides</li>
-								<li>This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : <a data-toggle="collapse" data-parent="#accordion"
-										href="#defaultexcludepattern">Default Excludes list provided during install</a></li>
-						<li>This page has an option to Auto-enable Reader mode for Archived pages - to automatically open "Reader mode" for archived pages which support Firefox's reader mode. (This option is currently not available in Firefox for Android)</li>
-
-							<li> You can export and import settings from this page. More information on this here : <a data-toggle="collapse" data-parent="#accordion"
-												href="#exportimport">Export and Import Settings</a> </li>
-								<li>Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.</li>
+								<li> The 'Excludes' list excludes at domain level, including subdomains - for example, if we exclude <i>*.google.*</i> - this results in redirect rules not applying to <em>all</em> Google sites - the ones that have 'google' in the url (i.e no redirection
+									to wayback machine) happens across all google domains - <i>docs.google.com, drive.google.com, google.de, google.co.in </i> and so on.</li>
+								<li>Now, in those domains, if there are "public pages" (like Blog posts) which do <em>not</em> need login to view, you can use the popup menu's "Save Page Now" button to save that page alone to the wayback machine - More info on popup menu's features
+									here <a data-toggle="collapse" data-parent="#accordion" href="#popup">Popup Menu</a></li>
+								</li>
 							</ul>
-		</div>
-			</div>
-		</div>
-
-		<br/>
-
-		<div class="card">
-				<div class="card-header" style="text-align: center;">
-				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#exportimport">Export/Import Settings</button>
-				</div>
-				<div id="exportimport" class="collapse" data-parent="#accordion">
-					<div class="card-body">
-						<ul>
-							<li>In Settings page, you can choose to Export your settings to a .JSON file </li>
-							<li>You can also import your settings using a previously exported JSON file</li>
-							<li>Addon tries to do some validation on the imported JSON before it saves settings to Disk. But we advise not to manually edit the exported JSON before importing to avoid errors</li>
-						</ul>
 						</div>
+
+					</div>
+				</div>
+<br/>
+
+<div class="card">
+		<div class="card-header" style="text-align: center;">
+		<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#settings">Edit Settings</button>
+		</div>
+		<div id="settings" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<ul>
+					<li>Click "Edit Settings" from Popup Menu to open Settings Page.</li>
+						<li>Settings page lets you view Existing Excludes list. and add or remove from excludes list manually by using the buttons provides</li>
+						<li>This page also lets you reset the Excludes list back to the default one provided during addon installation if the user wishes for the same. More information on the default list : <a data-toggle="collapse" data-parent="#accordion"
+								href="#defaultexcludepattern">Default Excludes list provided during install</a></li>
+				<li>This page has an option to Auto-enable Reader mode for Archived pages - to automatically open "Reader mode" for archived pages which support Firefox's reader mode. (This option is currently not available in Firefox for Android)</li>
+
+					<li> You can export and import settings from this page. More information on this here : <a data-toggle="collapse" data-parent="#accordion"
+										href="#exportimport">Export and Import Settings</a> </li>
+						<li>Additionally, curious users may enable Logging on the checkbox provided to view system logs in Browser console.</li>
+					</ul>
+</div>
+	</div>
+</div>
+
+<br/>
+
+<div class="card">
+		<div class="card-header" style="text-align: center;">
+		<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#exportimport">Export/Import Settings</button>
+		</div>
+		<div id="exportimport" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<ul>
+					<li>In Settings page, you can choose to Export your settings to a .JSON file </li>
+					<li>You can also import your settings using a previously exported JSON file</li>
+					<li>Addon tries to do some validation on the imported JSON before it saves settings to Disk. But we advise not to manually edit the exported JSON before importing to avoid errors</li>
+				</ul>
+				</div>
+	</div>
+</div>
+
+<br/>
+
+<div class="card">
+		<div class="card-header" style="text-align: center;">
+		<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#defaultexcludepattern">Default Excludes List</button>
+		</div>
+		<div id="defaultexcludepattern" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<ul class="list-unstyled">
+									<li> Upon install, a set of predefined rules are loaded into the Excludes List. This is to provide a starting point for the users. This list is prepared by the developer(s) of this addon on purely technical basis:
+
+										<li> &#9658; Some sites that are excluded from Wayback Machine - quora.com for example </li>
+										<li> &#9658; Some sites that use robots.txt file on server to exclude themselves from Wayback Machine - smithsonianmag.com, for example </li>
+										<li> &#9658; Some sites that may need login, as Wayback Machine archives public pages only. For example, docs.google.com or paypal.com , or some sites that host video content which may not work in Waymachine Archived version like youtube.com or vimeo.com </li>
+										<li> &#9658; Some sites that may not work fine with Wayback Machine - ft.com for example.</li>
+											<li>&#9658; Some URL shortener sites.</li>
+											<li> &#9658; Some Search engines to help the user avoid seeing Wayback redirects when she searches </li>
+											<li> &#9658; Some reserved addresses like 127.0.0 * and 0.0.0* so that user can browse these without routing</li>
+											<li> &#9658; Some online education learning course sites as they host video content and also need login to work</li>
+											<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li> <br/>
+											<li> &#9658; Some video streaming (netflix..) sites and live streaming sites (Periscope..)</li>
+											<li> &#9658; Some audio podcast sites </li>
+											<li> &#9658; Some Language learning sites (Duolingo) as they need login to work </li>
+											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page 
+												(example.com/download/file.zip or /file.doc will get auto-excluded only for the download link) </li>
+											<li> &#9658; Some video conference site links like skype, sococo, jitsi and few other online meeting sites.<li></li>
+                                            <li> &#9658; Some online office suite sites like office365, zoho and onlyoffice. </li>
+											<li> &#9658; Some mailerlist domains so that you can easily unsubscribe from marketing emails ;-) </li>
+											<small>P.S : There's no other agenda behind this bundled list made available during install :)</small>
+								</ul> </div>
+<br/>If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
+		</div>
+	</div>
+
+	<br>
+
+	<div class="card">
+			<div class="card-header" style="text-align: center;">
+			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Loadall1plinks">Open all links as new tabs</button>
+			</div>
+			<div id="Loadall1plinks" class="collapse" data-parent="#accordion">
+				<div class="card-body">
+					<ul >
+						<li>This feature is for advanced users only and is in EXPERIMENTAL STATE, hence not enabled by default. Please read the below before using it </li>
+						<li>Setting page has an option to enable "open all links in page" button to Popup menu.</li>
+						<li>Once enabled, this adds a button and input field to Popup Menu.</li>
+						<li>You need to enter a selector in input field before you click Open all links.</li><br/>
+						<li>For example, open this page <a href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002)" target="_blank">Free as in Freedom</a>
+
+							<br/>All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs</li>
+							<li>This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs</li>
+					</ul>
+					 </div>
 			</div>
 		</div>
-
-		<br/>
-
-		<div class="card">
-				<div class="card-header" style="text-align: center;">
-				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#defaultexcludepattern">Default Excludes List</button>
-				</div>
-				<div id="defaultexcludepattern" class="collapse" data-parent="#accordion">
-					<div class="card-body">
-						<ul class="list-unstyled">
-											<li> Upon install, a set of predefined rules are loaded into the Excludes List. This is to provide a starting point for the users. This list is prepared by the developer(s) of this addon on purely technical basis:
-
-												<li> &#9658; Some sites that are excluded from Wayback Machine - quora.com for example </li>
-												<li> &#9658; Some sites that use robots.txt file on server to exclude themselves from Wayback Machine - smithsonianmag.com, for example </li>
-												<li> &#9658; Some sites that may need login, as Wayback Machine archives public pages only. For example, docs.google.com or paypal.com , or some sites that host video content which may not work in Waymachine Archived version like youtube.com or vimeo.com </li>
-												<li> &#9658; Some sites that may not work fine with Wayback Machine - ft.com for example.</li>
-													<li>&#9658; Some URL shortener sites.</li>
-													<li> &#9658; Some Search engines to help the user avoid seeing Wayback redirects when she searches </li>
-													<li> &#9658; Some reserved addresses like 127.0.0 * and 0.0.0* so that user can browse these without routing</li>
-													<li> &#9658; Some online education learning course sites as they host video content and also need login to work</li>
-													<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li> <br/>
-													<small>P.S : There's no other agenda behind this bundled list made available during install :)</small>
-										</ul> </div>
-		<br/>If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
-				</div>
-			</div>
 
 			<br>
 
-			<div class="card">
-					<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Loadall1plinks">[EXPERIMENTAL FEATURE] Open all links in a archived page as new tabs</button>
-					</div>
-					<div id="Loadall1plinks" class="collapse" data-parent="#accordion">
-						<div class="card-body">
-							<ul >
-								<li>This feature is for advanced users only and is in EXPERIMENTAL STATE, hence not enabled by default. Please read the below before using it </li>
-								<li>Setting page has an option to enable "open all links in page" button to Popup menu.</li>
-								<li>Once enabled, this adds a button and input field to Popup Menu.</li>
-								<li>You need to enter a selector in input field before you click Open all links.</li><br/>
-								<li>For example, open this page <a href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002)" target="_blank">Free as in Freedom</a>
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Stats">Details on Stats</a></div>
+				<div id="Stats" class="collapse" data-parent="#accordion">
+					<div class="card-body">
 
-									<br/>All the chapters listed have "Chapter" in the URLs. So, open popup menu and enter "Chapter" as selector and click "Open All Links" button - this will open all the chapter links in new tabs</li>
-									<li>This may cause your browser to freeze until all tabs are loaded - Use Selector wisely to only open the links that you really want to open in new tabs</li>
-							</ul>
-							 </div>
-					</div>
-				</div>
-
-				<br>
-
-			<div class="card">
-					<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#LicenseAndDisclaimer">License</button>
-					</div>
-					<div id="LicenseAndDisclaimer" class="collapse" data-parent="#accordion">
-						<div class="card-body">
-
-							<div class="card-block">The WaybackEverywhere addon is licensed under GPLv3 license. Refer the full license here : <a href="LICENSE.html"  id="licenselink" target="_blank">License</a></div>
-							<br/>
-		---
-							<p> Wayback Everywhere - a browser addon/extension to redirect all pages to archive.org's Wayback Machine except the ones in Excludes List<br/><br/> Copyright (C) 2018 Gokulakrishna K S
-								<br/> This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-								<br/> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-								<br/> You should have received a copy of the GNU General Public License along with this program. If not, see
-								https://www.gnu.org/licenses/
-							</p>
-		---
-							<p style="font-weight:bold"> The developer of this addon/extension is <em>NOT</em> affliated with the Internet Archive (archive.org or web.archive.org)</p>
-
-		<br/><p> Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : <a href="privacy.html"  id="privacy" target="_blank">Privacy Policy</a>
-			 </div>
-
-					</div>
-				</div>
-
-				<br>
-
-				<div class="card">
-						<div class="card-header" style="text-align: center;">
-						<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Credits">Credits and Acknowledgements</a></div>
-						<div id="Credits" class="collapse" data-parent="#accordion">
-							<div class="card-body">
-
-							<ul><li>This addon is built based on the 'Redirector' addon developed by  <a href="http://einaregilsson.com/redirector" target="_blank">Einar Regilsson</a>. He published its sourcecode under MIT license.</li> <li>The developer of this addon is <em>NOT</em> affliated to Internet Archive (archive.org) or its Wayback Machine (web.archive.org)- but I thank them for making web.archive.org a freely available resource on the internet for the benefit of general public, and the commons.</li><li> This addon uses libraries/frameworks - AngularJS, Bootstrap (CSS and JS), FontAwesome, and JQuery. These are governed by their respective licenses. You can refer to their websites for the same.</li>
-								<li> This addon uses the icons from https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/. Some parts of popup.html were also taken from this addon.</li></ul>
-				 </div>
-
-						</div>
-					</div>
-
-
-
+					<ul><li> Stats are displayed in popup menu. Stats include total redirects and total pages saved to Wayback Machine using the addon </li>
+						<li> Once a page is redirected to wayback machine, all links in the page get web.archive.org/web/2* prefixed by Wayback Machine. Clicking on any link within an archived page will <em>not</em> add to the redirected counts.</li>
+						<li> Saved counts are updated for both auto-save and also manual saves using "save this page" button in popup menu</li>
+						<li> Since the stat counts are per-device (per-install) statistics, it is not included in Export/Import setting feature.</li>
+						<li> To avoid multiple disk writes, stats are stored to disk once every four minutes. It's fine if browser is closed before a four minute window as stats are not a critical value :)</li>
+						</ul>
+		 </div>
 
 				</div>
 			</div>
-			<footer><small>
-					Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
-				gokulakrishnaks@gmail.com
-				</a> Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a></small>
-					</footer>
-		</body>
+			
+				<br>
 
-		</html>
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#advancedUser">Advanced Settings</a></div>
+				<div id="advancedUser" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+
+					<ul><li> For ADVANCED USERS only : There are some settings for advanced users in a page that's not directly accessible from Addon UI pages</li>
+						<li> To open the advanced settings page, open Settings page - or this Help page - adjust the URL to <addonID>/advanceduser.html</li>
+						<li> In the page, you can clear all Excludes, set stats to Zero, and remove all the fitlers</li>
+						<li> You also have the option to add to filters or remove a specific filter - use this carefully. Avoid using this add filter feature if you aren't sure what UTM or similar things are</li>
+						</ul>
+		 </div>
+
+				</div>
+			</div>
+
+            <br>
+	<div class="card">
+			<div class="card-header" style="text-align: center;">
+			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#LicenseAndDisclaimer">License</button>
+			</div>
+			<div id="LicenseAndDisclaimer" class="collapse" data-parent="#accordion">
+				<div class="card-body">
+
+					<div class="card-block">The WaybackEverywhere addon is licensed under GPLv3 license. Refer the full license here : <a href="LICENSE.html"  id="licenselink" target="_blank">License</a></div>
+					<br/>
+---
+					<p> Wayback Everywhere - a browser addon/extension to redirect all pages to archive.org's Wayback Machine except the ones in Excludes List<br/><br/> Copyright (C) 2018 Gokulakrishna K S
+						<br/> This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+						<br/> This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+						<br/> You should have received a copy of the GNU General Public License along with this program. If not, see
+						https://www.gnu.org/licenses/
+					</p>
+---
+					<p style="font-weight:bold"> The developer of this addon/extension is <em>NOT</em> affliated with the Internet Archive (archive.org or web.archive.org)</p>
+
+<br/><p> Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : <a href="privacy.html"  id="privacy" target="_blank">Privacy Policy</a>
+	 </div>
+
+			</div>
+		</div>
+
+		<br>
+
+		<div class="card">
+				<div class="card-header" style="text-align: center;">
+				<a class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#Credits">Credits and Acknowledgements</a></div>
+				<div id="Credits" class="collapse" data-parent="#accordion">
+					<div class="card-body">
+
+					<ul><li>This addon is built based on the 'Redirector' addon developed by  <a href="http://einaregilsson.com/redirector" target="_blank">Einar Regilsson</a>. He published its sourcecode under MIT license.</li> <li>The developer of this addon is <em>NOT</em> affliated to Internet Archive (archive.org) or its Wayback Machine (web.archive.org)- but I thank them for making web.archive.org a freely available resource on the internet for the benefit of general public, and the commons.</li><li> This addon uses libraries/frameworks - AngularJS, Bootstrap (CSS and JS), FontAwesome, and JQuery. These are governed by their respective licenses. You can refer to their websites for the same.</li>
+						<li> This addon uses the icons from https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/. Some parts of popup.html were also taken from this addon.</li></ul>
+		 </div>
+
+				</div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+
+<footer>	<div style="text-align: center;">
+<small>
+			Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
+gokulakrishnaks@gmail.com
+</a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
+<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
+ <p id="appVersion"></p> 
+
+</small>
+</div>
+
+		</footer>
+
+</div>
+			</div>
+</body>
+
+</html>

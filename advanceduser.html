@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html>
+<!-- 
+	/*******************************************************************************
 
+    Wayback Everywhere - a browser addon/extension to redirect all pages to
+    archive.org's Wayback Machine except the ones in Excludes List
+    Copyright (C) 2018 Gokulakrishna K S
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
+*/
+-->
 <head>
 	<title>Wayback Everywhere</title>
 	<meta charset="UTF-8">
@@ -62,8 +84,12 @@
 				   <div>
 						<label>Clear all filters</label>
 				<button class="btn blue" ng-click="clearAllFilters()">Clear Filters!</button>
+		</div>
+	<div><button class="btn blue" ng-disabled="!newfilter" ng-click="addtofilters(newfilter)">Add to Filters</button><input type="text" class="incexcbuttons" ng-model="newfilter" placeholder="Enter a new filter" id="addfilter"/>
+	<br/>
+					<div><button class="btn green" ng-disabled="!toRemoveFilter" ng-click="removefromfilters(toRemoveFilter)">Remove from Filters</button><input class="incexcbuttons" type="text" ng-model="toRemoveFilter" placeholder="Enter a filter to remove" /></div>
 				</div>
-
+				<br/>
 				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
 					{{message}}
 					<a ng-click="message=null">&#x2716;</a>
@@ -142,12 +168,18 @@
 			</div>
 		</div>
 		<br/><br/>
-		<footer><small>
+			<footer>	<div style="text-align: center;">
+<small>
 			Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
 gokulakrishnaks@gmail.com
-</a> Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a></small>
-		</footer>
+</a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
+<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
+ Version {{appVersion}} 
 
+</small></div>
+
+		</footer>
+</div>
 	</div>
 </body>
 

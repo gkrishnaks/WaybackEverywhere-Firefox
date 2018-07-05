@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Home: https://github.com/gkrishnaks/WaybackEverywhere-Firefox
+    Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
 
@@ -68,7 +68,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (tab.url.indexOf('about:add') < 0 && tab.url.indexOf('about:conf') < 0 &&
     tab.url.indexOf('about:pref') < 0 && tab.url.indexOf('file://') < 0 &&
     tab.url.indexOf('ftp:/') < 0 && tab.url.indexOf('about:debug') < 0 && tab.url.indexOf('about:log') < 0 &&
-    tab.url.indexOf('about:fir') < 0 && tab.url.indexOf('about:down') < 0) {
+    tab.url.indexOf('about:fir') < 0 && tab.url.indexOf('about:down') < 0 && tab.url.indexOf('about:mem') < 0) {
     chrome.pageAction.show(tabId);
   } else {
     chrome.pageAction.hide(tabId);
@@ -128,7 +128,7 @@ chrome.tabs.onActivated.addListener(function(tab) {
         currentUrl.indexOf('about:conf') < 0 && currentUrl.indexOf('about:pref') < 0 &&
         currentUrl.indexOf('file://') < 0 && currentUrl.indexOf('ftp:/') < 0 &&
         currentUrl.indexOf('about:debug') < 0 && currentUrl.indexOf('about:log') < 0 &&
-        currentUrl.indexOf('about:fir') < 0 && currentUrl.indexOf('about:down') < 0) {
+        currentUrl.indexOf('about:fir') < 0 && currentUrl.indexOf('about:down') < 0 && currentUrl.indexOf('about:mem') < 0) {
         chrome.pageAction.show(tab.tabId);
         // Until issue #2 is resolved, we use pageaction instrad of browseraction Popup
         // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/2
@@ -204,6 +204,9 @@ var addSitetoExclude = function(request, sender) {
 
     //check if already exists in ExcludePattern
     let array = redirectslist[0].excludePattern.split('*|*');
+    let lastIndex=array.length - 1;
+    array[lastIndex]=array[lastIndex].replace('*',''); 
+      
     let alreadyExistsinExcludes=false;
     if(array.indexOf(obj.hostname) > -1){
       alreadyExistsinExcludes = true;
@@ -212,7 +215,7 @@ var addSitetoExclude = function(request, sender) {
      // Fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
      // t.co seems to be the only hostname that causes problems with other sites that has "somenamet.com" in url where "t.co" gets a match against t.co
 
-    if (!alreadyExistsinExcludes && "t.co" !== obj.hostname) {
+    if (!alreadyExistsinExcludes &&  obj.hostname.length > 0 && "t.co" != obj.hostname && "web.archive.org" != obj.hostname) {
       log('need to exclude this site' + obj.hostname + 'and previous exclude pattern is ' + redirectslist[0].excludePattern);
       redirectslist[0].excludePattern = redirectslist[0].excludePattern + '|*' + obj.hostname + '*';
       log('Now the new redirects is' + JSON.stringify(redirectslist));
@@ -371,7 +374,7 @@ function checkRedirects(details) {
 
     // Once wayback redirect url is loaded, we can just return it except when it's in exclude pattern.
     // this is for issue https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/7
-    // When already in archived page, Wayback Machine appends web.archive.org/web/2/* to all URLs in the page
+    // When already in archived page, Wayback Machine appends web.archive.org/web/2/ to all URLs in the page
     // For example, when viewing archived site, there's a github link - and if github is in Excludes list,
     // Using this, we load live page of github since it's in excludes list.
     // we may add a switch to Settings page to disable this behaviour at a later time if needed.
@@ -386,11 +389,22 @@ function checkRedirects(details) {
   }
 
   let urlDetails = getHostfromUrl(details.url);
-
+  
+  if(urlDetails.hostname.length === 0){
+    //getHostfromUrl will return empty hostname if you try to load archived version of Wayback Machine itself.
+    return {};
+  }
+  
+  let ambiguousExcludes=["t.co","g.co","ft.com","cnet.co","vine.co","ted.com"];  
   //since "t.co" shoterner matches with sites that have "..t.com" in the url as we use RegExp
   //As t.co is the most common for links clicked from tweets - let's check and return t.co without further processing
   // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/13
-  if (urlDetails.hostname == "t.co") {
+  
+  // Made the below a loop now after ft.com matched against sites that have ft.com in the URL..
+  // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/22
+  
+  for(let i=0; i<ambiguousExcludes.length;i++){
+  if (urlDetails.hostname == ambiguousExcludes[i]) {
     //We need this if condition to avoid infinite redirects of t.co url into itself.
     //That is, if web.archive.org is prefixed to t.co, just load t.co live url so that this shortener can expand to actual URL
     //If web.archive.org is NOT prefixed, just return as it can continue to expand to live URL which will get redirected to WM later.
@@ -399,6 +413,9 @@ function checkRedirects(details) {
     }
     return {};
   }
+  }
+
+    
 
 // https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/20
 // Issue happens when a blog redirects to medium globalidentify for some reason
@@ -421,7 +438,38 @@ function checkRedirects(details) {
   }
 
   if (details.url.indexOf("web.archive.org/web") > -1) {
-
+    // #23 - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23
+    // Load live url when url ends with common file extensions so that user can download a file easily
+    // example.com/path/to/dir/file.zip     
+    let isDownloadlink = false;
+    let commonExtensions = [".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".webm", ".pdf",".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt", ".torrent", ".c32", ".cfg", ".xz", ".gpg", ".crt", ".dmg", ".rtf", ".z", ".csv",".lz",".bin",".epub",".mobi",".vdi",".dat",".m4v", ".mkv",".blend",".block",".3mf",".cal3d",".c4d",".ssh",".pub",".ppk",".cer", ".der",".mpp",".3dmf",".dwg",".sqlite", ".psd", ".raw",".tiff",".azw", ".azw3", ".kfx",".h264",".rm",".ai",".ibooks",".kf8",".prc",".djvu", ".djv",".fb2", ".fbz",".srt",".dxf",".cbr",".ovf",".ova",".vhd",".vmdk",".qcow2",".qcow",".vdi",".img", "download.php", "downloads.php"];
+    let liveURL = urlDetails.url.toLowerCase();
+    if(liveURL.endsWith("#close")){
+        liveURL=liveURL.split("#close")[0];
+    }  
+    let index = liveURL.indexOf("?");
+    if(index > -1){
+        liveURL = liveURL.substring(0,index);
+        index = -1;
+    }
+    if(liveURL.endsWith("/")){
+        liveURL = liveURL.substring(0,liveURL.length-1);
+    }
+    index = liveURL.indexOf("#");
+    if(index > -1){
+        liveURL = liveURL.substring(0,index)
+    }
+   
+    for(let j=0; j<commonExtensions.length; j++){
+        if(liveURL.endsWith(commonExtensions[j])){
+            isDownloadlink = true;
+            break;
+        }
+    }
+    if(isDownloadlink){
+        return {redirectUrl: urlDetails.url};
+    }
+     
     // Issue 12   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/12
     let isJustSaved=false;
     let toSaveurl=urlDetails.url.replace("#close",'');
@@ -594,6 +642,14 @@ function monitorChanges(changes, namespace) {
     log("load all 1p links setting changed to " + changes.isLoadAllLinksEnabled.newValue);
     isLoadAllLinksEnabled = changes.isLoadAllLinksEnabled.newValue;
   }
+  if(changes.counts){
+    // This is needed only when user resets stats to 0 from advanceduser page
+    if((changes.count.newValue.archivedPageLoadsCount === 0) &&
+        (changes.count.newValue.waybackSavescount === 0)) {
+          counts.archivedPageLoadsCount = 0;
+          counts.waybackSavescount = 0;
+        }
+  }
 }
 
 function getRegex(excludePatterns) {
@@ -682,6 +738,8 @@ function setUpRedirectListener() {
   });
 }
 
+var manifestData = chrome.runtime.getManifest();
+
 var justreloaded=[];
 //Firefox doesn't allow the "content script" which is actually privileged
 //to access the objects it gets from chrome.storage directly, so we
@@ -750,7 +808,8 @@ chrome.runtime.onMessage.addListener(
         tempIncludes: tempIncludes,
         isLoadAllLinksEnabled: isLoadAllLinksEnabled,
         justSaved: justSaved,
-        filters: filters.join(", ")
+        filters: filters.join(", "),
+        appVersion: manifestData.version
       };
       sendResponse(c);
 
