@@ -1,0 +1,7 @@
+1) Settings folder
+    -> updates.json : check true/false for each update
+    -> setting.json : check that the new updates in updates.json are also present in setting.json
+    
+2) manifest.json -> bump version number
+
+3) Sync all Firefox changes to Chrome version - exclude firefox-only parts.
