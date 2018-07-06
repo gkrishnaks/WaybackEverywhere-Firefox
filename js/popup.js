@@ -23,7 +23,7 @@
 var popupApp = angular.module('popupApp', []);
 
 popupApp.config(['$compileProvider', function ($compileProvider) {
-  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension):/);
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|moz-extension):/);
 }]);
 
 popupApp.controller('PopupCtrl', ['$scope', function($s) {
