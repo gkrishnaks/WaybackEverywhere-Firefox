@@ -20,8 +20,13 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
+var popupApp = angular.module('popupApp', []);
 
-angular.module('popupApp', []).controller('PopupCtrl', ['$scope', function($s) {
+popupApp.config(['$compileProvider', function ($compileProvider) {
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension):/);
+}]);
+
+popupApp.controller('PopupCtrl', ['$scope', function($s) {
   // get the existing redirect
   $s.redirectslist = [];
   $s.excludethisSite = 'jj';
