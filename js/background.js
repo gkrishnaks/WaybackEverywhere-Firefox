@@ -29,6 +29,7 @@ chrome.runtime.onStartup.addListener(handleStartup);
 const STORAGE = chrome.storage.local;
 
 var justUpdatedReader = {};
+var commonExtensions=[];
 
 function log(msg) {
   if (log.enabled) {
@@ -154,10 +155,12 @@ function loadinitialdata(type) {
     var isReset = e.data.type;
     log(JSON.stringify(initialsettings));
     log(JSON.stringify(e.data.workerResult.filters));
+    commonExtensions =  e.data.workerResult.commonExtensions;
     readworker.terminate();
     STORAGE.set({
       redirects: initialsettings,
-      filters: e.data.workerResult.filters
+      filters: e.data.workerResult.filters,
+      commonExtensions: commonExtensions
     }, function() {
       if (isReset == 'doFullReset') {
         log('full reset completed, refrreshing tab to show changes');
@@ -442,7 +445,7 @@ function checkRedirects(details) {
     // Load live url when url ends with common file extensions so that user can download a file easily
     // example.com/path/to/dir/file.zip     
     let isDownloadlink = false;
-    let commonExtensions = [".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".webm", ".pdf",".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt", ".torrent", ".c32", ".cfg", ".xz", ".gpg", ".crt", ".dmg", ".rtf", ".z", ".csv",".lz",".bin",".epub",".mobi",".vdi",".dat",".m4v", ".mkv",".blend",".block",".3mf",".cal3d",".c4d",".ssh",".pub",".ppk",".cer", ".der",".mpp",".3dmf",".dwg",".sqlite", ".psd", ".raw",".tiff",".azw", ".azw3", ".kfx",".h264",".rm",".ai",".ibooks",".kf8",".prc",".djvu", ".djv",".fb2", ".fbz",".srt",".dxf",".cbr",".ovf",".ova",".vhd",".vmdk",".qcow2",".qcow",".vdi",".img", "download.php", "downloads.php"];
+
     let liveURL = urlDetails.url.toLowerCase();
     if(liveURL.endsWith("#close")){
         liveURL=liveURL.split("#close")[0];
@@ -809,7 +812,8 @@ chrome.runtime.onMessage.addListener(
         isLoadAllLinksEnabled: isLoadAllLinksEnabled,
         justSaved: justSaved,
         filters: filters.join(", "),
-        appVersion: manifestData.version
+        appVersion: manifestData.version,
+        commonExtensions: commonExtensions
       };
       sendResponse(c);
 
@@ -1048,16 +1052,24 @@ function handleUpdate(istemporary) {
     let changeInRemovefromFiltersList = e.data.workerResult.changeInRemovefromFiltersList;
     let addtoFiltersList = e.data.workerResult.addtoFiltersList;
     let removefromFiltersList = e.data.workerResult.removefromFiltersList;
+     let changeinAddtoCommonFileExtensions = e.data.workerResult.changeinAddtoCommonFileExtensions;
+    let addtoCommonFileExtensions = e.data.workerResult.addtoCommonFileExtensions;
+    let changeinRemovefromCommonFileExtensions = e.data.workerResult.changeinRemovefromCommonFileExtensions;
+    let removefromCommonFileExtensions = e.data.workerResult.removefromCommonFileExtensions;
+
     updateWorker.terminate();
     // Add or remove from Excludes
     STORAGE.get({
         redirects: [],
-        filters: []
+        filters: [],
+        commonExtensions: []
       },
       function(response) {
         log("handleUpdate-  updating default excludes if needed");
         let redirects = response.redirects;
         let filterlist = response.filters;
+        let currentCommonExtArray = response.commonExtensions;
+
         // Add to redirects
 
         if (changeInAddList && addToDefaultExcludes != null && addToDefaultExcludes.length > 0) {
@@ -1093,6 +1105,33 @@ function handleUpdate(istemporary) {
              }
          }
       }
+
+       if(changeinAddtoCommonFileExtensions && (addtoCommonFileExtensions.length > 0) ){
+        for(ext of addtoCommonFileExtensions){
+          if(currentCommonExtArray.indexOf(ext) === -1){
+          currentCommonExtArray.push(ext);
+          }
+        }
+      }
+
+      if(changeinRemovefromCommonFileExtensions && (removefromCommonFileExtensions.length > 0) ){
+        for(ext of removefromCommonFileExtensions){
+          let index = currentCommonExtArray.indexOf(ext);
+          if(index > -1){
+          currentCommonExtArray.splice(index,1);
+          }
+        }
+      }
+
+      if(changeinAddtoCommonFileExtensions || changeinRemovefromCommonFileExtensions){
+        commonExtensions = currentCommonExtArray;
+         STORAGE.set({
+          commonExtensions: currentCommonExtArray
+        },function(){
+           log("CommonExtensions saved as .. " + JSON.stringify(currentCommonExtArray));
+           });
+      }
+
 
       if(changeInAddtoFiltersList || changeInRemovefromFiltersList){
            filters = filterlist;
@@ -1157,6 +1196,12 @@ STORAGE.get({
   counts.archivedPageLoadsCount = response.counts.archivedPageLoadsCount;
   counts.waybackSavescount = response.counts.waybackSavescount;
   oldcounts = JSON.parse(JSON.stringify(counts));
+});
+
+STORAGE.get({
+  commonExtensions: []
+}, function(response) {
+  commonExtensions = response.commonExtensions;
 });
 
 function handleStartup() {
