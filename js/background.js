@@ -647,8 +647,8 @@ function monitorChanges(changes, namespace) {
   }
   if(changes.counts){
     // This is needed only when user resets stats to 0 from advanceduser page
-    if((changes.count.newValue.archivedPageLoadsCount === 0) &&
-        (changes.count.newValue.waybackSavescount === 0)) {
+    if((changes.counts.newValue.archivedPageLoadsCount === 0) &&
+        (changes.counts.newValue.waybackSavescount === 0)) {
           counts.archivedPageLoadsCount = 0;
           counts.waybackSavescount = 0;
         }
