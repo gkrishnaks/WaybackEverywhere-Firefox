@@ -8,7 +8,7 @@
   "addtoFiltersList":["?utm","?smid","?CMP","?feedType","?__source","?smtyp","?ncid","?uc","?ocid","?cid","?foxtrotcallback","?gi", "?source","?rev","?mbid","?sf","?mc_cid","?tid","?__twitter_impress","&utm_","?ftag=", "?ref=", "?sr_source", "?Post+generic="],
   "removefromFiltersList":[],
   "showUpdatehtml": false,
-  "changeinAddtoCommonFileExtensions": false,
+  "changeinAddtoCommonFileExtensions": true,
   "changeinRemovefromCommonFileExtensions": false,
   "addtoCommonFileExtensions": [".zip", ".exe", ".deb", ".rpm", ".gz", ".7z", ".doc", ".docx", ".webm", ".pdf",".xls", ".xlsx", ".ppt", ".pptx", ".mp3", ".ogg", ".wav", ".wma", ".pkg", ".rar", ".bin", ".dmg", ".iso", ".csv", ".dat", ".db", ".sql", ".tar", ".apk", ".otf", ".ttf", ".odp", ".pps", ".ods", ".3gp", ".flv", ".avi", ".mkv", ".m4v", ".mp4", ".mpg", ".mpeg", ".odt", ".torrent", ".c32", ".cfg", ".xz", ".gpg", ".crt", ".dmg", ".rtf", ".z", ".csv",".lz",".bin",".epub",".mobi",".vdi",".dat",".m4v", ".mkv",".blend",".block",".3mf",".cal3d",".c4d",".ssh",".pub",".ppk",".cer", ".der",".mpp",".3dmf",".dwg",".sqlite", ".psd", ".raw",".tiff",".azw", ".azw3", ".kfx",".h264",".rm",".ai",".ibooks",".kf8",".prc",".djvu", ".djv",".fb2", ".fbz",".srt",".dxf",".cbr",".ovf",".ova",".vhd",".vmdk",".qcow2",".qcow",".vdi",".img", "download.php", "downloads.php"],
   "removefromCommonFileExtensions":[]
