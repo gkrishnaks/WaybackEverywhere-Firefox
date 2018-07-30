@@ -1073,10 +1073,10 @@ function handleUpdate(istemporary) {
         // Add to redirects
 
         if (changeInAddList && addToDefaultExcludes != null && addToDefaultExcludes.length > 0) {
-          if(redirects[0].excludePattern.indexOf(addToDefaultExcludes) === -1 ){
+          //if(redirects[0].excludePattern.indexOf(addToDefaultExcludes) === -1 ){
           redirects[0].excludePattern = redirects[0].excludePattern + addToDefaultExcludes;
           log("the new excludes list is..." + redirects[0].excludePattern);
-          }
+          
         }
         if (changeInRemoveList && removeFromDefaultExcludes != null && removeFromDefaultExcludes.length > 0) {
           for (let i = 0; i < removeFromDefaultExcludes.length; i++) {
