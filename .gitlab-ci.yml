@@ -1,7 +1,7 @@
-image: node:8.0.0
+image: node:8.11.3
 
 before_script:
-  - yarn --ignore-engines
+  - yarn 
 
 stages:
   - deployExtension
