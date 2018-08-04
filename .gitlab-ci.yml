@@ -9,12 +9,13 @@ stages:
 
 test:
   stage: test
-  only: FunctionTest
+  only:
+    - FunctionTest
   script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 5
-  - npm run testFunctional
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    - sleep 5
+    - npm run testFunctional
 
 deployExtension:
   stage: deployExtension
