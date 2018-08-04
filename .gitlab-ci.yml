@@ -10,7 +10,7 @@ stages:
 test:
   stage: test
   only:
-    - FunctionTest
+    - FunctionalTest
   script:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
