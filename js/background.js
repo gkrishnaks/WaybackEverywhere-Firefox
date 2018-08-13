@@ -487,6 +487,7 @@ function checkRedirects(details) {
         return {};
     }
     log("Checking if this is in Excludes so that we can return live page url ..  " + urlDetails.url);
+    if(!!excludePatterns){
     let shouldExclude = excludePatterns.test(urlDetails.hostname);
     excludePatterns.lastIndex=0;
     if(tempIncludes.length == 0){
@@ -504,6 +505,7 @@ function checkRedirects(details) {
         };
       }
     }
+  }
   return {};
 }
 
