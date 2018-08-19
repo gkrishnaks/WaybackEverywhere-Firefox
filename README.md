@@ -100,6 +100,7 @@ Over time (perhaps a few days of usage..), you can build this 'Excludes' list to
 - Some crowdfunding sites.
 - Some "what is my ip" type sites.
 - Some chat apps like whatapp web and telegram web.
+- Some travel and hotel booking sites
 - Some online payment sites like flattr and liberapay and buymeacoffee.
 
 P.S : There's no other agenda behind this bundled list made available during install :)
