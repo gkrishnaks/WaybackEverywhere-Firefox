@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<!-- 
+<!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -38,7 +38,7 @@
 	<link rel="shortcut icon" href="images/icon@2x.png">
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
 
-	<script src="js/angular-1.7.2.min.js"></script>
+	<script src="js/libraries/angular-1.7.2.min.js"></script>
 	<script src="js/redirect.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/controllers/settingspage.js"></script>
@@ -55,19 +55,17 @@
 
 		<h2><strong>Advanced user</strong></h2>
 
-		<!--<h5>Go where <em>YOU</em> want!</h5>-->
+
 
 		<div id="menu">
 
-			<!--	<a class="btn blue large" ng-click="createNewRedirect()">Create new redirect</a>-->
-			<!-- Importing/Exporting of redirects -->
 
 
 		</div>
 
 
 
-		<!-- List of existing redirects -->
+
 		<div ng-controller="ListRedirectsCtrl">
 
 			<div class="redirect-table" ng-show="true">
@@ -88,6 +86,11 @@
 	<div><button class="btn blue" ng-disabled="!newfilter" ng-click="addtofilters(newfilter)">Add to Filters</button><input type="text" class="incexcbuttons" ng-model="newfilter" placeholder="Enter a new filter" id="addfilter"/>
 	<br/>
 					<div><button class="btn green" ng-disabled="!toRemoveFilter" ng-click="removefromfilters(toRemoveFilter)">Remove from Filters</button><input class="incexcbuttons" type="text" ng-model="toRemoveFilter" placeholder="Enter a filter to remove" /></div>
+				</div>
+				<br/>
+				<div><button class="btn blue" ng-disabled="!newExtension" ng-click="addtoExtensions(newExtension)">Add to Excluded File Extensions</button><input type="text" class="incexcbuttons" ng-model="newExtension" placeholder="Enter a file extension to add to Exclude list" id="addexclbutton"/><br/>
+					<div><button class="btn green" ng-disabled="!removeExtension" ng-click="removefromExtensions(removeExtension)">Remove from Excluded File Extensions</button><input class="incexcbuttons" type="text" ng-model="removeExtension" placeholder="Enter a file extension to remove from Exclude list"/></div><br/>
+					<div><button class="btn red" ng-click="clearAllFileExtensions()">Clear all from File Extensions (not recommended)</button></div><br/>
 				</div>
 				<br/>
 				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
@@ -131,11 +134,11 @@
 						</div>
 						<div>
 							<label>Filters to clean URLS:</label>
-							<p>{{filters}}<p>
+							<p>{{filters.join(", ")}}<p>
 						</div>
 							<div>
 							<label>Common File Extensions to exclude:</label>
-							<p>{{commonExtensions}}<p>
+							<p>{{commonExtensions.join(", ")}}<p>
 						</div>
 
 					</div>
@@ -153,6 +156,11 @@
 					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
 				</div>
 				<br/>
+
+<div id="message-box" ng-show="true" ng-class="{visible : incExcmsg, error : messageType == 'error', success : messageType == 'success'}">
+					{{incExcmsg}}
+					<a ng-click="incExcmsg=null">&#x2716;</a>
+				</div>
 
 				<br/>
 
@@ -178,7 +186,7 @@
 gokulakrishnaks@gmail.com
 </a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
 <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
- Version {{appVersion}} 
+ Version {{appVersion}}
 
 </small></div>
 

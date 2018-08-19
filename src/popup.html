@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-<!-- 
+<!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -32,13 +32,13 @@
 
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <script src="js/angular-1.7.2.min.js"></script>
+  <script src="js/libraries/angular-1.7.2.min.js"></script>
   <script src="js/parseUrl.js"></script>
   <script src="js/popup.js"></script>
 
 </head>
 
-<body ng-app="popupApp" ng-controller="PopupCtrl">
+<body ng-app="popupApp" ng-controller="PopupCtrl" ng-cloak>
 
   <table width="100%" style="min-width: 120px; ">
     <tr class="spaceUnder">
@@ -68,20 +68,66 @@
       </td>
     </tr>
 
+    <tr class="spaceUnder" align="center" ng-show="!settingspagehide && !disabled && domain" ng-if="isDomainInExcludesList || isDomainTempExcluded || isDomainTempIncluded">
+      <td>
+          <div class="alert alert-info" ng-if="isDomainInExcludesList" tabindex='-1' style="">{{domain}} is in Excludes list</div>
+          <div class="alert alert-info" ng-if="isDomainTempExcluded" tabindex='-1' style="">{{domain}} is temporarily Excluded</div>
+          <div class="alert alert-info" ng-if="isDomainTempIncluded" tabindex='-1' style="">{{domain}} is temporarily Included</div>
 
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
+      </td>
+    </tr>
+
+    <tr class="spaceUnder" align="center" ng-if="showRefreshAlert && !settingspagehide && !webextpagesExcluded && !disabled && domain && !isDomainInExcludesList && !isDomainTempExcluded && !issiteexcluded && (domain !== 'chrome')">
+      <td>
+                <div ng-click="pageReload()" class="alert alert-info" tabindex='-1' style="">Click here to Refresh this page</div>
+       </td>
+    </tr>
+
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempExcluded">
       <td>
         <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="removeSitefromexclude()"><strong> Include {{domain}} </strong></button>
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempExcluded">
 
       <td>
         <button type="button" class="btn btn-outline-info btn-sm" id="recent_capture" tabindex='-1' ng-click="removeSitefromexcludeTemp()"><strong>Temporarily Include {{domain}}</strong></button>
         <BR>
       </td>
     </tr>
+
+<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempExcluded">
+      <td>
+        <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="clearTempRules('tempExcludes')"><strong> Clear {{domain}} from Temporary Excludes</strong></button>
+      </td>
+    </tr>
+
+    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempExcluded">
+
+      <td>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="applyTemptoPermanent('excludes')">
+            <strong>Add {{domain}} to Excludes List</strong></button>
+        <BR>
+      </td>
+    </tr>
+
+ <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempIncluded">
+      <td>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="clearTempRules('tempIncludes')">
+            <strong>Clear {{domain}} from Temporary Includes</strong></button>
+        <BR>
+      </td>
+    </tr>
+
+       <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempIncluded">
+      <td>
+        <button type="button" class="btn btn btn-outline-success btn-sm" id="recent_capture" tabindex='-1' ng-click="applyTemptoPermanent('includes')">
+            <strong>Include {{domain}} from now</strong></button>
+        <BR>
+      </td>
+    </tr>
+
     <tr class="spaceUnder" align="center" ng-if="!disabled && SettingsInAboutConfig && !webextpagesExcluded">
       <td>
         <button type="button" class="btn btn-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="savePage()">Save this page {{!issiteexcluded ?'now':'again'}}</button>
@@ -89,18 +135,18 @@
       </td>
     </tr>
     <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
-
-
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempIncluded">
       <td>
-        <button type="button" class="btn btn-outline-dark btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetotempExclude()"><strong>Temporarily Exclude {{domain}}</strong></button>
+        <button type="button" class="btn btn-outline-dark btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetotempExclude()">
+            <strong>Temporarily Exclude {{domain}}</strong></button>
         <BR>
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempIncluded">
       <td>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()"><strong>Add {{domain}} to Excludes List</strong></button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()">
+            <strong>Add {{domain}} to Excludes List</strong></button>
         <BR>
       </td>
     </tr>
@@ -114,24 +160,24 @@
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!disabled">
+    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
+      <td>
+        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="seefirstversion()">See first archived version</button>
+      </td>
+    </tr>
+
+     <tr class="spaceUnder" align="center" ng-if="!isMobilefirefox && issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+       <td>
+         <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="saveAsPDF()">Save Page as PDF</button>
+       </td>
+     </tr>
+
+     <tr class="spaceUnder" align="center" ng-if="!disabled">
       <td>
         <button type="button" class="btn btn-outline-dark btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Disable Wayback temporarily</button>
       </td>
     </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!isMobilefirefox && issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
-      <td>
-        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="saveAsPDF()">Save Page as PDF</button>
-      </td>
-    </tr>
-    
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
-      <td>
-        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="seefirstversion()">See first archived</button>
-      </td>
-    </tr>
-    
     <tr class="spaceUnder" align="center">
       <td>
         <button type="button" class="btn btn-info btn-sm formfineleft" id="about_support_button" ng-click="openHelp()">Help</button>
@@ -167,6 +213,16 @@
   </table>
   <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
 <footer><small><div style="text-align:center;"> Version {{appVersion}}</div></small></footer>
+<div ng-if="logging" style="text-align:center;"> isDomainTempExcluded : {{isDomainTempExcluded}} <BR>
+  isDomainTempIncluded : {{isDomainTempIncluded}} <BR>
+  isDomainInExcludesList : {{isDomainInExcludesList}} <BR>
+  SettingsInAboutConfig : {{SettingsInAboutConfig}} <BR>
+  webextpagesExcluded(not) : {{webextpagesExcluded}} <BR>
+  isLoadAllLinksEnabled : {{isLoadAllLinksEnabled}} <BR>
+      tempExcludes : {{tempExcludes}} <BR>
+      tempIncludes : {{tempIncludes}} <BR>
+      domain: {{domain}} <BR>
+  </div>
 </body>
 
 </html>

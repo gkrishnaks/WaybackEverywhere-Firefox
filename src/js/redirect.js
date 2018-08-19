@@ -20,83 +20,85 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
-
 function Redirect(o) {
   this._init(o);
 }
-log.enabled = false;
+//logs.enabled = false;
 //temp, allow addon sdk to require this.
-if (typeof exports !== 'undefined') {
+if (typeof exports !== "undefined") {
   exports.Redirect = Redirect;
 }
-
-function updateLogging() {
-  chrome.storage.local.get({
-    logging: false
-  }, function(obj) {
-    log.enabled = obj.logging;
-  });
+/*
+function updateLoggingSetting() {
+  chrome.storage.local.get(
+    {
+      logging: false
+    },
+    function(obj) {
+      logs.enabled = obj.logging;
+    }
+  );
 }
 
-updateLogging();
+updateLoggingSetting(); 
 
-function log(msg) {
+function logs(msg) {
   if (log.enabled) {
-    console.log('WaybackEverywhere redirect.js: ' + msg);
+    console.log("WaybackEverywhere: Redirect.js " + msg);
   }
-}
+}*/
 //Static
-Redirect.WILDCARD = 'W';
-Redirect.REGEX = 'R';
+Redirect.WILDCARD = "W";
+Redirect.REGEX = "R";
 
 Redirect.requestTypes = {
-  main_frame: 'Main window (address bar)',
-  sub_frame: 'IFrames',
-  stylesheet: 'Stylesheets',
-  script: 'Scripts',
-  image: 'Images',
-  object: 'Objects (e.g. Flash videos, Java applets)',
-  xmlhttprequest: 'XMLHttpRequests (Ajax)',
-  other: 'Other',
+  main_frame: "Main window (address bar)",
+  sub_frame: "IFrames",
+  stylesheet: "Stylesheets",
+  script: "Scripts",
+  image: "Images",
+  object: "Objects (e.g. Flash videos, Java applets)",
+  xmlhttprequest: "XMLHttpRequests (Ajax)",
+  other: "Other"
 };
 
 Redirect.prototype = {
-
   //attributes
-  description: '',
-  exampleUrl: '',
-  exampleResult: '',
+  description: "",
+  exampleUrl: "",
+  exampleResult: "",
   error: null,
-  includePattern: '',
-  excludePattern: '',
-  redirectUrl: '',
-  patternType: '',
-  processMatches: 'noProcessing',
+  includePattern: "",
+  excludePattern: "",
+  redirectUrl: "",
+  patternType: "",
+  processMatches: "noProcessing",
   disabled: false,
 
   compile: function() {
-
     var incPattern = this._preparePattern(this.includePattern);
     var excPattern = this._preparePattern(this.excludePattern);
-    log('Pattern..' + excPattern);
+    //logs("Pattern.." + excPattern);
     if (incPattern) {
-      this._rxInclude = new RegExp(incPattern, 'gi');
+      this._rxInclude = new RegExp(incPattern, "gi");
     }
 
     if (excPattern) {
-      this._rxExclude = new RegExp(excPattern, 'gi');
+      this._rxExclude = new RegExp(excPattern, "gi");
     }
   },
 
   equals: function(redirect) {
-    return this.description == redirect.description &&
+    return (
+      this.description == redirect.description &&
       this.exampleUrl == redirect.exampleUrl &&
       this.includePattern == redirect.includePattern &&
       this.excludePattern == redirect.excludePattern &&
       this.redirectUrl == redirect.redirectUrl &&
       this.patternType == redirect.patternType &&
       this.processMatches == redirect.processMatches &&
-      this.appliesTo.toString() == redirect.appliesTo.toString();
+      this.appliesTo.toString() == redirect.appliesTo.toString()
+    );
   },
 
   toObject: function() {
@@ -111,7 +113,7 @@ Redirect.prototype = {
       patternType: this.patternType,
       processMatches: this.processMatches,
       disabled: this.disabled,
-      appliesTo: this.appliesTo.slice(0),
+      appliesTo: this.appliesTo.slice(0)
     };
   },
 
@@ -124,7 +126,7 @@ Redirect.prototype = {
       isMatch: false,
       isExcludeMatch: false,
       isDisabledMatch: false,
-      redirectTo: '',
+      redirectTo: "",
       toString: function() {
         return JSON.stringify(this);
       }
@@ -132,7 +134,7 @@ Redirect.prototype = {
     var redirectTo = null;
 
     redirectTo = this._includeMatch(url);
-    log('redirectTo is' + this._includeMatch(url));
+    //logs("redirectTo is" + this._includeMatch(url));
 
     if (redirectTo !== null) {
       if (this.disabled && !forceIgnoreDisabled) {
@@ -144,46 +146,43 @@ Redirect.prototype = {
         result.redirectTo = redirectTo;
       }
     }
-    log('returning result as ' + result);
+    //logs("returning result as " + result);
     return result;
   },
-
 
   //Updates the .exampleResult field or the .error
   //field depending on if the example url and patterns match
   //and make a good redirect
   updateExampleResult: function() {
-
     //Default values
     this.error = null;
-    this.exampleResult = '';
-
+    this.exampleResult = "";
 
     if (!this.exampleUrl) {
-      this.error = 'No example URL defined.';
+      this.error = "No example URL defined.";
       return;
     }
 
     if (this.patternType == Redirect.REGEX && this.includePattern) {
       try {
-        new RegExp(this.includePattern, 'gi');
+        new RegExp(this.includePattern, "gi");
       } catch (e) {
-        this.error = 'Invalid regular expression in Include pattern.';
+        this.error = "Invalid regular expression in Include pattern.";
         return;
       }
     }
 
     if (this.patternType == Redirect.REGEX && this.excludePattern) {
       try {
-        new RegExp(this.excludePattern, 'gi');
+        new RegExp(this.excludePattern, "gi");
       } catch (e) {
-        this.error = 'Invalid regular expression in Exclude pattern.';
+        this.error = "Invalid regular expression in Exclude pattern.";
         return;
       }
     }
 
     if (!this.appliesTo || this.appliesTo.length == 0) {
-      this.error = 'At least one request type must be chosen.';
+      this.error = "At least one request type must be chosen.";
       return;
     }
 
@@ -192,12 +191,12 @@ Redirect.prototype = {
     var match = this.getMatch(this.exampleUrl, true);
 
     if (match.isExcludeMatch) {
-      this.error = 'The exclude pattern excludes the example url.'
+      this.error = "The exclude pattern excludes the example url.";
       return;
     }
 
     if (!match.isMatch) {
-      this.error = 'The include pattern does not match the example url.';
+      this.error = "The include pattern does not match the example url.";
       return;
     }
 
@@ -226,46 +225,47 @@ Redirect.prototype = {
     }
     if (this.patternType == Redirect.REGEX) {
       return pattern;
-    } else { //Convert wildcard to regex pattern
-      var converted = '^';
+    } else {
+      //Convert wildcard to regex pattern
+      var converted = "^";
       for (var i = 0; i < pattern.length; i++) {
         var ch = pattern.charAt(i);
-        if ('()[]{}?.^$\\+'.indexOf(ch) != -1) {
-          converted += '\\' + ch;
-        } else if (ch == '*') {
-          converted += '(.*?)';
+        if ("()[]{}?.^$\\+".indexOf(ch) != -1) {
+          converted += "\\" + ch;
+        } else if (ch == "*") {
+          converted += "(.*?)";
         } else {
           converted += ch;
         }
       }
-      converted += '$';
-      log('Converted pattern from wildcards is.. ' + converted);
+      converted += "$";
+      //logs("Converted pattern from wildcards is.. " + converted);
       return converted;
     }
   },
 
   _init: function(o) {
-    this.description = o.description || '';
-      this.exampleUrl = o.exampleUrl || '';
-    this.exampleResult = o.exampleResult || '';
+    this.description = o.description || "";
+    this.exampleUrl = o.exampleUrl || "";
+    this.exampleResult = o.exampleResult || "";
     this.error = o.error || null;
-    this.includePattern = o.includePattern || '';
-    this.excludePattern = o.excludePattern || '';
-    this.redirectUrl = o.redirectUrl || '';
+    this.includePattern = o.includePattern || "";
+    this.excludePattern = o.excludePattern || "";
+    this.redirectUrl = o.redirectUrl || "";
     this.patternType = o.patternType || Redirect.WILDCARD;
-    this.processMatches = o.processMatches || 'noProcessing';
+    this.processMatches = o.processMatches || "noProcessing";
     if (!o.processMatches && o.unescapeMatches) {
-      this.processMatches = 'urlDecode';
+      this.processMatches = "urlDecode";
     }
     if (!o.processMatches && o.escapeMatches) {
-      this.processMatches = 'urlEncode';
+      this.processMatches = "urlEncode";
     }
 
     this.disabled = !!o.disabled;
     if (o.appliesTo && o.appliesTo.length) {
       this.appliesTo = o.appliesTo.slice(0);
     } else {
-      this.appliesTo = ['main_frame'];
+      this.appliesTo = ["main_frame"];
     }
   },
 
@@ -284,30 +284,30 @@ Redirect.prototype = {
     }
     var resultUrl = this.redirectUrl;
     for (var i = 1; i < matches.length; i++) {
-      var repl = matches[i] || '';
-      if (this.processMatches == 'urlDecode') {
+      var repl = matches[i] || "";
+      if (this.processMatches == "urlDecode") {
         repl = unescape(repl);
       }
-      if (this.processMatches == 'urlEncode') {
+      if (this.processMatches == "urlEncode") {
         repl = encodeURIComponent(repl);
       }
-      if (this.processMatches == 'base64decode') {
-        if (repl.indexOf('%') > -1) {
+      if (this.processMatches == "base64decode") {
+        if (repl.indexOf("%") > -1) {
           repl = unescape(repl);
         }
         repl = atob(repl);
       }
-      resultUrl = resultUrl.replace(new RegExp('\\$' + i, 'gi'), repl);
-      log('finalurl --> ' + repl + ' resultUrl -->' + resultUrl);
+      resultUrl = resultUrl.replace(new RegExp("\\$" + i, "gi"), repl);
+      // logs("finalurl --> " + repl + " resultUrl -->" + resultUrl);
     }
     this._rxInclude.lastIndex = 0;
     return resultUrl;
   },
 
   _excludeMatch: function(url) {
-    log('inside _excludeMatch.. for url -->' + url);
+    //logs("inside _excludeMatch.. for url -->" + url);
     if (!this._rxExclude) {
-      log('returning false');
+      //  logs("returning false");
       return false;
     }
     // fix for https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/3
@@ -322,7 +322,7 @@ Redirect.prototype = {
     if (url2 == "t.co") {
       shouldExclude = true;
     }
-    log('shouldExclude --> ' + shouldExclude + 'for url ' + url);
+    // logs("shouldExclude --> " + shouldExclude + "for url " + url);
     return shouldExclude;
   }
 };

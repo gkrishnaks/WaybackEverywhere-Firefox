@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<!-- 
+<!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -31,9 +31,9 @@
 	<link rel="stylesheet" href="css/bootstrap.min.old.css" />
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
 	<link rel="shortcut icon" href="images/icon@2x.png">
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/bootstrap.min.4.js"></script>
-	<script src="js/help.js"></script>
+	<script src="js/libraries/jquery-3.3.1.min.js"></script>
+	<script src="js/libraries/bootstrap.min.4.js"></script>
+	<script src="js/libraries/help.js"></script>
 </head>
 
 <body class="container">
@@ -43,33 +43,71 @@
 		<div id="accordion">
 			<div class="card">
 				<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Version 1.0.19</button>
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisnew">What's new in Version 1.1.0</button>
 				</div>
 				<div id="whatisnew" class="collapse show" data-parent="#accordion">
 					<div class="card-body"> <br/>
 						<ul>
 							<strong>New Features:</strong>
 							    <li> You can raise feature requests/issue reports here : <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Gitlab</a> Or tweet me at <a href="https://twitter.com/gkrishnaks" target="_blank">@gkrishnaks</a></li>
-								<li> Extension will try to auto-exclude download links if the url ends with any of the 100 popular file extensions here <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23" target="_blank">23</a> </li>
-								<li> This will be helpful when trying to click a download link in archived version of page - as Wayback Machine doesn't archive the files themselves - so addon will try to fetch from live site</li>
-								<li> Updated Angular library version for popup/settings page to its latest version</li>
-								<li> Added more streaming sites and some url shorteners to default excludes <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/35" target="_blank">#35</a> </li>
-								<li> Updated the filters which are used to scrub URLs off trackers before redirecting to Wayback Machine <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/37" target="_blank">#37</a> </li>
-								<li> Reduced the extension size by removing or excluded unused files or files that are not necessary to be bundled within extension <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/41" target="_blank">#41</a></li>
-								<li> In advanceduser.html page - added a way to update or remove filters <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/21" target="_blank">#21</a></li>
-								<li>Stats button displays Saved to Redirected ratio as percentage</li>
-								
+
+									<li> Popup menu is updated to handle "temporary incldue" or "temporary exclude". When under a temporary included/excluded site, buttons are now shown to either save the temporary rule to settings, or clear the temporary rule.  <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/28"  target="_blank">#28</a> and  <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/32"  target="_blank">#32</a>
+									</li>
+
+								<li> Extension will try to auto-add site to temporary excludes if you click on Links that have "signin" or "login" or "signup" and more - to help you login into sites without having to add a site to excludes <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/77"  target="_blank">#77</a> </li>
+
+								<li> This extension is now available for Opera browser also at : <a   href="https://addons.opera.com/en-gb/extensions/details/wayback-everywhere/" target="_blank">  Opera Addons store </a></li>
+
+								<li>During every addon update, excludes List is deduplicated to keep excludes clean and reduce memory consumption by regular expression size and evaluation time <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/59"  target="_blank">#59</a></li>
+
+								<li> Popup menu shows information regarding whether the curernt site is in any of the 3 lists - excludes list, temporary excludes list, temporary includes list  <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/49" target="_blank"> #49</a> </li>
+
+								<li> In Android Firefox, URL gets encoded when reader mode view is loaded on a tab. Now the popup menu can correctly handle encoded URLs from reader mode and behave as though it's normal URL <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/70" target="_blank">#70</a> </li>
+
+								<li> Can handle two more error messages shown by Wayback Machine when trying to save a page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/72" target="_blank">#72</a> and <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/63" target="_blank">#63</a></li>
+
+								<li> Updates to Advanced User page : (extensionId/advanceduser.html) page: You can now add/remote/delete all the list of file extensions to exclude. This is needed for excluding automatically download links to help you download files easily instead of routing to Wayback Machine (as WM won't support such files archived anyway..).  <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/65" target="_blank">#65</a> and <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/47" target="_blank">#47</a> </li>
+									<li> Updated sites in default excludes with some online radio sites, some crowdfunding sites, some "what is my ip" type sites, some chat apps like whatapp web and telegram web and some online payment sites like flattr and liberapay and buymeacoffee. </li>
+							<li> Other performance improvements! Checkout my gitlab repo and issue board.</li>
 								<br/>
 								<strong>Fixes :  </strong>
-								<li> Popup menu icon is no longer shown in about:memory page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/33" target="_blank">#33</a></li>
-							   	<li> Include/Exclude buttons are no longer shown when user is viewing an archived page of Wayback machine itself! <a ="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/17" target="_blank">#17</a></li>
-								<li> Fixed a layout UI bug in help page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/36" target="_blank">#36</a></li>
-								<li> Fix for * (all!) getting added to Excludes when trying to exclude archived version of wayback machine itself - this fix protects against ALL sites getting excluded <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/25" target="_blank">#25</a></li>
-								<li> Fix for ft.com in excluding all sites that *ft.com in domain name<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/22" target="_blank">#22</a></li>
-                    </ul>
+								<li> Regular expression evaluation for loading live page when user tries to load a archived URL that's there in excludes or temporary excludes is now corrected to check if regular expression exists before evaulating <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/76" target="_blank">#76</a></li>
+
+							   </ul>
 					</div>
 				</div>
 				<br/>
+
+				<div class="card">
+					<div class="card-header" style="text-align: center;">
+						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatwasnew">What was new in previous version</button>
+					</div>
+					<div id="whatwasnew" class="collapse show" data-parent="#accordion">
+						<div class="card-body"> <br/>
+							<ul>
+								<strong>New Features:</strong>
+										<li> You can raise feature requests/issue reports here : <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Gitlab</a> Or tweet me at <a href="https://twitter.com/gkrishnaks" target="_blank">@gkrishnaks</a></li>
+									<li> Extension will try to auto-exclude download links if the url ends with any of the 100 popular file extensions here <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/23" target="_blank">23</a> </li>
+									<li> This will be helpful when trying to click a download link in archived version of page - as Wayback Machine doesn't archive the files themselves - so addon will try to fetch from live site</li>
+									<li> Updated Angular library version for popup/settings page to its latest version</li>
+									<li> Added more streaming sites and some url shorteners to default excludes <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/35" target="_blank">#35</a> </li>
+									<li> Updated the filters which are used to scrub URLs off trackers before redirecting to Wayback Machine <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/37" target="_blank">#37</a> </li>
+									<li> Reduced the extension size by removing or excluded unused files or files that are not necessary to be bundled within extension <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/41" target="_blank">#41</a></li>
+									<li> In advanceduser.html page - added a way to update or remove filters <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/21" target="_blank">#21</a></li>
+									<li>Stats button displays Saved to Redirected ratio as percentage</li>
+
+									<br/>
+									<strong>Fixes :  </strong>
+									<li> Popup menu icon is no longer shown in about:memory page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/33" target="_blank">#33</a></li>
+										<li> Include/Exclude buttons are no longer shown when user is viewing an archived page of Wayback machine itself! <a ="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/17" target="_blank">#17</a></li>
+									<li> Fixed a layout UI bug in help page <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/36" target="_blank">#36</a></li>
+									<li> Fix for * (all!) getting added to Excludes when trying to exclude archived version of wayback machine itself - this fix protects against ALL sites getting excluded <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/25" target="_blank">#25</a></li>
+									<li> Fix for ft.com in excluding all sites that *ft.com in domain name<a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/22" target="_blank">#22</a></li>
+											</ul>
+						</div>
+					</div>
+					<br/>
+
 <div class="card">
 				<div class="card-header" style="text-align: center;">
 				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#whatisWaybackEverywhere">What is Wayback Everywhere?</button>
@@ -250,7 +288,7 @@
 											<li> &#9658; Some video streaming (netflix..) sites and live streaming sites (Periscope..)</li>
 											<li> &#9658; Some audio podcast sites </li>
 											<li> &#9658; Some Language learning sites (Duolingo) as they need login to work </li>
-											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page 
+											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page
 												(example.com/download/file.zip or /file.doc will get auto-excluded only for the download link) </li>
 											<li> &#9658; Some video conference site links like skype, sococo, jitsi and few other online meeting sites.<li></li>
                                             <li> &#9658; Some online office suite sites like office365, zoho and onlyoffice. </li>
@@ -301,7 +339,7 @@
 
 				</div>
 			</div>
-			
+
 				<br>
 
 		<div class="card">
@@ -373,7 +411,7 @@
 gokulakrishnaks@gmail.com
 </a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
 <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
- <p id="appVersion"></p> 
+ <p id="appVersion"></p>
 
 </small>
 </div>

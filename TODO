@@ -1,9 +1,10 @@
 1. Fix CSS in Settings.html (Success/Error Messages don't show up properly in phone/tablet screensizes) 
-https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/29
+https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/29
 
 2. Update Settings page's Add to Exclude/Remove to Exclude buttons to handle different types of links/URLs
-https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/30
+https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/30
 
-3. Make Popup menu display buttons based on if a hostname is in Temporary excluded/temporary included list or not
-   (currently we just check and display include/exclude buttons based on currently loaded URL) 
-   https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/28
+
+And more here : https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/boards?= 
+
+Always add quora and box.com to updates.json always as we have functional automated test.

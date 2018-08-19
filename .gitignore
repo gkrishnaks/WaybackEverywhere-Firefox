@@ -7,3 +7,8 @@ debug.sh
 *.pem
 mk.sh
 *artifacts*
+coverage/
+karma_coverage/
+node_modules/
+karma_*
+.nyc*

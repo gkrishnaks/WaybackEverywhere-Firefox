@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<!-- 
+<!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -45,7 +45,7 @@
 	<link rel="shortcut icon" href="images/icon@2x.png">
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
 
-	<script src="js/angular-1.7.2.min.js"></script>
+	<script src="js/libraries/angular-1.7.2.min.js"></script>
 	<script src="js/redirect.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/controllers/settingspage.js"></script>
@@ -248,7 +248,7 @@
 							<p><button class="btn blue" ng-click="showExcludes=!showExcludes" ng-show="!showExcludes">Excludes list</button>
 								<span ng-if="showExcludes">{{ReadableExcludePattern}}</span></p>
 						</div>
-						
+
 						<div ng-if="tempExcludes">
 							<label>Temporary Excludes:</label>
 							<p>{{tempExcludes}}</p>
@@ -260,7 +260,7 @@
 						<div ng-if="tempExcludes || tempIncludes">
 						<label>Clear Temporary rules:</label>
 						<p><button class="btn blue" ng-click="clearTemps()">Clear </button>
-							
+
 						</div>
 						<div ng-if="logging">
 							<!-- Show JustSaved only when logging is enabled - used during development -->
@@ -268,13 +268,13 @@
 						</div>
 						<div ng-if="logging">
 							<label>Filters to clean URLS:</label>
-							<p>{{filters}}<p>
+							<p>{{filters.join(", ")}}<p>
 						</div>
 						<div ng-if="logging">
 							<label>Common File Extensions to exclude:</label>
-							<p>{{commonExtensions}}<p>
+							<p>{{commonExtensions.join(", ")}}<p>
 						</div>
-							
+
 					</div>
 
 
@@ -341,7 +341,7 @@
 gokulakrishnaks@gmail.com
 </a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
 <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
- Version {{appVersion}} 
+ Version {{appVersion}}
 
 </small>
 

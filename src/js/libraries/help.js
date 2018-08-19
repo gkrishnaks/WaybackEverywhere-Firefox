@@ -20,13 +20,15 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
-
 $(document).ready(function() {
-  $('.collapse').on('shown.bs.collapse', function(e) {
-    var $card = $(this).closest('.card');
-    $('html,body').animate({
-      scrollTop: $card.offset().top
-    }, 500);
+  $(".collapse").on("shown.bs.collapse", function(e) {
+    var $card = $(this).closest(".card");
+    $("html,body").animate(
+      {
+        scrollTop: $card.offset().top
+      },
+      500
+    );
     e.stopPropagation();
   });
   let manifestData = chrome.runtime.getManifest();

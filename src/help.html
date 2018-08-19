@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<!-- 
+<!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -32,9 +32,9 @@
 	<link rel="stylesheet" href="css/bootstrap.min.old.css" />
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
 	<link rel="shortcut icon" href="images/icon@2x.png">
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/bootstrap.min.4.js"></script>
-	<script src="js/help.js"></script>
+	<script src="js/libraries/jquery-3.3.1.min.js"></script>
+	<script src="js/libraries/bootstrap.min.4.js"></script>
+	<script src="js/libraries/help.js"></script>
 </head>
 
 <body class="container">
@@ -48,9 +48,12 @@
 				</div>
 				<div id="whatisWaybackEverywhere" class="collapse" data-parent="#accordion">
 					<div class="card-body">
-						Wayback Everywhere is a browser extension/addon that allows you to automatically redirect all pages to Internet Archive's <a href="https://web.archive.org" target="_blank">Wayback Machine</a> except the site (domains) that are in 'Excludes' List.
+						Wayback Everywhere is a browser extension/addon that allows you to automatically redirect all pages to Internet Archive's <a href="https://web.archive.org" target="_blank">Wayback Machine</a> except the site (domains) that are in 'Excludes' List, and auto-save to Wayback Machine if a page is not yet archived.
 							<br/><br/>Examples: <ul><li><span class="url">http://example.org</span> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;--> <span class="url">https://web.archive.org/web/2/https://example.org</span>.</li>
-							<li> If <span class="url">http://gnu.org</span> is in 'Excludes' List --> <span class="url">http://gnu.org</span> <br/></li></ul><br/>Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here <a data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Exclude List</a>	</div>
+							<li> If <span class="url">http://gnu.org</span> is in 'Excludes' List --> <span class="url">http://gnu.org</span> <br/></li>
+							<li> If a page is not yet archived when loaded, --> https://web.archive.org/save/https://example.com </li>
+
+						</ul><br/>Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here <a data-toggle="collapse" data-parent="#accordion" href="#excludepattern">Exclude List</a>	</div>
 				</div>
 			</div>
 <br/>
@@ -63,7 +66,7 @@
 						<ul>
 							<li> <strong>Popup menu</strong> - Use the Popup menu to add/remove site from Excludes list, temporarily disable WaybackEverywhere addon and open Settings and Help Pages. More information on Popup Menu available here <a data-toggle="collapse" data-parent="#accordion"
 								  href="#popup">Popup Menu</a></li>
-							<li> <strong>Automatic Detection of Wayback Machine Site's Error Messages</strong> - Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message.
+							<li> <strong>Auto-Save pages and Auto-exclude sites</strong> - Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message.
 								More information on Automatic Detection of WM Error Messages available here <a data-toggle="collapse" data-parent="#accordion" href="#AutodetectWayBackMessages">Auto-detect Wayback Machine Error Messages</a></li>
 							<li> <strong>Settings Page </strong> - Settings page allows you to add or remove a site from the excludes list, and also do factory reset. If you are interested, you can enable console logging from here. More information on Popup Menu available here
 								<a data-toggle="collapse" data-parent="#accordion" href="#settings">Settings Page</a></li>
@@ -106,7 +109,7 @@
 			<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#alreadyonWayback">When viewing an archived page</button>
 			</div>
 			<div id="alreadyonWayback" class="collapse" data-parent="#accordion">
-									<div class="card-body" style="text-align: center">				 <img src="images/ShowExcludes.png"/></div>
+									<div class="card-body" style="text-align: center">				 <img src="images/whenSiteIncluded.png"/></div>
 			</div>
 		</div> <br/>
 		<div class="card">
@@ -114,18 +117,27 @@
 				<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onexcludedpage">When viewing an excluded site</button>
 				</div>
 				<div id="Onexcludedpage" class="collapse" data-parent="#accordion">
-									<div class="card-body" style="text-align: center">					 <img src="images/ShowIncludes.png"/></div>
+									<div class="card-body" style="text-align: center">					 <img src="images/whenSiteExcluded.png"/></div>
 				</div>
 			</div><br/>
+
 			<div class="card">
 					<div class="card-header" style="text-align: center;">
-					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#Onpreviligedpages">When you are on special pages</button>
+					<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#OnTempExcludedPage">When on Temporarily Excluded site</button>
 					</div>
-					<div id="Onpreviligedpages" class="collapse" data-parent="#accordion">
-									<div class="card-body" style="text-align: center">						 <img src="images/settingspage.png"/></div>
+					<div id="OnTempExcludedPage" class="collapse" data-parent="#accordion">
+										<div class="card-body" style="text-align: center">					 <img src="images/tempExclude.png"/></div>
 					</div>
-				</div>
+				</div><br/>
 
+				<div class="card">
+						<div class="card-header" style="text-align: center;">
+						<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion2" href="#OnTempIncludedPage">When on Temporarily Included site</button>
+						</div>
+						<div id="OnTempIncludedPage" class="collapse" data-parent="#accordion">
+											<div class="card-body" style="text-align: center">					 <img src="images/tempInclude.png"/></div>
+						</div>
+					</div><br/>
 
 
 							</div>
@@ -184,22 +196,6 @@
 
 <br/>
 
-<div class="card">
-		<div class="card-header" style="text-align: center;">
-		<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#exportimport">Export/Import Settings</button>
-		</div>
-		<div id="exportimport" class="collapse" data-parent="#accordion">
-			<div class="card-body">
-				<ul>
-					<li>In Settings page, you can choose to Export your settings to a .JSON file </li>
-					<li>You can also import your settings using a previously exported JSON file</li>
-					<li>Addon tries to do some validation on the imported JSON before it saves settings to Disk. But we advise not to manually edit the exported JSON before importing to avoid errors</li>
-				</ul>
-				</div>
-	</div>
-</div>
-
-<br/>
 
 <div class="card">
 		<div class="card-header" style="text-align: center;">
@@ -218,15 +214,20 @@
 											<li> &#9658; Some Search engines to help the user avoid seeing Wayback redirects when she searches </li>
 											<li> &#9658; Some reserved addresses like 127.0.0 * and 0.0.0* so that user can browse these without routing</li>
 											<li> &#9658; Some online education learning course sites as they host video content and also need login to work</li>
-											<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li> 
+											<li> &#9658; Some cloud storage sites as they need login anyway (Dropbox, WeTransfer,Box)</li>
 											<li> &#9658; Some video streaming (netflix..) sites and live streaming sites (Periscope..)</li>
 											<li> &#9658; Some audio podcast sites </li>
 											<li> &#9658; Some Language learning sites (Duolingo) as they need login to work </li>
-											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page 
+											<li> &#9658; Download links in which the URL ends with 100 common extensions get auto-excluded so you can begin the download even from within archived page
 												(example.com/download/file.zip or /file.doc will get auto-excluded only for the download link) </li>
 											<li> &#9658; Some video conference site links like skype, sococo, jitsi and few other online meeting sites.<li></li>
                                             <li> &#9658; Some online office suite sites like office365, zoho and onlyoffice. </li>
-											<li> &#9658; Some mailerlist domains so that you can easily unsubscribe from marketing emails ;-) </li><br/>
+											<li> &#9658; Some mailerlist domains so that you can easily unsubscribe from marketing emails ;-) </li>
+											<li> &#9658; Some online radio sites. </li>
+                                            <li> &#9658;  Some crowdfunding sites.</li>
+                                            <li> &#9658;  Some "what is my ip" type sites.</li>
+                                            <li> &#9658;  Some chat apps like whatapp web and telegram web </li>
+                                            <li> &#9658;  Some online payment sites like flattr, buymeacoffee and liberapay.</li> <br/>
 											<small>P.S : There's no other agenda behind this bundled list made available during install :)</small>
 								</ul> </div>
 <br/>If user wishes to reset his Excludes back to the ones provided by Developer, she can do so from the Settings Page
@@ -234,6 +235,24 @@
 	</div>
 
 	<br>
+
+<div class="card">
+		<div class="card-header" style="text-align: center;">
+		<button class="btn btn-outline-primary" style="border-color: #007bff" class="collapsed card-link" data-toggle="collapse" data-parent="#accordion" href="#exportimport">Export/Import Settings</button>
+		</div>
+		<div id="exportimport" class="collapse" data-parent="#accordion">
+			<div class="card-body">
+				<ul>
+					<li>In Settings page, you can choose to Export your settings to a .JSON file </li>
+					<li>You can also import your settings using a previously exported JSON file</li>
+					<li>Addon tries to do some validation on the imported JSON before it saves settings to Disk. But we advise not to manually edit the exported JSON before importing to avoid errors</li>
+				</ul>
+				</div>
+	</div>
+</div>
+
+<br/>
+
 
 	<div class="card">
 			<div class="card-header" style="text-align: center;">
@@ -273,7 +292,7 @@
 
 				</div>
 			</div>
-			
+
 				<br>
 
 		<div class="card">
@@ -344,7 +363,7 @@
 gokulakrishnaks@gmail.com
 </a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
 <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
- <p id="appVersion"></p> 
+ <p id="appVersion"></p>
 
 </small>
 </div>
