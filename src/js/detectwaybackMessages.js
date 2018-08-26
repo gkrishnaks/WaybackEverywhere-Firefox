@@ -42,7 +42,7 @@ function handleWMErrors() {
     }
     //  console.log(fullString);
     let canSave = fullString.indexOf("Save this url in the Wayback Machine");
-    let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14;
+    let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15;
     e1 = fullString.indexOf("Page cannot");
     e2 = fullString.indexOf("excluded from the Wayback Machine");
     e3 = fullString.indexOf("doesn't look like an valid URL");
@@ -65,6 +65,7 @@ function handleWMErrors() {
     e14 = fullString.indexOf(
       "This page is not available on the web because access is forbidden"
     );
+    e15 = fullString.indexOf("because access is forbidden");
 
     //console.log(canSave, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
     if (canSave > -1) {
@@ -80,7 +81,7 @@ function handleWMErrors() {
       sendBgMessage("excludethisSite", "AddtoTempExcludesList");
     } else if (e8 > -1 || e9 > -1 || e10 > -1 || e11 > -1 || e12 > -1) {
       sendBgMessage("excludethisSite", "AddtoTempExcludesList");
-    } else if (e3 > -1 || e13 > -1 || e14 > -1) {
+    } else if (e3 > -1 || e13 > -1 || e14 > -1 || e15 > -1) {
       sendBgMessage("excludethisSite", "AddtoTempExcludesList");
     } else {
       //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
