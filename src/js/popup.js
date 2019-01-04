@@ -73,6 +73,7 @@ popupApp.controller("PopupCtrl", function PopupCtrl($scope) {
         $scope.disabled = response.appDisabled;
         $scope.tempExcludes = response.tempExcludes;
         $scope.tempIncludes = response.tempIncludes;
+        $scope.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
         let domainStatus = response.domainStatus;
         if (domainStatus === "domainTempExcluded") {
           $scope.isDomainTempExcluded = true;
