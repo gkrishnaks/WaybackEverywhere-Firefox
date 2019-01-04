@@ -29,11 +29,6 @@ stages:
 
 test:
   stage: test
-  only:
-    - /^release.*$/
-    - master
-    - /^test.*$/
-
   script:
 #    - export DISPLAY=:99.0
     - npm run karmasingle
