@@ -20,6 +20,10 @@ Examples:
 
 Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here [Exclude List](#excludes-list) and it comes bundled with ~800 sites in default Excludes to help provide starting point to the user - Read more : [Default Excludes list](#default-excludes-list)
 
+ <a href="https://codecov.io/gl/gkrishnaks/WaybackEverywhere-Firefox?branch=master">
+    <img src="https://codecov.io/gl/gkrishnaks/WaybackEverywhere-Firefox/coverage.svg?branch=master" alt="Codecov" />
+  </a>
+  
 ## Features
 
 - **Auto-Save pages / Auto-exclude sites** \- Addon tries to detect messages displayed by Wayback Machine and either Saves a available page to Wayback or Adds the site to Exclude list based on the error message. More information here: [Auto-save pages/ Auto-exclude sites](#auto-save-pages-auto-exclude-sites)
