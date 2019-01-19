@@ -33,8 +33,9 @@
 
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <script src="js/libraries/angular-1.7.2.min.js"></script>
-  <script src="js/popup.js"></script>
+  <script src="js/dom/DOMUpdater.js"></script>
+  <script src="js/registerListeners.js"></script>
+  <script src="js/popup/popup.js"></script>
 
 </head>
 <!--<body style="min-width: 200px;max-width: 200px;">-->
@@ -54,39 +55,65 @@
 
 
 
-    <tr class="spaceUnder" style="text-align:center;" ng-if="disabled">
-      <td>
-        <div class="alert alert-danger" tabindex='-1' style="">Wayback is disabled!</div>
-        <button type="button" class="btn btn-success btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Enable Wayback</button>
-
-      </td>
-    </tr>
-
-    <tr class="spaceUnder" style="text-align:center;" ng-if="!settingspagehide">
-      <td>
-        <button type="button" class="btn btn-primary btn-sm" id="save_now" tabindex='-1' ng-click="openWayBackEverywhereSettings()">Edit Settings</button>
-        <BR>
-      </td>
-    </tr>
-
-
-
-
-    <tr class="spaceUnder" sty ng-if="!disabled">
-      <td float>
-        <button type="button" class="btn btn-outline-dark btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Disable Wayback Everywhere  temporarily</button>
-      </td>
-    </tr>
+     <tr class="spaceUnder" id="showenablebutton" align="center">
+        <td>
+          <div class="alert alert-danger" tabindex="-1" style="">
+            Wayback is disabled!
+          </div>
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            id="enablebutton"
+            tabindex="-1"
+          >
+            Enable Wayback Everywhere
+          </button>
+        </td>
+      </tr>
 
 
+    
+      <tr class="spaceUnder" align="center" id="settingsbuttonarea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            id="settingsbutton"
+            tabindex="-1"
+          >
+            Edit Settings
+          </button>
+          <br />
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" style="text-align:center;">
-      <td>
-        <button type="button" class="btn btn-info btn-sm formfineleft" id="about_support_button" ng-click="openHelp()">Help</button>
 
-        <!--  <a class="btn blue large" href="help.html" target="_blank">Help</a>-->
+   <tr class="spaceUnder" align="center" id="showdisablebutton">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-dark btn-sm"
+            id="disablebutton"
+            tabindex="-1"
+          >
+            Disable Wayback temporarily
+          </button>
+        </td>
+      </tr>
 
 
+   
+      <tr class="spaceUnder" align="center">
+        <td>
+          <button
+            type="button"
+            class="btn btn-info btn-sm formfineleft"
+            id="helpButton"
+          >
+            Help
+          </button>
+        </td>
+      </tr>
   </table>
   <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
 </body>

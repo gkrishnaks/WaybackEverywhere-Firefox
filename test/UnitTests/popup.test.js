@@ -1,84 +1,66 @@
 describe("PopupApp", function() {
-  beforeEach(angular.mock.module("popupApp"));
-
-  var $controller;
-
-  beforeEach(
-    angular.mock.inject(function(_$controller_) {
-      $controller = _$controller_;
-    })
-  );
+  var storage = chrome.storage.local;
+  var sendMsg = chrome.runtime.sendMessage;
+  beforeEach(function() {
+    chrome.flush();
+  });
 
   describe("Check variable initializations", function() {
-    var $scope = {};
-    var controller;
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
     it("variables need to be intialized", function() {
-      expect($scope.logging).to.eql(false);
-      expect($scope.domain).to.eql("");
-      expect($scope.tempIncludes).to.eql([]);
-      expect($scope.tempExcludes).to.eql([]);
-
-      expect($scope.isDomainTempIncluded).to.eql(false);
-      expect($scope.isDomainTempExcluded).to.eql(false);
-      expect($scope.isDomainInExcludesList).to.eql(false);
-      expect($scope.showRefreshAlert).to.eql(false);
+      expect(PopupApp.logging).to.eql(false);
+      expect(PopupApp.tempIncludes).to.eql([]);
+      expect(PopupApp.tempExcludes).to.eql([]);
+      expect(PopupApp.isDomainTempIncluded).to.eql(false);
+      expect(PopupApp.isDomainTempExcluded).to.eql(false);
+      expect(PopupApp.isDomainInExcludesList).to.eql(false);
+      expect(PopupApp.showRefreshAlert).to.eql(false);
     });
-    /*
-		it("provide a mock response for self calling function getCurrentUrl and updateDetails", function() {
-			$scope.$apply = function() {};
-			var tabs = [{ id: 1, url: "https://gnu.org" }];
-			chrome.tabs.query.yields(tabs);
 
-			var response = {
-				logstatus: false,
-				counts: JSON.stringify({
-					archivedPageLoadsCount: 10,
-					waybackSavescount: 40
-				}),
-				appDisabled: false,
-				tempExcludes: [],
-				tempIncludes: [],
-				//excludesList: excludesList,
-				domainStatus: "domainTempExcluded",
-				isLoadAllLinksEnabled: false,
-				justSaved: {},
-				filters: [],
-				appVersion: "1.0.0",
-				commonExtensions: []
-			};
-			chrome.runtime.sendMessage.yields(response);
-			$scope.getCurrentUrlandUpdateDetails();
+    /* it("provide a mock response for self calling function getCurrentUrl and updateDetails", function() {
+      var tabs = [{ id: 1, url: "https://gnu.org" }];
+      chrome.tabs.query.yields(tabs);
+      var stub = sinon.stub(window, "updateDOM");
 
-			expect($scope.isDomainTempExcluded).to.eql(true);
-		}); */
+      var response = {
+        logstatus: false,
+        counts: JSON.stringify({
+          archivedPageLoadsCount: 10,
+          waybackSavescount: 40
+        }),
+        appDisabled: false,
+        tempExcludes: [],
+        tempIncludes: [],
+        //excludesList: excludesList,
+        domainStatus: "domainTempExcluded",
+        isLoadAllLinksEnabled: false,
+        justSaved: {},
+        filters: [],
+        appVersion: "1.0.0",
+        commonExtensions: []
+      };
+      chrome.runtime.sendMessage.yields(response);
+      getCurrentUrl(updateDetails);
+      stub.restore();
+      expect(PopupApp.isDomainTempExcluded).to.eql(true);
+    }); */
   });
 
-  describe("sendExcludeMessage helper function should send message to BG script as received", function() {
-    var $scope = {};
-    var controller;
+  describe("PopupApp.sendExcludeMessage helper function should send message to BG script as received", function() {
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
-    it("sendExcludeMessage helper function should send message to BG script as received", function() {
+    it("PopupApp.sendExcludeMessage helper function should send message to BG script as received", function() {
       var responseMessage = {
         message: "excluded"
       };
       chrome.runtime.sendMessage.yields(responseMessage);
 
-      $scope.domain = "gnu.org";
-      $scope.sendExcludeMessage("AddtoExcludesListfromJunit");
+      PopupApp.domain = "gnu.org";
+      PopupApp.sendExcludeMessage("AddtoExcludesListfromJunit");
       assert.ok(chrome.runtime.sendMessage.calledOnce);
       assert.ok(
         chrome.runtime.sendMessage.calledWith({
@@ -94,24 +76,21 @@ describe("PopupApp", function() {
   });
 
   describe("should send exclude Message correctly to Background script", function() {
-    afterEach(function() {
-      chrome.flush();
-      //delete global.chrome;
-    });
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
-    var controller;
-    var $scope = {};
-    it("addSitetoExclude should pass category as AddtoExcludesList", function() {
-      $scope.domain = "gnu.org";
+    let e = {};
+    e.target = { id: "" };
+
+    it("main excludes button should pass category as AddtoExcludesList", function() {
+      PopupApp.domain = "gnu.org";
       assert.ok(chrome.runtime.sendMessage.notCalled);
 
-      $scope.addSitetoExclude();
+      e.target.id = "MainExcludesButton";
+      var spy = sinon.spy(PopupApp, "sendExcludeMessage");
+      PopupApp.listenForClicks(e);
+      spy.restore();
+      sinon.assert.calledOnce(spy);
 
       assert.ok(
         chrome.runtime.sendMessage.calledWith({
@@ -125,10 +104,14 @@ describe("PopupApp", function() {
     });
 
     it("addSitetoExclude should pass category as AddtoTempExcludesList", function() {
-      $scope.domain = "gnu.org";
+      PopupApp.domain = "gnu.org";
       assert.ok(chrome.runtime.sendMessage.notCalled);
 
-      $scope.addSitetotempExclude();
+      e.target.id = "tempExcludebutton";
+      var spy = sinon.spy(PopupApp, "sendExcludeMessage");
+      PopupApp.listenForClicks(e);
+      spy.restore();
+      sinon.assert.calledOnce(spy);
 
       assert.ok(
         chrome.runtime.sendMessage.withArgs({
@@ -142,46 +125,30 @@ describe("PopupApp", function() {
     });
   });
 
-  describe("sendExcludeMessage should handle invalid cases and not send to background script", function() {
-    var $scope;
-    var controller;
+  describe("PopupApp.sendExcludeMessage should handle invalid cases and not send to background script", function() {
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
-    afterEach(function() {
-      chrome.flush();
-      //delete global.chrome;
-    });
-
-    it("sendExcludeMessage should not send Empty domain to background script", function() {
-      assert.ok(chrome.runtime.sendMessage.notCalled);
-      $scope.domain = "";
-      $scope.sendExcludeMessage("AddtoExcludesListfromJunit");
+    it("PopupApp.sendExcludeMessage should not send Empty domain to background script", function() {
+      PopupApp.domain = "";
+      PopupApp.sendExcludeMessage("AddtoExcludesListfromJunit");
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
 
-    it("sendExcludeMessage should not web.archive.org Empty domain to background script", function() {
-      $scope.domain = "web.archive.org";
-      $scope.sendExcludeMessage("AddtoExcludesListfromJunit");
+    it("PopupApp.sendExcludeMessage should not web.archive.org domain to background script", function() {
+      PopupApp.domain = "web.archive.org";
+      PopupApp.sendExcludeMessage("AddtoExcludesListfromJunit");
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
   });
 
   describe("Check toggle functions", function() {
-    var $scope;
-    var controller;
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
+    let e = {};
+    e.target = { id: "" };
 
     afterEach(function() {
       chrome.flush();
@@ -189,32 +156,28 @@ describe("PopupApp", function() {
     });
 
     it("showStats should toggle  stats from false/ true", function() {
-      $scope.showstat = false;
-      $scope.showstats();
-      expect($scope.showstat).to.eql(true);
-      $scope.showstats();
-      expect($scope.showstat).to.eql(false);
+      e.target.id = "statsButton";
+      var spy = sinon.spy(DOM.popupDOM, "toggleStats");
+
+      PopupApp.listenForClicks(e);
+      spy.restore();
+      sinon.assert.calledWith(spy, false);
     });
 
     it("toggledisabled should toggle  disable from false/ true", function() {
-      $scope.disabled = false;
-      $scope.toggleDisabled();
-      expect($scope.disabled).to.eql(true);
-      $scope.toggleDisabled();
-      expect($scope.disabled).to.eql(false);
+      e.target.id = "enablebutton";
+      var spy = sinon.spy(PopupApp, "toggleDisabled");
+      PopupApp.listenForClicks(e);
+      spy.restore();
+      sinon.assert.calledOnce(spy);
     });
 
     it("toggledisabled should save correct value to storage", function() {
-      $scope.disabled = false;
-      $scope.toggleDisabled();
+      e.target.id = "enablebutton";
+      var spy = sinon.spy(PopupApp, "toggleDisabled");
+      PopupApp.listenForClicks(e);
+      spy.restore();
       var local = { disabled: true };
-      expect($scope.disabled).to.eql(true);
-      assert.ok(chrome.storage.local.set.calledWith(local));
-      chrome.flush();
-
-      $scope.toggleDisabled();
-      local.disabled = false;
-      expect($scope.disabled).to.eql(false);
       assert.ok(chrome.storage.local.set.calledWith(local));
     });
   });
@@ -224,14 +187,8 @@ describe("PopupApp", function() {
       chrome.flush();
       //delete global.chrome;
     });
-    var $scope = {};
-    var controller;
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
     it("should send Save this page message to background script", function() {
@@ -239,7 +196,9 @@ describe("PopupApp", function() {
         message: "page saved"
       };
       chrome.runtime.sendMessage.yields(responseMessage);
-      $scope.savePage();
+      let e = {};
+      e.target = { id: "savePagebutton" };
+      PopupApp.listenForClicks(e);
 
       assert.ok(
         chrome.runtime.sendMessage.withArgs({
@@ -252,24 +211,19 @@ describe("PopupApp", function() {
     });
   });
 
-  describe("loadAll1pLinks functionality should work as expected", function() {
+  describe("PopupApp.loadAll1pLinks functionality should work as expected", function() {
     afterEach(function() {
       chrome.flush();
     });
-    var $scope = {};
-    var controller;
+
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
-    it("loadAll1pLinks should send message to tab, then background script", function() {
+    it("PopupApp.loadAll1pLinks should send message to tab, then background script", function() {
       var data = { data: "some urls" };
       chrome.tabs.sendMessage.yields({ data });
-      $scope.loadAll1pLinks("pathSelector");
+      PopupApp.loadAll1pLinks("pathSelector");
       assert.ok(
         chrome.tabs.sendMessage.calledWith(undefined, {
           type: "getAllFirstPartylinks"
@@ -287,25 +241,26 @@ describe("PopupApp", function() {
       );
     });
 
-    it("loadAll1pLinks should not proceed if selector is empty", function() {
+    it("PopupApp.loadAll1pLinks should not proceed if selector is empty", function() {
       var data = { data: "some urls" };
       chrome.tabs.sendMessage.yields({ data });
-      $scope.loadAll1pLinks("");
+      PopupApp.loadAll1pLinks("");
       assert.ok(chrome.tabs.sendMessage.notCalled);
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
 
-    it("loadAll1pLinks should not proceed if selector is placeholder", function() {
+    it("PopupApp.loadAll1pLinks should not proceed if selector is placeholder", function() {
       var data = { data: "some urls" };
       chrome.tabs.sendMessage.yields({ data });
-      $scope.loadAll1pLinks("Enter a selector");
+      PopupApp.loadAll1pLinks("Enter a selector");
       assert.ok(chrome.tabs.sendMessage.notCalled);
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
   });
 
   describe("Apply temporary changes to permanent should send correct message to background script", function() {
-    afterEach(function() {
+    let redirectsInitial = [];
+    beforeEach(function() {
       chrome.flush();
       redirectsInitial = [
         {
@@ -318,16 +273,7 @@ describe("PopupApp", function() {
             "*web.archive.org*|*archive.org*|*gnu.org*|*raw.githubusercontent.com*|*youtube.com*|*github.com*|*imgur.com*|*reddit.com*|*archive.is*|*quora.com*|*techcrunch.com*|*amazon.in*|*amazon.com*"
         }
       ];
-    });
-
-    var $scope = {};
-    var controller;
-    beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
     it("Apply tempExclude to Permanent should send correct message to background script", function() {
@@ -335,8 +281,8 @@ describe("PopupApp", function() {
         message: "Applid temporary changes to permanenet"
       };
       chrome.runtime.sendMessage.yields(responseMessage);
-      $scope.domain = "gnu.org";
-      $scope.applyTemptoPermanent("excludes");
+      PopupApp.domain = "gnu.org";
+      PopupApp.applyTemptoPermanent("excludes");
 
       assert.ok(
         chrome.runtime.sendMessage.withArgs({
@@ -356,7 +302,7 @@ describe("PopupApp", function() {
       var responseMessage = {
         message: "Applid temporary changes to permanenet"
       };
-      var spy = sinon.spy($scope, "removeSitefromexclude");
+      var spy = sinon.spy(PopupApp, "removeSitefromexclude");
 
       chrome.runtime.sendMessage
         .withArgs({
@@ -369,15 +315,15 @@ describe("PopupApp", function() {
         })
         .yields(responseMessage);
 
-      $scope.redirectslist = [];
+      PopupApp.redirectslist = [];
       chrome.runtime.sendMessage
         .withArgs({
           type: "getredirects"
         })
         .yields({ redirects: redirectsInitial });
 
-      $scope.domain = "gnu.org";
-      $scope.applyTemptoPermanent("includes");
+      PopupApp.domain = "gnu.org";
+      PopupApp.applyTemptoPermanent("includes");
 
       spy.restore();
       redirectsInitial[0].excludePattern =
@@ -413,15 +359,12 @@ describe("PopupApp", function() {
     var controller;
     beforeEach(function() {
       chrome.flush();
-      $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
 
     it("should send Save this page message to background script", function() {
-      $scope.seefirstversion();
-
+      let e = {};
+      e.target = { id: "firstArchivedButton" };
+      PopupApp.listenForClicks(e);
       assert.ok(
         chrome.runtime.sendMessage.withArgs({
           type: "seeFirstVersion",
@@ -432,87 +375,90 @@ describe("PopupApp", function() {
       );
     });
   });
-
-  describe("removeSitefromexcludeTemp functionality", function() {
+  // TODO TODO
+  describe("PopupApp.applyTemptoPermanent functionality", function() {
     afterEach(function() {
       chrome.flush();
       //delete global.chrome;
     });
     var $scope = {};
     var controller;
+    redirects = [
+      {
+        description: "Wayback Everywhere Rules",
+        exampleUrl: "http://example.org",
+        exampleResult: "https://web.archive.org/web/2/http://example.org",
+        error: null,
+        appliesTo: ["main_frame"],
+        includePattern: "*",
+        excludePattern: "*web.archive.org*|*archive.org*|*gnu.org*|*quora.com*"
+      }
+    ];
     beforeEach(function() {
       chrome.flush();
       $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
-
-    it("removeSitefromexcludeTemp should call removeSitefromexclude after saving temps ", function() {
-      $scope.domain = "gnu.org";
+    //TODO mock sendmessage response to check
+    it("PopupApp.applyTemptoPermanent should call PopupApp.removeSitefromexclude after saving temps ", function() {
+      PopupApp.domain = "gnu.org";
       var getResponse = ["|*fsf.org*"];
+      chrome.runtime.sendMessage.yields(redirects);
       getResponse.push = function() {};
       chrome.storage.local.get.yields({ tempIncludes: getResponse });
       chrome.storage.local.set.yields([]);
-      var stub = sinon.spy($scope, "removeSitefromexclude");
-
-      $scope.removeSitefromexcludeTemp();
+      var stub = sinon.stub(PopupApp, "removeSitefromexclude");
+      chrome.runtime.sendMessage.yields([]);
+      PopupApp.applyTemptoPermanent("includes");
       stub.restore();
       //sinon.stub(Array.prototype, "push").returns(1);
       sinon.assert.calledOnce(stub);
-      sinon.assert.calledWith(stub, false);
-      assert.ok(chrome.storage.local.get.calledWith({ tempIncludes: [] }));
+      sinon.assert.calledWith(stub, true);
+      assert.ok(
+        chrome.runtime.sendMessage.calledWith({
+          type: "clearTemps",
+          domain: PopupApp.domain,
+          subtype: "fromPopup",
+          url: PopupApp.currentUrl,
+          tabid: PopupApp.tabid,
+          toClear: "cleartempIncludes"
+        })
+      );
+      /*assert.ok(chrome.storage.local.get.calledWith({ tempIncludes: [] }));
       assert.ok(
         chrome.storage.local.set.calledWith({
           tempIncludes: getResponse
         })
+      );*/
+      //assert(stub.withArgs(false).calledOnce);
+    });
+
+    it("PopupApp.applyTemptoPermanent should applyTemptoPermanent for exclues ", function() {
+      PopupApp.domain = "";
+      var getResponse = ["|*fsf.org*"];
+      getResponse.push = function() {};
+      var stub = sinon.stub(PopupApp, "removeSitefromexclude");
+      chrome.runtime.sendMessage.yields([]);
+      PopupApp.applyTemptoPermanent("excludes");
+      stub.restore();
+      sinon.assert.notCalled(stub);
+      assert.ok(
+        chrome.runtime.sendMessage.calledWith({
+          type: "clearTemps",
+          domain: PopupApp.domain,
+          subtype: "fromPopup",
+          url: PopupApp.currentUrl,
+          tabid: PopupApp.tabid,
+          toClear: "cleartempExcludes"
+        })
       );
-      //assert(stub.withArgs(false).calledOnce);
-    });
-
-    it("removeSitefromexcludeTemp should do nothing if domain is empty ", function() {
-      $scope.domain = "";
-      var getResponse = ["|*fsf.org*"];
-      getResponse.push = function() {};
-      chrome.storage.local.get.yields({ tempIncludes: getResponse });
-      chrome.storage.local.set.yields([]);
-      var stub = sinon.spy($scope, "removeSitefromexclude");
-
-      $scope.removeSitefromexcludeTemp();
-      stub.restore();
-      //sinon.stub(Array.prototype, "push").returns(1);
-      sinon.assert.notCalled(stub);
+      assert.ok(
+        chrome.tabs.update.calledWith(PopupApp.tabid, { active: true })
+      );
       //sinon.assert.calledWith(stub, false);
-      assert.ok(chrome.storage.local.get.notCalled);
-      assert.ok(chrome.storage.local.set.notCalled);
-      //assert(stub.withArgs(false).calledOnce);
-    });
-
-    it("removeSitefromexcludeTemp should do nothing if domain is web.archive.org ", function() {
-      $scope.domain = "web.archive.org";
-      var getResponse = ["|*fsf.org*"];
-      getResponse.push = function() {};
-      chrome.storage.local.get.yields({ tempIncludes: getResponse });
-      chrome.storage.local.set.yields([]);
-      var stub = sinon.spy($scope, "removeSitefromexclude");
-
-      $scope.removeSitefromexcludeTemp();
-      stub.restore();
-      //sinon.stub(Array.prototype, "push").returns(1);
-      sinon.assert.notCalled(stub);
-      //sinon.assert.calledWith(stub, false);
-      assert.ok(chrome.storage.local.get.notCalled);
-      assert.ok(chrome.storage.local.set.notCalled);
-      //assert(stub.withArgs(false).calledOnce);
     });
   });
 
-  /* 	$scope.$apply = function() {};
-			var tabs = [{ id: 1, url: "https://gnu.org" }];
-			chrome.tabs.query.yields(tabs);
-			$scope.getCurrentUrl1(); */
-
-  describe("removeSitefromExclude (include) functionality should work as expected", function() {
+  describe("PopupApp.removeSitefromexclude (include) functionality should work as expected", function() {
     afterEach(function() {
       chrome.flush();
       //delete global.chrome;
@@ -524,11 +470,8 @@ describe("PopupApp", function() {
     beforeEach(function() {
       chrome.flush();
       $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
 
-      $scope.domain = "github.com";
+      PopupApp.domain = "github.com";
       redirectsInitial = [
         {
           description: "Wayback Everywhere Rules",
@@ -564,8 +507,8 @@ describe("PopupApp", function() {
         .yields("saved redirects");
     });
 
-    it("removeSitefromexclude with false should remove site from exclude and save to storage as expected", function() {
-      $scope.removeSitefromexclude(false);
+    it("PopupApp.removeSitefromexclude with false should remove site from exclude and save to storage as expected", function() {
+      PopupApp.removeSitefromexclude(false);
 
       assert.ok(chrome.runtime.sendMessage.calledTwice);
       assert.ok(
@@ -586,7 +529,7 @@ describe("PopupApp", function() {
       assert.ok(chrome.tabs.update.withArgs(undefined, obj).calledOnce);
     });
 
-    it("removeSitefromexclude with true should remove site from exclude and save to storage as expected", function() {
+    it("PopupApp.removeSitefromexclude with true should remove site from exclude and save to storage as expected", function() {
       chrome.runtime.sendMessage
         .withArgs({
           type: "getredirects"
@@ -597,7 +540,7 @@ describe("PopupApp", function() {
         .withArgs({ type: "saveredirects", redirects: redirectsLater })
         .yields("saved redirects");
 
-      $scope.removeSitefromexclude(true);
+      PopupApp.removeSitefromexclude(true);
 
       assert.ok(chrome.runtime.sendMessage.calledTwice);
       assert.ok(
@@ -615,8 +558,8 @@ describe("PopupApp", function() {
       assert.ok(chrome.tabs.update.withArgs(undefined, obj).calledOnce);
     });
 
-    it("removeSitefromexclude should do nothing if domain is empty", function() {
-      $scope.domain = "";
+    it("PopupApp.removeSitefromexclude should do nothing if domain is empty", function() {
+      PopupApp.domain = "";
       chrome.runtime.sendMessage
         .withArgs({
           type: "getredirects"
@@ -626,12 +569,12 @@ describe("PopupApp", function() {
       chrome.runtime.sendMessage
         .withArgs({ type: "saveredirects", redirects: redirectsLater })
         .yields("saved redirects");
-      $scope.removeSitefromexclude(false);
+      PopupApp.removeSitefromexclude(false);
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
 
-    it("removeSitefromexclude should do nothing if domain is web.archive.org", function() {
-      $scope.domain = "web.archive.org";
+    it("PopupApp.removeSitefromexclude should do nothing if domain is web.archive.org", function() {
+      PopupApp.domain = "web.archive.org";
       chrome.runtime.sendMessage
         .withArgs({
           type: "getredirects"
@@ -641,7 +584,7 @@ describe("PopupApp", function() {
       chrome.runtime.sendMessage
         .withArgs({ type: "saveredirects", redirects: redirectsLater })
         .yields("saved redirects");
-      $scope.removeSitefromexclude(false);
+      PopupApp.removeSitefromexclude(false);
       assert.ok(chrome.runtime.sendMessage.notCalled);
     });
   });
@@ -656,47 +599,38 @@ describe("PopupApp", function() {
     beforeEach(function() {
       chrome.flush();
       $scope = {};
-      controller = $controller("PopupCtrl", {
-        $scope: $scope
-      });
     });
     it("Should be able to clear temporary include rule", function() {
-      $scope.tempIncludes = ["|*gnu.org*", "|*example.org*"];
-      $scope.domain = "example.org";
+      PopupApp.tempIncludes = ["|*gnu.org*", "|*example.org*"];
+      PopupApp.domain = "example.org";
       var tempIncludesExpected = ["|*gnu.org*"];
       chrome.storage.local.set.yields("response");
-      var stub = sinon.stub($scope, "addSitetoExclude");
 
-      $scope.clearTempRules("tempIncludes");
+      PopupApp.clearTempRules("tempIncludes");
 
-      stub.restore();
       assert.ok(chrome.storage.local.set.calledOnce);
       assert.ok(
         chrome.storage.local.set.calledWith({
           tempIncludes: tempIncludesExpected
         })
       );
-      sinon.assert.calledOnce(stub);
     });
 
     it("Should be able to clear temporary exclude rule", function() {
-      $scope.tempExcludes = ["|*gnu.org*", "|*example.org*"];
-      $scope.domain = "example.org";
+      PopupApp.tempExcludes = ["|*gnu.org*", "|*example.org*"];
+      PopupApp.domain = "example.org";
       var tempExcludesExpected = ["|*gnu.org*"];
       chrome.storage.local.set.yields("response");
-      var stub = sinon.stub($scope, "removeSitefromexclude");
+      //var stub = sinon.stub($scope, "PopupApp.removeSitefromexclude");
 
-      $scope.clearTempRules("tempExcludes");
+      PopupApp.clearTempRules("tempExcludes");
 
-      stub.restore();
       assert.ok(chrome.storage.local.set.calledOnce);
       assert.ok(
         chrome.storage.local.set.calledWith({
           tempExcludes: tempExcludesExpected
         })
       );
-      sinon.assert.calledOnce(stub);
-      sinon.assert.calledWithExactly(stub, false);
     });
   });
   // -- Add Describes above this line --

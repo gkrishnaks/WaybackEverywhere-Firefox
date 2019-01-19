@@ -20,7 +20,8 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
-var sendBgMessage = function(type, category) {
+var $contentScript = {};
+$contentScript.sendBgMessage = (type, category) => {
   chrome.runtime.sendMessage(
     {
       type: type,
@@ -33,14 +34,15 @@ var sendBgMessage = function(type, category) {
   );
 };
 
-function handleWMErrors() {
+(() => {
   let error = document.getElementById("error");
+
   if (error !== null) {
     let fullString = "";
     for (let i = 0; i < error.childElementCount; i++) {
       fullString = fullString + " " + error.children[i].innerText;
     }
-    //  console.log(fullString);
+    //console.log(fullString);
     let canSave = fullString.indexOf("Save this url in the Wayback Machine");
     let e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, e11, e12, e13, e14, e15;
     e1 = fullString.indexOf("Page cannot");
@@ -70,36 +72,34 @@ function handleWMErrors() {
     //console.log(canSave, e1, e2, e3, e4, e5, e6, e7, e8, e9, e10);
     if (canSave > -1) {
       //  console.log('detected save this page');
-      sendBgMessage("savetoWM", "save");
+      $contentScript.sendBgMessage("savetoWM", "save");
     } else if (e1 > -1 || e2 > -1) {
       //  console.log('robot txt detected or page is excluded');
-      sendBgMessage("excludethisSite", "AddtoExcludesList");
+      $contentScript.sendBgMessage("excludethisSite", "AddtoExcludesList");
     } else if (e4 > -1 && e5 > -1) {
       //  console.log('Not other errors like robots.txt or excluded, we will try saving this page');
-      sendBgMessage("savetoWM", "save");
+      $contentScript.sendBgMessage("savetoWM", "save");
     } else if (e6 > -1 && e7 > -1) {
-      sendBgMessage("excludethisSite", "AddtoTempExcludesList");
+      $contentScript.sendBgMessage("excludethisSite", "AddtoTempExcludesList");
     } else if (e8 > -1 || e9 > -1 || e10 > -1 || e11 > -1 || e12 > -1) {
-      sendBgMessage("excludethisSite", "AddtoTempExcludesList");
+      $contentScript.sendBgMessage("excludethisSite", "AddtoTempExcludesList");
     } else if (e3 > -1 || e13 > -1 || e14 > -1 || e15 > -1) {
-      sendBgMessage("excludethisSite", "AddtoTempExcludesList");
+      $contentScript.sendBgMessage("excludethisSite", "AddtoTempExcludesList");
     } else {
       //log('detected unknown error, perhaps an archived page had an id error.. Ignore');
     }
   }
-}
 
-handleWMErrors();
+  //to hide wayback hideWaybackToolbat
+  // We hide for 2 cases
+  // 1. In desktop firefox, when a user clicks save as pdf button. This feature not available in chrome as chrome does not provide API for printPDF.
+  // 2. In Firefox Android, as there`s limited screen space,  let's hide it
+  // Below is for case2, case 1 handled by hideWMtoolbar.js called from popup.js
 
-//to hide wayback hideWaybackToolbat
-// We hide for 2 cases
-// 1. In desktop firefox user clicks save as pdf button
-// 2. In Firefox Android, as there`s limited screen space,  let's hide it
-// Below is for case2, case 1 handled by hideWMtoolbar.js called from popup.js
-
-if (navigator.userAgent.match(/Android/i)) {
-  let c = document.getElementById("wm-tb-close");
-  if (c !== null) {
-    c.click();
+  if (navigator.userAgent.match(/Android/i)) {
+    let c = document.getElementById("wm-tb-close");
+    if (c !== null) {
+      c.click();
+    }
   }
-}
+})();

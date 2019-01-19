@@ -20,6 +20,8 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
+//This code is used for collapse/open functionality in Help page
+
 $(document).ready(function() {
   $(".collapse").on("shown.bs.collapse", function(e) {
     var $card = $(this).closest(".card");
@@ -33,5 +35,7 @@ $(document).ready(function() {
   });
   let manifestData = chrome.runtime.getManifest();
   let versionText = "Version " + manifestData.version;
-  $("#appVersion").text(versionText);
+  if (!!$("#appVersion")) {
+    $("#appVersion").text(versionText);
+  }
 });

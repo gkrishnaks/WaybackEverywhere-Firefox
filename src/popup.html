@@ -1,6 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<!--
+  <!--
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
@@ -23,206 +23,338 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 -->
-<head>
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Wayback Everywhere</title>
-  <link rel="stylesheet" href="css/popup.css" />
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Wayback Everywhere</title>
+    <link rel="stylesheet" href="css/popup.css" />
 
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <script src="js/libraries/angular-1.7.2.min.js"></script>
-  <script src="js/parseUrl.js"></script>
-  <script src="js/popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+     <script src="js/popup/registerListeners.js"></script>
+    <script src="js/commonUtils/parseUrl.js"></script>
+    <script src="js/dom/DOMUpdater.js"></script>
+    <script src="js/dom/common.js"></script>
+    <script src="js/popup/popup.js"></script>
+  </head>
+  <!-- https://web.archive.org/web/20190110050900/https://stackoverflow.com/questions/6505419/stop-javascript-flicker-when-pages-content-is-manipulated -->
+  <body class="hideBody">
+    <table width="100%" style="min-width: 120px; " id="tableMain">
+      <tr class="spaceUnder">
+        <td>
+          <div
+            style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"
+          ></div>
+          <div class="container">
+            <img class="resize_fit_center" src="images/logo.jpg" />
+          </div>
+          <div
+            style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"
+          ></div>
+        </td>
+      </tr>
 
-</head>
+      <tr class="spaceUnder" id="showenablebutton" align="center">
+        <td>
+          <div class="alert alert-danger" tabindex="-1" style="">
+            Wayback is disabled!
+          </div>
+          <button
+            type="button"
+            class="btn btn-success btn-sm"
+            id="enablebutton"
+            tabindex="-1"
+          >
+            Enable Wayback Everywhere
+          </button>
+        </td>
+      </tr>
 
-<body ng-app="popupApp" ng-controller="PopupCtrl" ng-cloak>
+      <tr class="spaceUnder" align="center" id="settingsbuttonarea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary btn-sm"
+            id="settingsbutton"
+            tabindex="-1"
+          >
+            Edit Settings
+          </button>
+          <br />
+        </td>
+      </tr>
 
-  <table width="100%" style="min-width: 120px; ">
-    <tr class="spaceUnder">
-      <td>
-        <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
-        <div class='container'>
-          <img class='resize_fit_center' src='images/logo.jpg' />
-        </div>
-        <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="alertArea">
+        <td>
+          <div
+            class="alert alert-info"
+            tabindex="-1"
+            id="inExcludesAlert"
+          ></div>
+          <div
+            class="alert alert-info"
+            tabindex="-1"
+            id="inTempexcludesAlert"
+            style=""
+          ></div>
+          <div
+            class="alert alert-info"
+            id="inTempIncludesAlert"
+            tabindex="-1"
+            style=""
+          ></div>
+        </td>
+      </tr>
 
+      <tr class="spaceUnder" align="center" id="clicktoRefreshArea">
+        <td>
+          <div
+            class="alert alert-info"
+            tabindex="-1"
+            id="refreshbutton"
+            style=""
+          >
+            Click here to Refresh this page
+          </div>
+        </td>
+      </tr>
 
+      <tr class="spaceUnder" align="center" id="includeDomainArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn btn-outline-success btn-sm "
+            id="includeButton"
+            tabindex="-1"
+          ></button>
+        </td>
+        <!-- button text set from popup.js-->
+      </tr>
+      <!--<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
+      <tr class="spaceUnder" align="center" id="tempIncludeArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-info btn-sm "
+            id="tempIncludeButton"
+            tabindex="-1"
+          ></button>
+          <!-- button text set from popup.js-->
+          <br />
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="disabled">
-      <td>
-        <div class="alert alert-danger" tabindex='-1' style="">Wayback is disabled!</div>
-        <button type="button" class="btn btn-success btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Enable Wayback Everywhere</button>
+      <tr class="spaceUnder" align="center" id="clearTempExcludeArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn btn-outline-success btn-sm "
+            id="clearTempExcludeButton"
+            tabindex="-1"
+          ></button>
+        </td>
+        <!-- button text set from popup.js-->
+      </tr>
 
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="applyTempToPermExcludes">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm "
+            id="applyTempToPermExcludesButton"
+            tabindex="-1"
+          ></button>
+          <br />
+          <!-- button text set from popup.js-->
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!settingspagehide">
-      <td>
-        <button type="button" class="btn btn-primary btn-sm" id="save_now" tabindex='-1' ng-click="openWayBackEverywhereSettings()">Edit Settings</button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="clearFromTempIncludesArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm "
+            id="clearFromTempIncludesButton"
+            tabindex="-1"
+          ></button>
+          <!-- button text set from popup.js-->
 
-    <tr class="spaceUnder" align="center" ng-show="!settingspagehide && !disabled && domain" ng-if="isDomainInExcludesList || isDomainTempExcluded || isDomainTempIncluded">
-      <td>
-          <div class="alert alert-info" ng-if="isDomainInExcludesList" tabindex='-1' style="">{{domain}} is in Excludes list</div>
-          <div class="alert alert-info" ng-if="isDomainTempExcluded" tabindex='-1' style="">{{domain}} is temporarily Excluded</div>
-          <div class="alert alert-info" ng-if="isDomainTempIncluded" tabindex='-1' style="">{{domain}} is temporarily Included</div>
+          <br />
+        </td>
+      </tr>
 
-      </td>
-    </tr>
+      <tr
+        class="spaceUnder"
+        align="center"
+        id="applysitetoPermanentIncludesArea"
+      >
+        <td>
+          <button
+            type="button"
+            class="btn btn btn-outline-success btn-sm "
+            id="applysitetoPermanentIncludesButton"
+            tabindex="-1"
+          ></button>
+          <!-- button text set from popup.js-->
 
-    <tr class="spaceUnder" align="center" ng-if="showRefreshAlert && !settingspagehide && !webextpagesExcluded && !disabled && domain && !isDomainInExcludesList && !isDomainTempExcluded && !issiteexcluded && (domain !== 'chrome')">
-      <td>
-                <div ng-click="pageReload()" class="alert alert-info" tabindex='-1' style="">Click here to Refresh this page</div>
-       </td>
-    </tr>
+          <br />
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempExcluded">
-      <td>
-        <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="removeSitefromexclude()"><strong> Include {{domain}} </strong></button>
-      </td>
-    </tr>
-    <!--<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempExcluded">
+      <tr class="spaceUnder" align="center" id="saveButtonArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            tabindex="-1"
+            id="savePagebutton"
+          ></button>
+          <!--button text added in popup.js-->
+          <br />
+        </td>
+      </tr>
+      <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
+      <tr class="spaceUnder" align="center" id="tempExcludeArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-dark btn-sm "
+            id="tempExcludebutton"
+            tabindex="-1"
+          ></button>
+          <br />
+        </td>
+      </tr>
 
-      <td>
-        <button type="button" class="btn btn-outline-info btn-sm" id="recent_capture" tabindex='-1' ng-click="removeSitefromexcludeTemp()"><strong>Temporarily Include {{domain}}</strong></button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="MainExcludesButtonArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm "
+            id="MainExcludesButton"
+            tabindex="-1"
+          ></button>
+          <br />
+        </td>
+      </tr>
 
-<tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempExcluded">
-      <td>
-        <button type="button" class="btn btn btn-outline-success btn-sm" id="first_capture" tabindex='-1' ng-click="clearTempRules('tempExcludes')"><strong> Clear {{domain}} from Temporary Excludes</strong></button>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="openAllLinksArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-sm "
+            id="openAllLinksButton"
+            tabindex="-1"
+          >
+            Open all links that have:
+          </button>
+          <input
+            id="selectorInput"
+            placeholder="Enter a selector in URL"
+            type="text"
+            class="newLine"
+          />
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempExcluded">
+      <tr class="spaceUnder" align="center" id="firstArchivedbuttonArea">
+        <td>
+          <button
+            type="button"
+            class="btn btn-light btn-sm formfineleft"
+            id="firstArchivedButton"
+          >
+            See first archived version
+          </button>
+        </td>
+      </tr>
 
-      <td>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="applyTemptoPermanent('excludes')">
-            <strong>Add {{domain}} to Excludes List</strong></button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" id="SavePagetoPDFArea" align="center">
+        <td>
+          <button
+            type="button"
+            class="btn btn-light btn-sm formfineleft"
+            id="savePdfbutton"
+          >
+            Save Page as PDF
+          </button>
+        </td>
+      </tr>
 
- <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempIncluded">
-      <td>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="clearTempRules('tempIncludes')">
-            <strong>Clear {{domain}} from Temporary Includes</strong></button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="showdisablebutton">
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-dark btn-sm"
+            id="disablebutton"
+            tabindex="-1"
+          >
+            Disable Wayback temporarily
+          </button>
+        </td>
+      </tr>
 
-       <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && isDomainTempIncluded">
-      <td>
-        <button type="button" class="btn btn btn-outline-success btn-sm" id="recent_capture" tabindex='-1' ng-click="applyTemptoPermanent('includes')">
-            <strong>Include {{domain}} from now</strong></button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center">
+        <td>
+          <button
+            type="button"
+            class="btn btn-info btn-sm formfineleft"
+            id="helpButton"
+          >
+            Help
+          </button>
+        </td>
+      </tr>
 
-    <tr class="spaceUnder" align="center" ng-if="!disabled && SettingsInAboutConfig && !webextpagesExcluded">
-      <td>
-        <button type="button" class="btn btn-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="savePage()">Save this page {{!issiteexcluded ?'now':'again'}}</button>
-        <BR>
-      </td>
-    </tr>
-    <!--<tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">-->
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempIncluded">
-      <td>
-        <button type="button" class="btn btn-outline-dark btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetotempExclude()">
-            <strong>Temporarily Exclude {{domain}}</strong></button>
-        <BR>
-      </td>
-    </tr>
+      <tr class="spaceUnder" align="center" id="statsArea">
+        <td>
+          <button
+            id="statsButton"
+            type="button"
+            class="btn btn-outline-info btn-sm formfineleft"
+          >
+            Stats
+          </button>
+        </td>
+      </tr>
+      <tr
+        id="showstats"
+        class="spaceUnder"
+        align="center"
+        style="display: none;"
+      >
+        <td>
+          
+            <div style="text-align:center; display: none;" id="loadcount">
+            </div>
+                    
+          <div style="text-align:center; display: none;" id="savecount">
+            </div>   
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton && domain && !isDomainTempIncluded">
-      <td>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-click="addSitetoExclude()">
-            <strong>Add {{domain}} to Excludes List</strong></button>
-        <BR>
-      </td>
-    </tr>
+             <div
+              style="text-align:center; display: none;"
+              id="totalcount"
+            ></div>        
 
-    <tr class="spaceUnder" align="center" ng-if="isLoadAllLinksEnabled && issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
+             <div style="text-align:center; display: none;"
+              id="ratiocount"
+            ></div>
+            <div style="text-align:center; display: none;" id="welcomecount"
+              >Welcome. Browse for some time! :)
+            </div>  
+          
+        </td>
+      </tr>
 
-      <td>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="recent_capture" tabindex='-1' ng-disabled="!selector" ng-click="loadAll1pLinks(selector)"><strong>Open all links that have:</strong></button>
-        <br/><input ng-model="selector" placeholder="Enter a selector" />
-        <BR>
-      </td>
-    </tr>
+      <!--  <a class="btn blue large" href="help.html" target="_blank">Help</a>-->
+    </table>
 
-    <tr class="spaceUnder" align="center" ng-if="issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig && !hideIncludebutton">
-      <td>
-        <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="seefirstversion()">See first archived version</button>
-      </td>
-    </tr>
-
-     <tr class="spaceUnder" align="center" ng-if="!isMobilefirefox && issiteexcluded && !disabled && !webextpagesExcluded && SettingsInAboutConfig">
-       <td>
-         <button type="button" class="btn btn-light btn-sm formfineleft" id="about_support_button" ng-click="saveAsPDF()">Save Page as PDF</button>
-       </td>
-     </tr>
-
-     <tr class="spaceUnder" align="center" ng-if="!disabled">
-      <td>
-        <button type="button" class="btn btn-outline-dark btn-sm" id="overview" tabindex='-1' ng-click="toggleDisabled()">Disable Wayback temporarily</button>
-      </td>
-    </tr>
-
-    <tr class="spaceUnder" align="center">
-      <td>
-        <button type="button" class="btn btn-info btn-sm formfineleft" id="about_support_button" ng-click="openHelp()">Help</button>
-      </td>
-    </tr>
-
-    <tr class="spaceUnder" align="center">
-      <td>
-        <button type="button" class="btn btn-outline-info btn-sm formfineleft" id="about_support_button" ng-click="showstats()">Stats</button>
-      </td>
-    </tr>
-    <tr ng-if="showstat" class="spaceUnder" align="center">
-      <td>
-        <div>
-          <span style="text-align:center;" ng-if="loadcount>0">Pages redirected : {{loadcount}}
-        <br/></span>
-          <span style="text-align:center;" ng-if="savecount>0">Pages saved to WM : {{savecount}}
-        <br/></span>
-          <span style="text-align:center;" ng-if="savecount>0 &&
-        loadcount>0">Total WM visits: {{savecount+loadcount}}
-      <br/></span>
-      <span style="text-align:center;" ng-if="savecount>0 &&
-        loadcount>0">Saved/Redirected: {{savecount*100/loadcount | number:1}}%
-      <br/></span>
-          <span style="text-align:center;" ng-if="loadcount==0 && savecount==0">Welcome. Browse for some time! :)
-        </span></div><br/>
-
-      </td>
-    </tr>
-    <!--  <a class="btn blue large" href="help.html" target="_blank">Help</a>-->
-
-
-  </table>
-  <div style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"></div>
-<footer><small><div style="text-align:center;"> Version {{appVersion}}</div></small></footer>
-<div ng-if="logging" style="text-align:center;"> isDomainTempExcluded : {{isDomainTempExcluded}} <BR>
-  isDomainTempIncluded : {{isDomainTempIncluded}} <BR>
-  isDomainInExcludesList : {{isDomainInExcludesList}} <BR>
-  SettingsInAboutConfig : {{SettingsInAboutConfig}} <BR>
-  webextpagesExcluded(not) : {{webextpagesExcluded}} <BR>
-  isLoadAllLinksEnabled : {{isLoadAllLinksEnabled}} <BR>
-      tempExcludes : {{tempExcludes}} <BR>
-      tempIncludes : {{tempIncludes}} <BR>
-      domain: {{domain}} <BR>
-  </div>
-</body>
-
+    <div
+      style="margin: 0px; padding: 0px; border: 0px solid rgb(6, 117, 211); font-size: 19px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: 1; font-family: sans-serif; vertical-align: baseline; box-sizing: content-box; overflow: unset; height: 1px; position: relative; width: auto; display: flex; background-color: rgb(9, 150, 248); color: rgb(255, 255, 255); text-align: left; align-items: center; border-radius: 3px; justify-content: center; text-decoration: none;"
+    ></div>
+    <footer>
+      <small><div style="text-align:center;" id="versiondisplay"></div></small>
+    </footer>
+  </body>
 </html>

@@ -36,16 +36,19 @@
   "content_scripts": [
     {
       "matches": ["*://web.archive.org/*"],
-      "js": ["js/detectwaybackMessages.js", "js/getAllFirstPartylinks.js"]
+      "js": [
+        "js/content/detectwaybackMessages.js",
+        "js/content/getAllFirstPartylinks.js"
+      ]
     }
   ],
 
   "background": {
     "scripts": [
-      "js/parseUrl.js",
-      "js/redirect.js",
-      "js/readData.js",
-      "js/background.js"
+      "js/commonUtils/parseUrl.js",
+      "js/background/redirect.js",
+      "js/background/readData.js",
+      "js/background/background.js"
     ],
     "persistent": true
   },

@@ -19,10 +19,9 @@
 
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
-
-
-function getHostfromUrl(url) {
-  let parser = document.createElement('a');
+var UrlHelper = {};
+UrlHelper.getHostfromUrl = url => {
+  let parser = document.createElement("a");
   // Urls can look like ..
   /*  var urls=["https://www.google.com/asdasd",
               "http://www.google.com/asdasd",
@@ -36,47 +35,48 @@ function getHostfromUrl(url) {
   let temp;
   let url2 = url;
 
-  if (url2.indexOf('web.archive.org') > -1) {
-    if (url2.indexOf('archive.org/save') > -1) {
-      url2 = url2.replace('/save', '/web/2')
+  if (url2.indexOf("web.archive.org") > -1) {
+    if (url2.indexOf("archive.org/save") > -1) {
+      url2 = url2.replace("/save", "/web/2");
     }
-    url2 = url2.split('web.archive.org/').pop();
-    let index = url2.indexOf('/');
+    url2 = url2.split("web.archive.org/").pop();
+    let index = url2.indexOf("/");
     //console.log(url2)
     temp = url2.substring(index + 1);
     //console.log(temp)
-    temp = temp.substring(temp.indexOf('/') + 1);
+    temp = temp.substring(temp.indexOf("/") + 1);
 
     // The if Block below is for this weird error I faced when I loaded https://web.archive.org/web/2/http://fsf.org/
     // in address bar and that somehow resulted in wayback machine adding "http://http//www.fsf.org" as URL which is invalid!
-    if (temp.indexOf("http://http//") === 0 || temp.indexOf("https://https//") === 0) {
+    if (
+      temp.indexOf("http://http//") === 0 ||
+      temp.indexOf("https://https//") === 0
+    ) {
       if (temp.indexOf("http://http//") === 0) {
-        temp = temp.replace("http//", '');
+        temp = temp.replace("http//", "");
       } else {
-        temp = temp.replace("https//", '');
+        temp = temp.replace("https//", "");
       }
     }
-
   } else {
     temp = url;
   }
 
-
-  if (temp.indexOf('http://') < 0 && temp.indexOf('https://') < 0) {
-    temp = 'http://' + temp;
+  if (temp.indexOf("http://") < 0 && temp.indexOf("https://") < 0) {
+    temp = "http://" + temp;
   }
   parser.href = temp;
 
-  let isWww = parser.hostname.indexOf('www.');
-  let isWww2 = parser.hostname.indexOf('www2.');
+  let isWww = parser.hostname.indexOf("www.");
+  let isWww2 = parser.hostname.indexOf("www2.");
   //Other subdomains are fine, let's just remove www or www2 anyway ..
   let obj = {
     hostname: "",
     url: ""
-  }
+  };
 
   if (isWww == 0 || isWww2 == 0) {
-    obj.hostname = parser.hostname.substring(parser.hostname.indexOf('.') + 1);
+    obj.hostname = parser.hostname.substring(parser.hostname.indexOf(".") + 1);
   } else {
     obj.hostname = parser.hostname;
   }
@@ -84,4 +84,10 @@ function getHostfromUrl(url) {
   //  console.log(obj);
 
   return obj;
-}
+};
+
+UrlHelper.hasRepeatedLetters = str => {
+  var patt = /^([a-z.A-Z])\1+$/;
+  var result = patt.test(str);
+  return result;
+};

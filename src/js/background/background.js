@@ -38,7 +38,8 @@ function subscribeListeners() {
   );
 }
 subscribeListeners();
-let STORAGE = chrome.storage.local;
+
+var STORAGE = chrome.storage.local;
 
 var justUpdatedReader = {};
 var commonExtensions = [];
@@ -66,7 +67,7 @@ STORAGE.get({
       log("tempIncludes to be sent to popup.js will be .." + tempIncludes);
     });  */
 
-// headerHandler - Append this to browser's UserAgent for "Save" requests - "WaybackEverywhere"
+// headerHandler - Make this as browser's UserAgent for "Save" requests - "WaybackEverywhere"
 // Wayback Machine Team requested for an unique useragent so that they can audit "save page" requests
 // that are sent from this extension/addon - https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/4
 
@@ -188,13 +189,15 @@ function tabOnActivatedListener(tab) {
 
 log.enabled = false;
 
-function loadinitialdata(type) {
+function loadInitialdata(type) {
   let STORAGE = chrome.storage.local;
 
   let initialsettings;
   let jsonUrl = "settings/setting.json";
   let absUrl = chrome.extension.getURL(jsonUrl);
-  let readworker = new Worker(chrome.extension.getURL("js/readData.js"));
+  let readworker = new Worker(
+    chrome.extension.getURL("js/background/readData.js")
+  );
   readworker.postMessage([absUrl, "json", type]);
   readworker.onmessage = function(e) {
     initialsettings = e.data.workerResult.redirects;
@@ -247,7 +250,7 @@ var addSitetoExclude = function(request, sender, sendResponse) {
       }
 
       log("tabid is.." + tabid);
-      let obj = getHostfromUrl(url1);
+      let obj = UrlHelper.getHostfromUrl(url1);
       log(
         obj.hostname +
           " and outputurl " +
@@ -466,10 +469,10 @@ function checkRedirects(details) {
     return {};
   }
 
-  let urlDetails = getHostfromUrl(details.url);
+  let urlDetails = UrlHelper.getHostfromUrl(details.url);
 
   if (urlDetails.hostname.length === 0) {
-    //getHostfromUrl will return empty hostname if you try to load archived version of Wayback Machine itself.
+    //UrlHelper.getHostfromUrl will return empty hostname if you try to load archived version of Wayback Machine itself.
     return {};
   }
 
@@ -516,14 +519,14 @@ function checkRedirects(details) {
       urlDetails.url.indexOf("/Account") > -1
     ) {
       log(
-        "Loginfound or signup found in URL. Adding site to temporary excludes " +
+        "Loginfound or signup found in URL. Adding site to excludes " +
           urlDetails.hostname +
           " when you tried to load" +
           details.url
       );
       let request = {};
       request.subtype = "fromContent";
-      request.category = "AddtoTempExcludesList";
+      request.category = "excludethisSite";
       let sender = { tab: {} };
       sender.tab = {};
       sender.tab.id = details.tabId;
@@ -983,13 +986,13 @@ function MessageHandler(request, sender, sendResponse) {
   } else if (request.type == "doFullReset") {
     var resettype = request.type;
     delete request.type;
-    // loadinitialdata(() => {
+    // FileReader.loadInitialdata(() => {
     //   log('finished full  reset, returning response to setting page');
     //   sendResponse({
     //     message: ' Factory reset. Reloaded  settings from bundled json'
     //   });
     // });
-    loadinitialdata(resettype);
+    loadInitialdata(resettype);
   } else if (request.type == "savetoWM") {
     delete request.type;
     if (appDisabled) {
@@ -1042,7 +1045,7 @@ function MessageHandler(request, sender, sendResponse) {
     }
   } else if (request.type == "seeFirstVersion") {
     delete request.type;
-    let urlDetails = getHostfromUrl(request.url);
+    let urlDetails = UrlHelper.getHostfromUrl(request.url);
     let firstVersionURL = "https://web.archive.org/web/0/" + urlDetails.url;
     chrome.tabs.update(
       request.tabid,
@@ -1057,6 +1060,7 @@ function MessageHandler(request, sender, sendResponse) {
             " as " +
             firstVersionURL
         );
+        sendResponse("loaded first archived version");
       }
     );
   } else if (request.type == "clearTemps") {
@@ -1154,7 +1158,7 @@ function savetoWM(request, sender, sendResponse) {
   let wmSaveUrl;
   let toSave;
   if (url1.indexOf("web.archive.org") > -1) {
-    let obj = getHostfromUrl(url1);
+    let obj = UrlHelper.getHostfromUrl(url1);
     toSave = obj.url.replace("#close", "");
   } else {
     toSave = url1.replace("#close", "");
@@ -1634,9 +1638,9 @@ function handleStartup() {
 }
 
 function onInstalledfn(details) {
-  log(JSON.stringify(details));
+  //console.log(JSON.stringify(details));
   if (details.reason == "install") {
-    loadinitialdata("init");
+    loadInitialdata("init");
     console.log(" Wayback Everywhere addon installed");
 
     let counts = {

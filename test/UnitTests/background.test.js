@@ -25,7 +25,7 @@ describe("Background script tests", function() {
       var tempExcludes = ["|*gnu.org*"];
       // log.enabled = true;
       checkTempExcludes("gnu.org", tempExcludes);
-      //tempExcludes.push("|*gnu.org*");
+      //tempExcludes.push("|*gn`u.org*");
       assert.ok(storage.set.notCalled);
     });
 
@@ -578,7 +578,7 @@ describe("Background script tests", function() {
     });
 
     it("Should return right away with empty object if user tries to load archived version of wayback machine itself", function() {
-      var stub = sinon.stub(window, "getHostfromUrl").returns({
+      var stub = sinon.stub(UrlHelper, "getHostfromUrl").returns({
         hostname: "",
         url: ""
       });
@@ -984,7 +984,7 @@ describe("Background script tests", function() {
     var details = {};
     var store;
     var fake = sinon.fake();
-    sinon.replace(window, "loadinitialdata", fake);
+    sinon.replace(window, "loadInitialdata", fake);
 
     beforeEach(function() {
       chrome.flush();
@@ -995,7 +995,7 @@ describe("Background script tests", function() {
 
     it("Should call load Initial data function to setup the settings", function() {
       var fake = sinon.fake();
-      sinon.replace(window, "loadinitialdata", fake);
+      sinon.replace(window, "loadInitialdata", fake);
       onInstalledfn(details);
       expect(fake.callCount).to.be.eql(1);
       expect(fake.lastArg).to.be.eql("init");
@@ -1243,7 +1243,7 @@ describe("Background script tests", function() {
     it("Should handle doFullReset message to do settings reset", function() {
       request.type = "doFullReset";
       var fake = sinon.fake();
-      sinon.replace(window, "loadinitialdata", fake);
+      sinon.replace(window, "loadInitialdata", fake);
       MessageHandler(request, sender, sendResponse);
       sinon.restore();
       sinon.assert.calledOnce(fake);

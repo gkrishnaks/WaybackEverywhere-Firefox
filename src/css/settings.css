@@ -1,174 +1,189 @@
-
 /* Basic element styles */
 
 body {
   font-family: Arial, sans-serif;
-  font-size:14px;
-  background:white;
-  color:rgb(43, 38, 38);
+  font-size: 14px;
+  background: white;
+  color: rgb(43, 38, 38);
 }
 
-h1, h2, h3, h5, h6 {
+#showExampleOpenall,
+#isLoadAllLinksEnabledArea {
+  font-weight: bold;
+}
+
+h1,
+h2,
+h3,
+h5,
+h6 {
   text-align: center;
 }
 .resize_fit_center {
-    max-width:100%;
-    max-height:100%;
-    vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 h1 {
-  font-size:55px;
-  margin-bottom:0px;
-  cursor:default;
-  padding:0px;
+  font-size: 55px;
+  margin-bottom: 0px;
+  cursor: default;
+  padding: 0px;
   letter-spacing: 2.1px;
 }
 
 h3 {
-  font-size:18px;
-  padding:0px;
+  font-size: 18px;
+  padding: 0px;
 }
 
 h4 {
   text-align: left;
-  font-size:14px;
-  padding:0px;
-  margin:4px;
+  font-size: 14px;
+  padding: 0px;
+  margin: 4px;
 }
 
 h5 {
-  font-size:20px;
-  margin:-6px 0 0 0;
-  color:#5e6163;
+  font-size: 20px;
+  margin: -6px 0 0 0;
+  color: #5e6163;
 }
 
-input[type='text'] {
-  border-radius:2px;
-  padding:3px;
-  border:solid 1px #bbb;
+input[type="text"] {
+  border-radius: 2px;
+  padding: 3px;
+  border: solid 1px #bbb;
 }
 
 input[type="radio"] {
-  margin-right:5px;
+  margin-right: 5px;
 }
 
 /* Classes for buttons and other stuff */
 
 .btn {
-  background:white;
-  border:solid 1px #bbb;
-  border-radius:2px;
+  background: white;
+  border: solid 1px #bbb;
+  border-radius: 2px;
   cursor: pointer;
   font-weight: bold;
-  display:inline-block;
+  display: inline-block;
   text-align: center;
   text-decoration: none;
 }
 
-.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
-    cursor: not-allowed;
-    filter: alpha(opacity=65);
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    opacity: .90;
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: 0.9;
 }
 
 .btn.reset {
-  background:white;
-  border:solid 1px #bbb;
-  border-radius:2px;
+  background: white;
+  border: solid 1px #bbb;
+  border-radius: 2px;
   cursor: pointer;
   font-weight: bold;
-  display:inline-block;
+  display: inline-block;
   text-align: center;
   text-decoration: none;
 }
 
 .btn.large {
-  font-size:18px;
-  padding:4px 8px;
-
+  font-size: 18px;
+  padding: 4px 8px;
 }
 
 .btn.medium {
-  font-size:14px;
-  padding:2px 6px;
+  font-size: 14px;
+  padding: 2px 6px;
 }
 
 .btn.small {
-
 }
 
 .btn:hover {
-  color:white !important;
+  color: white !important;
   text-decoration: none;
 }
 
-
 .btn.grey {
-  color:#333;
+  color: #333;
 }
 
 .btn.grey:hover {
-  background:#333;
-  border:solid 1px #333;
+  background: #333;
+  border: solid 1px #333;
 }
 
 .btn.red {
-  color:rgb(208,52,37);
+  color: rgb(208, 52, 37);
 }
 
 .btn.red:hover {
-  background:rgb(208,52,37);
-  border:solid 1px rgb(208,52,37);
+  background: rgb(208, 52, 37);
+  border: solid 1px rgb(208, 52, 37);
 }
 
 .btn.blue {
-  color:rgb(21,90,233);
+  color: rgb(21, 90, 233);
 }
 
 .btn.blue:hover {
-  background:rgb(21,90,233);
-  border:solid 1px rgb(21,90,233);
+  background: rgb(21, 90, 233);
+  border: solid 1px rgb(21, 90, 233);
 }
 
 .btn.green {
-  color:green;
+  color: green;
 }
 
 .btn.green:hover {
-  background:green;
-  border:solid 1px green;
+  background: green;
+  border: solid 1px green;
 }
 
 /* Main menu with buttons */
 
 #menu {
   margin: 30px auto 8px auto;
-  max-width:90%;
+  max-width: 90%;
   text-align: center;
 }
 
-#import-file {
-  display:none;
+#fileInput {
+  display: none;
 }
 
 /* Message box for success/failure messages */
-#message-box {
-  margin:10px auto;
-  color:white;
+#message-box,
+#incExcmsg {
+  margin: 10px auto;
+  color: white;
   max-width: 800px;
-  border-radius:3px;
+  border-radius: 3px;
   line-height: 30px;
-  font-size:16px;
-  text-align:center;
-  overflow:visible;
+  font-size: 16px;
+  text-align: center;
+  overflow: visible;
   transition: height 0.2s ease-out;
   position: relative;
 }
 
+.logging.hide {
+  display: none;
+}
+
+.logging.show {
+  display: "";
+}
 #message-box.visible {
-  height:30px;
+  height: 30px;
   transition: height 0.2s ease-out;
 }
 
@@ -177,52 +192,65 @@ input[type="radio"] {
 }
 
 #message-box.error {
-  background-color: rgb(208,52,37);;
+  background-color: rgb(208, 52, 37);
+}
+
+#incExcmsg.visible {
+  height: 30px;
+  transition: height 0.2s ease-out;
+}
+
+#incExcmsg.success {
+  background-color: green;
+}
+
+#incExcmsg.error {
+  background-color: rgb(208, 52, 37);
 }
 
 #message-box a {
-  color:white;
-  font-size:20px;
+  color: white;
+  font-size: 20px;
   position: absolute;
-  right:6px;
-  top:0px;
+  right: 6px;
+  top: 0px;
 }
 
 /* Table of redirects */
 
 .redirect-table {
-  max-width:800px;
-  border:solid 1px #bbb;
-  margin:0px auto;
-  border-radius:3px;
+  max-width: 800px;
+  border: solid 1px #bbb;
+  margin: 0px auto;
+  border-radius: 3px;
 }
 
 .redirect-row {
   position: relative;
-  font-size:14px;
-  padding:8px;
-  line-height:18px;
-  border-bottom:solid 1px #bbb;
+  font-size: 14px;
+  padding: 8px;
+  line-height: 18px;
+  border-bottom: solid 1px #bbb;
 }
 
 .redirect-info {
-  display:table;
+  display: table;
 }
 
 .redirect-info div {
-  display:table-row;
+  display: table-row;
 }
 
 .redirect-info div label {
-  display:table-cell;
-  padding:3px 5px;
+  display: table-cell;
+  padding: 3px 5px;
   white-space: nowrap;
 }
 
 .redirect-info div p {
-  display:table-cell;
-  word-wrap:break-word;
-  max-width:700px;
+  display: table-cell;
+  word-wrap: break-word;
+  max-width: 700px;
 }
 
 .redirect-row:last-child {
@@ -230,79 +258,83 @@ input[type="radio"] {
 }
 
 .redirect-row:nth-child(odd) {
-  background:#f8f8f8;
+  background: #f8f8f8;
 }
 
-.redirect-row.disabled label, .redirect-row.disabled span, .redirect-row.disabled p, a.disabled {
-  color:#bbb !important;
+.redirect-row.disabled label,
+.redirect-row.disabled span,
+.redirect-row.disabled p,
+a.disabled {
+  color: #bbb !important;
 }
 
 /* Edit, Delete, Disable buttons */
-.redirect-row a, .redirect-row a:visited {
-  font-size:13px;
-  margin-top:5px;
-  padding:2px;
-  width:60px;
+.redirect-row a,
+.redirect-row a:visited {
+  font-size: 13px;
+  margin-top: 5px;
+  padding: 2px;
+  width: 60px;
 }
 
 .redirect-row h4 span.disabled-marker {
-  color:red !important;
+  color: red !important;
 }
 
-.move-up-btn, .move-down-btn {
-  width:35px !important;
+.move-up-btn,
+.move-down-btn {
+  width: 35px !important;
 }
-
 
 .redirect-row label {
-  display:inline-block;
-  width:80px;
-  font-weight:bold;
+  display: inline-block;
+  width: 80px;
+  font-weight: bold;
   text-align: right;
 }
 
 .arrow {
-  font-size:18px;
+  font-size: 18px;
 }
 
 a.disabled:hover {
-  cursor:default;
-  color:#bbb !important;
-  border:solid 1px #bbb !important;
-  background:white !important;
+  cursor: default;
+  color: #bbb !important;
+  border: solid 1px #bbb !important;
+  background: white !important;
 }
 
 /* Popup form for deleting redirects */
 
 #delete-redirect-form {
   position: fixed;
-  padding:10px;
-  width:500px;
-  background:white;
-  border:solid 1px #bbb;
-  border-radius:3px;
+  padding: 10px;
+  width: 500px;
+  background: white;
+  border: solid 1px #bbb;
+  border-radius: 3px;
   z-index: 6000;
-  left:50%;
-  margin-left:-260px;
-  top:50%;
-  margin-top:-220px;
-  height:220px;
+  left: 50%;
+  margin-left: -260px;
+  top: 50%;
+  margin-top: -220px;
+  height: 220px;
 }
 
-#delete-redirect-form div{
-  margin-bottom:7px;
+#delete-redirect-form div {
+  margin-bottom: 7px;
 }
 
 #delete-redirect-form div label:first-child {
-  width:130px;
-  font-weight:bold;
+  width: 130px;
+  font-weight: bold;
   text-align: right;
-  display:inline-block;
+  display: inline-block;
   vertical-align: top;
 }
 
 #delete-redirect-form div span {
-  display:inline-block;
+  display: inline-block;
   width: 330px;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -314,119 +346,121 @@ a.disabled:hover {
 
 #cover {
   position: fixed;
-  top:0px;
-  bottom:0px;
-  left:0px;
-  right:0px;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
   z-index: 5000;
   background: #333;
   opacity: 0.5;
 }
 
 .blur {
-  -webkit-filter:blur(3px);
-  filter:blur(3px);
+  -webkit-filter: blur(3px);
+  filter: blur(3px);
 }
 
 #edit-redirect-form {
   position: fixed;
-  display:table;
-  width:700px;
-  background:white;
-  border:solid 1px #bbb;
-  border-radius:3px;
+  display: table;
+  width: 700px;
+  background: white;
+  border: solid 1px #bbb;
+  border-radius: 3px;
   z-index: 6000;
-  left:50%;
-  margin-left:-350px;
-  top:50%;
-  margin-top:-258px;
+  left: 50%;
+  margin-left: -350px;
+  top: 50%;
+  margin-top: -258px;
 }
 
 .form-grid {
-  display:table;
+  display: table;
 }
 
-.form-grid > div{
-  display:table-row;
+.form-grid > div {
+  display: table-row;
 }
 
 .form-grid > div > label {
-  display:table-cell;
-  font-weight:bold;
+  display: table-cell;
+  font-weight: bold;
   text-align: right;
-  padding:6px;
+  padding: 6px;
   white-space: nowrap;
-  width:140px;
-  vertical-align:top;
+  width: 140px;
+  vertical-align: top;
 }
 
 .input-cell {
-  padding-top:1px;
+  padding-top: 1px;
 }
 
-.form-grid div input[type='text'] {
-  width:510px;
-  font-size:14px;
+.form-grid div input[type="text"] {
+  width: 510px;
+  font-size: 14px;
 }
 
 .example-result {
-  width:500px;
-  display:inline-block;
-  word-wrap:break-word;
-  margin-top:5px;
+  width: 500px;
+  display: inline-block;
+  word-wrap: break-word;
+  margin-top: 5px;
 }
 
 .example-result-error {
-  margin-top:5px;
-  display:inline-block;
+  margin-top: 5px;
+  display: inline-block;
 }
 
-#unescape-matches, #escape-matches {
-  margin-top:7px;
-  margin-left:0px;
+#unescape-matches,
+#escape-matches {
+  margin-top: 7px;
+  margin-left: 0px;
 }
 
 .input-cell label {
-  display:block;
+  display: block;
 }
 
 #apply-to {
-  padding-top:3px;
+  padding-top: 3px;
 }
 
 #apply-to label span {
   position: relative;
-  top:1px;
+  top: 1px;
 }
 
 .input-cell label input {
-  margin-left:0px;
+  margin-left: 0px;
 }
 
 .error {
-  color:red;
+  color: red;
 }
 
-.placeholder  {
-  color:#c0c0c0;
-  font-size:11px;
+.placeholder {
+  color: #c0c0c0;
+  font-size: 11px;
 }
 
-::-moz-placeholder {  /* Firefox 19+ */
-   color: #c0c0c0;
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #c0c0c0;
 }
 
 .advanced {
-  margin-top:8px;
+  margin-top: 8px;
 }
 
 #advanced-toggle {
-  padding-top:3px;
+  padding-top: 3px;
   text-align: center;
 }
 
 #advanced-toggle a {
-  color:rgb(21,90,233);
+  color: rgb(21, 90, 233);
 }
 
 #advanced-toggle a:hover {
@@ -434,64 +468,67 @@ a.disabled:hover {
 }
 
 .advanced div .input-cell label:first-child {
-  margin-top:2px;
+  margin-top: 2px;
 }
 
 .advanced div .input-cell select {
-  margin-top:4px;
-  width:160px;
+  margin-top: 4px;
+  width: 160px;
 }
 
 a[ng-click] {
-  cursor:pointer;
+  cursor: pointer;
 }
 
-#wildcardtype, #regextype {
-  margin-right:10px;
-  display:inline-block;
-  margin-top:4px;
+#wildcardtype,
+#regextype {
+  margin-right: 10px;
+  display: inline-block;
+  margin-top: 4px;
 }
 
 .button-container {
-  margin-top:20px;
+  margin-top: 20px;
   text-align: center;
-  padding-bottom:10px;
+  padding-bottom: 10px;
 }
-
-
 
 /* Footer with link */
 footer {
-  margin-top:30px;
+  margin-top: 30px;
   text-align: center;
 }
 
 footer small {
-  font-size:10px;
-  color:#555;
+  font-size: 10px;
+  color: #555;
 }
 
-footer small a, footer small a:visited {
+footer small a,
+footer small a:visited {
   text-decoration: none;
-  color:rgb(21,90,233);
+  color: rgb(21, 90, 233);
 }
 
 footer small a:hover {
   text-decoration: underline;
 }
 
-
 /* Hide by default so we can show a message in private mode where angular won't load */
 
-.private #edit-redirect-form, .private #delete-redirect-form, .private .redirect-table, .private #message-box, .private #menu {
-  display:none;
+.private #edit-redirect-form,
+.private #delete-redirect-form,
+.private .redirect-table,
+.private #message-box,
+.private #menu {
+  display: none;
 }
 
 #private-mode-message {
-  background-color:white;
-  margin:auto;
-  border:solid 4px red;
-  border-radius:4px;
+  background-color: white;
+  margin: auto;
+  border: solid 4px red;
+  border-radius: 4px;
   font-size: 30px;
   width: 600px;
   padding: 20px;

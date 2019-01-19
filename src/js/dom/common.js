@@ -20,27 +20,16 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
+var DOM = DOM || {};
 
-function loadInitial(absUrl, returnType) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", absUrl, false);
-  //false -> synchrnous call  (blocking xhr), read file fully before returning to background js
-  xhr.send(null);
-  if (xhr.readyState !== 4) {
-    return;
-  }
-  if (returnType === 'json') {
-    return JSON.parse(xhr.responseText);
-  }
-  return xhr.responseText;
-}
-
-self.onmessage = function(e) {
-  var obj = {
-    workerResult: "",
-    type: ""
-  };
-  obj.workerResult = loadInitial(e.data[0], e.data[1]);
-  obj.type = e.data[2];
-  postMessage(obj);
-}
+DOM.shouldEnableButton = function(e) {
+    if (this.value.length > 0) {
+        document.getElementById(
+            e.target.previousElementSibling.id
+        ).disabled = false;
+    } else {
+        document.getElementById(
+            e.target.previousElementSibling.id
+        ).disabled = true;
+    }
+};
