@@ -2,11 +2,11 @@
 
 Install in Firefox / Firefox for Android : [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere)
 
-Install in Chrome/ Chromium/ Vivaldi : [Chrome Webstore](https://chrome.google.com/webstore/detail/wayback-everywhere/heienainncnjjejmamdkmbbfmblpffjj)
+Install in Chrome/ Brave / Vivaldi / Other chromium browsers : [Chrome Webstore](https://chrome.google.com/webstore/detail/wayback-everywhere/heienainncnjjejmamdkmbbfmblpffjj)
 
 Install in Opera : [Opera addons store](https://addons.opera.com/en/extensions/details/wayback-everywhere/)
 
-Install in Brave : Use this method [Chrome Extension in Brave](https://medium.com/@jonathansampson/testing-chrome-extensions-in-brave-8e25d1f7386d)
+Install in Brave (Muon based version) : Use this method [Chrome Extension in Brave](https://medium.com/@jonathansampson/testing-chrome-extensions-in-brave-8e25d1f7386d)
 
 ## What is Wayback Everywhere?
 
@@ -18,7 +18,7 @@ Examples:
 - If http://<i></i>gnu.org is in 'Excludes' List --> http://<i></i>gnu.org
 - If a page is not yet archived when loaded, --> https://<i></i>web.archive.org/save/&lt;URL&gt;
 
-Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here [Exclude List](#excludes-list) and it comes bundled with ~700 sites in default Excludes to help provide starting point to the user - Read more : [Default Excludes list](#default-excludes-list)
+Over time (perhaps a few days of usage..), you can build this 'Excludes' list to suit your browsing habits. More information on 'Excludes' list available here [Exclude List](#excludes-list) and it comes bundled with ~800 sites in default Excludes to help provide starting point to the user - Read more : [Default Excludes list](#default-excludes-list)
 
 ## Features
 
