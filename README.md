@@ -1,6 +1,6 @@
 # Wayback Everywhere
 
-Install in Firefox / Firefox for Android : [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere)
+Install in Firefox / Firefox for Android / GNU Icecat : [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere)
 
 Install in Chrome/ Brave / Vivaldi / Other chromium browsers : [Chrome Webstore](https://chrome.google.com/webstore/detail/wayback-everywhere/heienainncnjjejmamdkmbbfmblpffjj)
 
