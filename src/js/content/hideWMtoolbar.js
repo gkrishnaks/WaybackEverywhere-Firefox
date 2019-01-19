@@ -20,13 +20,14 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
+//to hide wayback hideWaybackToolbat
+// We hide for 2 cases
+// 1. In desktop firefox, when user clicks save as pdf button, so that PDF wont have header blocking the text
+// 2. In Firefox Android, as there`s limited screen space,  let's hide it
 
-//Nothing really here except the app object. Filters, and directives are
-//include with the controllers that use them. If we need to add any that
-//are used by multiple controllers then we'll define them here.
-var waybackEverywhereApp = angular.module('waybackEverywhereApp', []);
-
-//To make the private stuff in Firefox work properly
-window.addEventListener('DOMContentLoaded', function() {
-  document.body.classList.remove('private');
-});
+(() => {
+    let c = document.getElementById("wm-tb-close");
+    if (c != null) {
+        c.click();
+    }
+})();

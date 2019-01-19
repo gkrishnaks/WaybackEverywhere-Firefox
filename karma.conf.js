@@ -1,20 +1,11 @@
 module.exports = function(config) {
   config.set({
     frameworks: ["mocha", "chai", "sinon-chai", "sinon-chrome"],
-    files: [
-      "src/js/libraries/angular*.js",
-      "node_modules/angular-mocks/angular-mocks.js",
-      "src/js/libraries/jquery*.js",
-      "src/js/libraries/bootstrap*.js",
-      "src/js/*.js",
-      "src/js/controllers/*.js",
-      "test/UnitTests/*.test.js"
-    ],
+    files: ["src/js/**/*.js", "test/UnitTests/*.js"],
 
     reporters: ["progress", "html", "coverage", "spec"], //,"text","text-summary"],
     preprocessors: {
-      "src/js/*.js": ["coverage"],
-      "src/js/controllers/*.js": ["coverage"]
+      "src/js/**/*.js": ["coverage"]
     },
 
     coverageReporter: {

@@ -1,3 +1,5 @@
+Before merge to Master:
+-----------------------
 1) Settings folder
     -> updates.json : check true/false for each update
     -> setting.json : check that the new updates in updates.json are also present in setting.json
@@ -5,3 +7,53 @@
 2) manifest.json -> bump version number
 
 3) Sync all Firefox changes to Chrome version - exclude firefox-only parts.
+
+Manual tests for popup menu 
+----------------------------
+1) When on archived page, check add to Excluds list, temp exclude functionality and save page again.
+
+2) When on excluded page, check incllude and temporary include page and save page now.
+
+3) When on temp excluded site, see clear temp exclude and add temp excluded site to Excludes list.
+
+4) When on temp included site, see clear temp include and include site from now buttons. 
+
+5) Check alerts messages in each of the above for 3 cases :  when on excludes, when on temp excludes , when on temp includes.
+
+6) Save page button should work.
+
+7) In firefox, save page as pdf button should hide header and print pdf. 
+
+8) In chrome, check if firefox specific code is removed. (remove auto-toggle reader mode checkbox in settings page as only firefox supports it, remove pageaction listener as in chrome , we use browser action. See #2 issue for reason) 
+
+Manual tests for settings page:
+------------------------------
+
+1) Check add and remove from Excludes functionality
+
+2) Check disable waybackeverywhere on launch mode. Enable it, restart browser and addon should start in disabled state , i.e no redirection. Uncheck, restart browser, addon should start  in enabled state i.e provide redirection.
+
+3) Check reset button.
+
+4) Help button
+
+Functionality check:
+-------------------
+
+1) Load https://gnu.org and see redirection to archived version.
+
+2) Load a new article which is already not archived, from a news site etc and see if auto-save is happening. 
+
+3) Load quora.com and see if it gets auto-added to excludes list. 
+
+4) Add fsf.org to excludes, then save a page from fsf.org , see if save page is loaded (Since we auto-unwarp prefixes when the host is in excludes, but save page is exception as user intends to see saved page from archive!)
+
+5) Load some archived page, click on a github repo link or youtube link and see if URL auto-unwraps prefixes since domain is in excludes)
+
+6) Load an archived page and try to click signup and signin button. Should add to excludes on the fly and load live page. 
+
+7) See the condition which unwraps URL to live URL for download links when URL ends with a commonly known file extension (this list should be shown in advanced user page or when logging is toggled in settings page) 
+
+8) See if Tracking ID like UTM are filtered out before routing to Wayback MAchine, so we will only end up saving clean links. 
+
+9) See if temp excludes and temp includes are cleared when browser restarts.

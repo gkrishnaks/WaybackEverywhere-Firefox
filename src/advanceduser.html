@@ -37,21 +37,23 @@
 
 	<link rel="shortcut icon" href="images/icon@2x.png">
 	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<script src="js/commonUtils/parseUrl.js"></script>
+    <script src="js/dom/common.js"></script>
+    <script src="js/settings/registerListeners.js"></script>
 
-	<script src="js/libraries/angular-1.7.2.min.js"></script>
-	<script src="js/redirect.js"></script>
-	<script src="js/app.js"></script>
-	<script src="js/controllers/settingspage.js"></script>
-	<script src="js/controllers/listredirects.js"></script>
+    <script src="js/settings/advanceduser.js"></script>
+
+	<script src="js/background/redirect.js"></script>
+	<script src="js/settings/settingspage.js"></script>
 </head>
 
-<body class="container" ng-app="waybackEverywhereApp" ng-controller="WBESettingsPageControl" class="private">
+<body class="container">
 
 
   <div>
 
 
-	<div id="blur-wrapper" ng-class="{blur: showEditForm || showDeleteForm}">
+	<div id="blur-wrapper">
 
 		<h2><strong>Advanced user</strong></h2>
 
@@ -66,127 +68,259 @@
 
 
 
-		<div ng-controller="ListRedirectsCtrl">
+		<div>
 
-			<div class="redirect-table" ng-show="true">
+			<div class="redirect-table">
 				<div>
 						<label>Clear All hostnames from Excludes:</label>
-							<button class="btn blue" ng-click="clearAllHostnamesFromExcludes()">Clear Excludes!</button>
+							<button class="btn blue" id="clearAllHostnamesFromExcludes">Clear Excludes!</button>
 				</div>
 
 				 <div>
 						<label>Reset Stats to Zero:</label>
-					<button class="btn blue" ng-click="clearAllStats()">Clear Stats!</button>
+					<button class="btn blue" id="clearAllStats">Clear Stats!</button>
 				</div>
 
 				   <div>
 						<label>Clear all filters</label>
-				<button class="btn blue" ng-click="clearAllFilters()">Clear Filters!</button>
+				<button class="btn blue" id="clearAllFilters">Clear Filters!</button>
 		</div>
-	<div><button class="btn blue" ng-disabled="!newfilter" ng-click="addtofilters(newfilter)">Add to Filters</button><input type="text" class="incexcbuttons" ng-model="newfilter" placeholder="Enter a new filter" id="addfilter"/>
+	<div><button class="btn blue"  id="addtofiltersBtn">Add to Filters</button><input type="text" class="incexcbuttons" ng-model="newfilter" placeholder="Enter a new filter" id="addfilter"/>
 	<br/>
-					<div><button class="btn green" ng-disabled="!toRemoveFilter" ng-click="removefromfilters(toRemoveFilter)">Remove from Filters</button><input class="incexcbuttons" type="text" ng-model="toRemoveFilter" placeholder="Enter a filter to remove" /></div>
+					<div><button class="btn green" id="removefromfiltersBtn">Remove from Filters</button><input class="incexcbuttons" type="text" id="toRemoveFilter" placeholder="Enter a filter to remove" /></div>
 				</div>
 				<br/>
-				<div><button class="btn blue" ng-disabled="!newExtension" ng-click="addtoExtensions(newExtension)">Add to Excluded File Extensions</button><input type="text" class="incexcbuttons" ng-model="newExtension" placeholder="Enter a file extension to add to Exclude list" id="addexclbutton"/><br/>
-					<div><button class="btn green" ng-disabled="!removeExtension" ng-click="removefromExtensions(removeExtension)">Remove from Excluded File Extensions</button><input class="incexcbuttons" type="text" ng-model="removeExtension" placeholder="Enter a file extension to remove from Exclude list"/></div><br/>
-					<div><button class="btn red" ng-click="clearAllFileExtensions()">Clear all from File Extensions (not recommended)</button></div><br/>
+				<div><button class="btn blue" ng-disabled="!newExtension" id="addtoExtensions">Add to Excluded File Extensions</button><input type="text" class="incexcbuttons" id="newExtension" placeholder="Enter a file extension to add to Exclude list" id="addexclbutton"/><br/>
+					<div><button class="btn green" ng-disabled="!removeExtension" id="removefromExtensions">Remove from Excluded File Extensions</button><input class="incexcbuttons" type="text" id="removeExtension" placeholder="Enter a file extension to remove from Exclude list"/></div><br/>
+					<div><button class="btn red" id="clearAllFileExtensions">Clear all from File Extensions (not recommended)</button></div><br/>
 				</div>
 				<br/>
-				<div id="message-box" ng-show="true" ng-class="{visible : message, error : messageType == 'error', success : messageType == 'success'}">
-					{{message}}
-					<a ng-click="message=null">&#x2716;</a>
-				</div>
-
-				<div class="redirect-row" ng-class="{disabled: r.disabled}" ng-repeat="r in redirects">
-					<h4><span class="disabled-marker" ng-show="r.disabled">[Disabled] </span><span>{{r.description}}</span></h4>
-					<div class="redirect-info">
-						<div>
-							<label style="white-space:initial;">Redirect:</label>
-							<p>All!</p>
-						</div>
-						<div>
-							<label>to:</label>
-							<p>Wayback Machine!</p>
-						</div>
-						<div ng-show="r.excludePattern">
-							<label>Excludes List:</label>
-							<p><button class="btn blue" ng-click="showExcludes=!showExcludes" ng-show="!showExcludes">Excludes list</button>
-								<span ng-if="showExcludes">{{ReadableExcludePattern}}</span></p>
-						</div>
-
-						<div ng-if="tempExcludes">
-							<label>Temporary Excludes:</label>
-							<p>{{tempExcludes}}</p>
-						</div>
-						<div ng-if="tempIncludes">
-							<label>Temporary Includes:</label>
-							<p>{{tempIncludes}}</p>
-						</div>
-						<div ng-if="tempExcludes || tempIncludes">
-						<label>Clear Temporary rules:</label>
-						<p><button class="btn blue" ng-click="clearTemps()">Clear </button>
-
-						</div>
-						<div>
-							<!-- Show JustSaved only when logging is enabled - used during development -->
-							<label>Just saved urls: </label><p>{{justSaved}}</p>
-						</div>
-						<div>
-							<label>Filters to clean URLS:</label>
-							<p>{{filters.join(", ")}}<p>
-						</div>
-							<div>
-							<label>Common File Extensions to exclude:</label>
-							<p>{{commonExtensions.join(", ")}}<p>
-						</div>
-
+				
+				<div>
+				<div class="redirect-table">
+					<div id="message-box" style="display:none">
+						{{message}} <a ng-click="message=null">&#x2716;</a>
 					</div>
 
+					<div
+						class="redirect-row"
+						ng-class="{disabled: r.disabled}"
+						ng-repeat="r in redirects"
+					>
+						<h4><span id="rDescription"></span></h4>
+						<div class="redirect-info">
+							<div>
+								<label 
+									>Redirect:</label
+								>
+								<p>All!</p>
+							</div>
+							<div>
+								<label>to:</label>
+								<p>Wayback Machine!</p>
+							</div>
+							<div ng-show="r.excludePattern">
+								<label>Excludes List:</label>
+								<p>
+									<button
+										class="btn blue"
+										id="showExcludesButton"
+									>
+										Excludes list
+									</button>
+									<span
+										id="showExcludes"
+										style="display:none"
+									></span>
+								</p>
+							</div>
 
+							<div id="tempExcludes" style="display:none">
+								<label>Temporary Excludes:</label>
+								<p>{{tempExcludes}}</p>
+							</div>
+							<div id="tempIncludes" style="display:none">
+								<label>Temporary Includes:</label>
+								<p>{{tempIncludes}}</p>
+							</div>
+							<div id="clearTempButton" style="display:none">
+								<label>Clear Temporary rules:</label>
+								<p>
+									<button class="btn blue" id="clearTemps">
+										Clear
+									</button>
+								</p>
+							</div>
+								<div id="loggingInAdvancedUserPage" >
+							<div >
+								<!-- Show JustSaved only when logging is enabled - used during development -->
+								<label>Just saved urls: </label>
+								<p id="justsaved"></p>
+							</div>
+							<div >
+								<label>Filters to clean URLS:</label>
+								<p id="filtersarea"></p>
+							</div>
+
+							<div  >
+								<label
+									>Common File Extensions to exclude:</label
+								>
+								<p id="fileExtarea"></p>
+							</div></div>
+						</div>
+					</div>
+
+					<div id="incExcmsg" style="display:none">
+						<a id="incExcmsgHide" style="display:none">&#x2716;</a>
+					</div>
+					<div>
+						<button class="btn blue" id="addtoExclude">
+							Add to Excludes List</button
+						><input
+							type="text"
+							class="incexcbuttons"
+							placeholder="Enter a link/site to Exclude"
+							id="newExcludesite"
+						/><br />
+						<div>
+							<button
+								class="btn green"
+								
+								id="removefromExclude"
+							>
+								Remove from Excludes List</button
+							><input
+								class="incexcbuttons"
+								type="text"
+								id="newIncludeSite"
+								placeholder="Enter a link/site to remove"
+							/>
+						</div>
+					</div>
+					<br />
+					<div id="ReaderModeArea" style="display:none;">
+						<label
+							><input type="checkbox" id="togglereadermode" /> Use
+							Reader mode for all archived webpages, if
+							supported</label
+						>
+
+						<br />
+					</div>
+
+					<label
+						><input type="checkbox" id="toggleOperationMode" />
+						Disable Wayback Everywhere when browser starts (you can
+						enable it whenever needed, from popup menu)</label
+					>
+
+					<br />
+
+					<span id="isLoadAllLinksEnabledArea">
+						<input type="checkbox" id="isLoadAllLinksEnabled" />
+						(EXPERIMENTAL FEATURE) Show "Open all links" button in
+						Popup menu for archived pages (opens only the links that
+						match a user-entered 'selector' </span
+					><a id="showExampleOpenall"
+						>Click here to Read more about this feature before using
+						it</a
+					>
+
+					<div id="showExampleOpen" style="display:none">
+						<br />
+						<ul>
+							<li>
+								This feature is for advanced users only and in
+								EXPERIMENTAL state, hence not enabled by
+								default. Please read the below before using it
+							</li>
+							<li>
+								Setting page has an option to enable "open all
+								links in page" button to Popup menu.
+							</li>
+							<li>
+								Once enabled, this adds a button and input field
+								to Popup Menu.
+							</li>
+							<li>
+								You need to enter a selector in input field
+								before you click Open all links.
+							</li>
+							<br />
+							<li>
+								For example, open this page
+								<a
+									href="https://web.archive.org/web/20180429164845/https://en.wikisource.org/wiki/Free_as_in_Freedom_(2002)"
+									target="_blank"
+									>Free as in Freedom</a
+								>
+
+								<br />All the chapters listed have "Chapter" in
+								the URLs. So, open popup menu and enter
+								"Chapter" as selector and click "Open All Links"
+								button - this will open all the chapter links in
+								new tabs
+							</li>
+							<li>
+								This may cause your browser to freeze until all
+								tabs are loaded - Use Selector wisely to only
+								open the links that you really want to open in
+								new tabs
+							</li>
+						</ul>
+					</div>
+
+					<br />
+
+					<br />
+
+					<label
+						><input type="checkbox" id="toggleLogging" />
+						Logging</label
+					>
+					<a
+						style="float: right; color: red; margin-right:4%"
+						id="toggleResetwarn"
+						>Factory Reset</a
+					>
+					<div
+						style="text-align: center; display:none; color:red; "
+						id="showresetConfirmation"
+					>
+						<p style="font-style: italic ">
+							Are you sure you wish to reset settings to factory
+							settings? <br />You will lose your "excluded sites "
+							settings, and the addon will do full reset!
+						</p>
+						<div style="text-align:left ">
+							<a
+								style="float: left "
+								id="cancelresets"
+								class="btn medium green"
+								>No, Cancel and let me retain my settings</a
+							>
+							<a
+								style="float: right "
+								id="doFactoryReset"
+								class=" btn red reset"
+							>
+								Yes, I understand, do full reset</a
+							>
+						</div>
+					</div>
 				</div>
-
-
-				<div id="message-box" ng-show="true" ng-class="{visible : incExcmsg, error : messageType == 'error', success : messageType == 'success'}">
-					{{incExcmsg}}
-					<a ng-click="incExcmsg=null">&#x2716;</a>
-				</div>
-				<div><button class="btn blue" ng-disabled="!newExcludesite" ng-click="addtoExclude(newExcludesite)">Add to Excludes List</button><input type="text" class="incexcbuttons" ng-model="newExcludesite" placeholder="Enter a link/site to Exclude" id="addexclbutton"
-					/><br/>
-					<div><button class="btn green" ng-disabled="!newIncludeSite" ng-click="removefromExclude(newIncludeSite)">Remove from Excludes List</button><input class="incexcbuttons" type="text" ng-model="newIncludeSite" placeholder="Enter a link/site to remove" /></div>
-				</div>
-				<br/>
-
-<div id="message-box" ng-show="true" ng-class="{visible : incExcmsg, error : messageType == 'error', success : messageType == 'success'}">
-					{{incExcmsg}}
-					<a ng-click="incExcmsg=null">&#x2716;</a>
-				</div>
-
-				<br/>
-
-
-				<a style="float: right " ng-if="showresetbutton " class="btn red reset " ng-click="toggleResetwarn()">Factory Reset</a>
-				<div style="text-align: center; color:red; " ng-if="showresetConfirmation ">
-					<p style="font-style: italic ">
-						Are you sure you wish to reset settings to factory settings? <br/>You will lose your "excluded sites " settings, and the addon will do full reset! </p>
-					<div style="text-align:left ">
-						<a style="float: left " ng-click="toggleResetwarn()" class="btn medium green">No, Cancel and let me retain my settings</a>
-						<a style="float: right " ng-click="doFactoryReset()" class=" btn red reset"> Yes, I understand, do full reset</a></div>
-
-
-				</div>
-
-
 			</div>
-		</div>
-		<br/><br/>
+			<br />
+
+
 			<footer>	<div style="text-align: center;">
 <small>
 			Developed by Gokulakrishna. <a href="mailto:gokulakrishnaks@gmail.com?subject=WaybackEverywhere%20Feedback ">
 gokulakrishnaks@gmail.com
 </a> <br>Twitter : <a href="https://twitter.com/gkrishnaks " target="_blank ">@gkrishnaks</a><br>
 <a href="https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues" target="_blank">Report an issue/Feature request</a><br>
- Version {{appVersion}}
+					<div id="appVersion"></div>
 
 </small></div>
 

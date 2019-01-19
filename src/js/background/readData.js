@@ -19,17 +19,28 @@
 
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
+var FileReader = {};
 
-
-//to hide wayback hideWaybackToolbat
-// We hide for 2 cases
-// 1. In desktop firefox user clicks save as pdf button
-// 2. In Firefox Android, as there`s limited screen space,  let's hide it
-
-function hideWaybackToolbar() {
-  let c = document.getElementById("wm-tb-close");
-  if (c != null) {
-    c.click();
+FileReader.loadInitial = (absUrl, returnType) => {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", absUrl, false);
+  //false -> synchrnous call  (blocking xhr), read file fully before returning to background js
+  xhr.send(null);
+  if (xhr.readyState !== 4) {
+    return;
   }
-}
-hideWaybackToolbar();
+  if (returnType === "json") {
+    return JSON.parse(xhr.responseText);
+  }
+  return xhr.responseText;
+};
+
+self.onmessage = function(e) {
+  var obj = {
+    workerResult: "",
+    type: ""
+  };
+  obj.workerResult = FileReader.loadInitial(e.data[0], e.data[1]);
+  obj.type = e.data[2];
+  postMessage(obj);
+};

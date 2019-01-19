@@ -314,7 +314,7 @@ Redirect.prototype = {
     // Url might have tracking parts after ? that might be in excludes
     // In that case, it shouldn't be excluded
     // for example, if url has http://example.com/some/page?utm=twitter.com -> though twitter.com is in Excludes list, shouldn't exclude that as it's in tracking part
-    let url2 = getHostfromUrl(url).hostname;
+    let url2 = UrlHelper.getHostfromUrl(url).hostname;
     var shouldExclude = this._rxExclude.test(url2);
     this._rxExclude.lastIndex = 0;
     // The below may not happen at all as background.js just returns when hostname is "t.co"
