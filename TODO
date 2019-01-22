@@ -1,8 +1,10 @@
+
 1. Fix CSS in Settings.html (Success/Error Messages don't show up properly in phone/tablet screensizes) 
 https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/29
 
 2. Update Settings page's Add to Exclude/Remove to Exclude buttons to handle different types of links/URLs
 https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/issues/30
+--- The above 2 are completed and closed. 
 
 
 And more here : https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox/boards?= 
