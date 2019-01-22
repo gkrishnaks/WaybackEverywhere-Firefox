@@ -1,4 +1,6 @@
 # Wayback Everywhere
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgkrishnaks%2FWaybackEverywhere-Firefox.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgkrishnaks%2FWaybackEverywhere-Firefox?ref=badge_shield)
+
 
 Install in Firefox / Firefox for Android / GNU Icecat : [addons.mozilla.org](https://addons.mozilla.org/en-US/firefox/addon/wayback-everywhere)
 
@@ -162,6 +164,9 @@ You should have received a copy of the GNU General Public License along with thi
 The developer of this addon/extension is _NOT_ affliated with the Internet Archive (archive.org or web.archive.org)
 
 Privacy Policy in one line : We do not collect your data. Detailed privacy policy page : [Privacy Policy](Privacy%20Policy)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fgkrishnaks%2FWaybackEverywhere-Firefox.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fgkrishnaks%2FWaybackEverywhere-Firefox?ref=badge_large)
 
 ## Credits and Acknowledgements
 
