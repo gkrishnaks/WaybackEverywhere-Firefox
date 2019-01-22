@@ -19,6 +19,9 @@
 
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
+
+/* globals PopupApp */
+
 var DOM = {};
 DOM.popupDOM = {};
 

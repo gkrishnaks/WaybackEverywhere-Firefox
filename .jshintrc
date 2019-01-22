@@ -1,4 +1,7 @@
 {
   "esversion": 6,
-  "moz": true
+  "moz": true,
+  "globals": {
+    "chrome": true
+  }
 }
