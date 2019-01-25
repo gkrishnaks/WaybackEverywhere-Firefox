@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,40 +24,40 @@
 // modal windows and loading and saving the list of redirects, that all of the
 // controllers work with.
 
-var $s = window.$s || {};
-$s.settingsApp = window.$s.settingsApp || {};
-$s.settingsApp.newExcludesite = "";
-$s.settingsApp.newIncludeSite = "";
+var App = window.App || {};
+App.settingsApp = window.App.settingsApp || {};
+App.settingsApp.newExcludesite = "";
+App.settingsApp.newIncludeSite = "";
 
-$s.settingsApp.operationmode = false; // we consider false as Default ON, true as disable on browser startup..
+App.settingsApp.operationmode = false; // we consider false as Default ON, true as disable on browser startup..
 
-$s.settingsApp.storage = chrome.storage.local;
+App.settingsApp.storage = chrome.storage.local;
 //TODO: Change to sync when Firefox supports it...
 
-$s.settingsApp.getInitialValues = () => {
-  $s.settingsApp.storage.get(
+App.settingsApp.getInitialValues = () => {
+  App.settingsApp.storage.get(
     {
       readermode: false,
       operationMode: false,
       logging: false
     },
     function(obj) {
-      $s.settingsApp.getRules();
-      $s.settingsApp.logging = obj.logging;
+      App.settingsApp.getRules();
+      App.settingsApp.logging = obj.logging;
       document.getElementById("toggleLogging").checked = obj.logging;
-      $s.settingsApp.readermode = obj.readermode;
+      App.settingsApp.readermode = obj.readermode;
       var useragent = navigator.userAgent;
-      $s.settingsApp.operationmode = obj.operationMode;
+      App.settingsApp.operationmode = obj.operationMode;
       document.getElementById("toggleOperationMode").checked =
         obj.operationMode;
 
       //console.log(useragent);
-      $s.settingsApp.isMobilefirefox = false;
+      App.settingsApp.isMobilefirefox = false;
       if (useragent.match(/Android/i)) {
-        $s.settingsApp.isMobilefirefox = true;
+        App.settingsApp.isMobilefirefox = true;
       }
 
-      if (!$s.settingsApp.isMobilefirefox) {
+      if (!App.settingsApp.isMobilefirefox) {
         document.getElementById("ReaderModeArea").style.display = "";
       }
       document.getElementById("togglereadermode").checked = obj.readermode;
@@ -65,24 +65,24 @@ $s.settingsApp.getInitialValues = () => {
   );
 };
 
-$s.settingsApp.addtoExclude = function(url) {
-  $s.settingsApp.message = null;
+App.settingsApp.addtoExclude = function(url) {
+  App.settingsApp.message = null;
   var url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
-  var exclPatrn = $s.settingsApp.getPattern(url1);
+  var exclPatrn = App.settingsApp.getPattern(url1);
   var msg;
-  $s.settingsApp.newExcludesite = "";
+  App.settingsApp.newExcludesite = "";
   if (url1.length < 4) {
     msg =
       "You entered a URL -> " +
       url1 +
       " which is too small and will affect addon functionality. Please try again. Reach out to Developer if this is causing an issue";
-    $s.settingsApp.showMessage(msg, false, 10, 1);
+    App.settingsApp.showMessage(msg, false, 10, 1);
 
     return;
   }
 
   if (UrlHelper.hasRepeatedLetters(url1)) {
-    $s.settingsApp.showMessage(
+    App.settingsApp.showMessage(
       "Invalid URL, try again or reach out to developer if this is causing an issue",
       false
     );
@@ -93,40 +93,40 @@ $s.settingsApp.addtoExclude = function(url) {
       "You entered a URL -> " +
       exclPatrn.domain +
       " with | symbol. This is not allowed, please try again";
-    $s.settingsApp.showMessage(msg, false, 10, 1);
-    $s.settingsApp.newExcludesite = "";
+    App.settingsApp.showMessage(msg, false, 10, 1);
+    App.settingsApp.newExcludesite = "";
 
     return;
   }
-  //excludePattern in $s.settingsApp.redir looks like *web.archive.org*|*fsf.org*
-  let str = $s.settingsApp.redirects[0].excludePattern;
+  //excludePattern in App.settingsApp.redir looks like *web.archive.org*|*fsf.org*
+  let str = App.settingsApp.redirects[0].excludePattern;
   let array = str.split("*");
   if (array.indexOf(exclPatrn.domain) > -1) {
     msg = "This site " + exclPatrn.domain + " already exists in Excludes list";
-    $s.settingsApp.newExcludesite = "";
+    App.settingsApp.newExcludesite = "";
 
-    $s.settingsApp.showMessage(msg, false, 10, 1);
+    App.settingsApp.showMessage(msg, false, 10, 1);
     return;
   } else {
-    $s.settingsApp.redirects[0].excludePattern =
-      $s.settingsApp.redirects[0].excludePattern + exclPatrn.Pattern;
+    App.settingsApp.redirects[0].excludePattern =
+      App.settingsApp.redirects[0].excludePattern + exclPatrn.Pattern;
     msg = "This site " + exclPatrn.domain + " is added to Excludes list";
-    $s.settingsApp.newExcludesite = "";
+    App.settingsApp.newExcludesite = "";
 
-    var arr = $s.settingsApp.redirects.map($s.settingsApp.normalize);
-    $s.settingsApp.saveRedirectsMsgsender(arr);
-    $s.settingsApp.getRules();
-    $s.settingsApp.showMessage(msg, "success", 10, 1);
+    var arr = App.settingsApp.redirects.map(App.settingsApp.normalize);
+    App.settingsApp.saveRedirectsMsgsender(arr);
+    App.settingsApp.getRules();
+    App.settingsApp.showMessage(msg, "success", 10, 1);
   }
 };
 
-$s.settingsApp.tempExcludes = "";
-$s.settingsApp.tempIncludes = "";
-$s.settingsApp.justSaved = "";
-$s.settingsApp.filters = [];
-$s.settingsApp.appVersion = "1.0.0";
-$s.settingsApp.commonExtensions = [];
-$s.settingsApp.getTemps = () => {
+App.settingsApp.tempExcludes = "";
+App.settingsApp.tempIncludes = "";
+App.settingsApp.justSaved = "";
+App.settingsApp.filters = [];
+App.settingsApp.appVersion = "1.0.0";
+App.settingsApp.commonExtensions = [];
+App.settingsApp.getTemps = () => {
   chrome.runtime.sendMessage(
     {
       type: "appDetails",
@@ -137,89 +137,89 @@ $s.settingsApp.getTemps = () => {
       /* log.enabled = response.logstatus;
         let counts = JSON.parse(response.counts);
         // {"archivedPageLoadsCount":0,"waybackSavescount":0}
-        $s.settingsApp.savecount = counts.waybackSavescount;
-        $s.settingsApp.loadcount = counts.archivedPageLoadsCount;
-        $s.settingsApp.disabled = response.appDisabled; */
-      $s.settingsApp.appVersion = response.appVersion;
+        App.settingsApp.savecount = counts.waybackSavescount;
+        App.settingsApp.loadcount = counts.archivedPageLoadsCount;
+        App.settingsApp.disabled = response.appDisabled; */
+      App.settingsApp.appVersion = response.appVersion;
       let k = document.getElementById("appVersion");
       if (!!k) {
-        k.textContent = "Version " + $s.settingsApp.appVersion;
+        k.textContent = "Version " + App.settingsApp.appVersion;
       }
-      $s.settingsApp.tempExcludes = response.tempExcludes
+      App.settingsApp.tempExcludes = response.tempExcludes
         .join("")
         .replace(/\*/g, "")
         .substring(1)
         .replace(/\|/g, ", ");
       let el = document.getElementById("tempExcludes");
 
-      if (!!$s.settingsApp.tempExcludes) {
+      if (!!App.settingsApp.tempExcludes) {
         el.style.display = "";
-        el.lastElementChild.textContent = $s.settingsApp.tempExcludes;
+        el.lastElementChild.textContent = App.settingsApp.tempExcludes;
       } else {
         el.style.display = "none";
       }
       el = document.getElementById("tempIncludes");
-      $s.settingsApp.tempIncludes = response.tempIncludes
+      App.settingsApp.tempIncludes = response.tempIncludes
         .join("")
         .replace(/\*/g, "")
         .substring(1)
         .replace(/\|/g, ", ");
-      if (!!$s.settingsApp.tempIncludes) {
+      if (!!App.settingsApp.tempIncludes) {
         el.style.display = "";
-        el.lastElementChild.textContent = $s.settingsApp.tempIncludes;
+        el.lastElementChild.textContent = App.settingsApp.tempIncludes;
       } else {
         el.style.display = "none";
       }
 
-      if (!$s.settingsApp.tempExcludes && !$s.settingsApp.tempExcludes) {
+      if (!App.settingsApp.tempExcludes && !App.settingsApp.tempExcludes) {
         document.getElementById("clearTempButton").style.display = "none";
       } else {
         document.getElementById("clearTempButton").style.display = "";
       }
-      //$s.settingsApp.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
+      //App.settingsApp.isLoadAllLinksEnabled = response.isLoadAllLinksEnabled;
       //  console.log('tempExcludes is ' + tempExcludes + ' tempIncludes is ' + tempIncludes);
       if (response.justSaved.length > 0) {
-        $s.settingsApp.justSaved = response.justSaved.join(", ");
+        App.settingsApp.justSaved = response.justSaved.join(", ");
       }
-      $s.settingsApp.filters = response.filters;
-      $s.settingsApp.appVersion = response.appVersion;
-      $s.settingsApp.commonExtensions = response.commonExtensions;
-      $s.settingsApp.showdebuginfo();
-      //$s.settingsApp.getRules();;
+      App.settingsApp.filters = response.filters;
+      App.settingsApp.appVersion = response.appVersion;
+      App.settingsApp.commonExtensions = response.commonExtensions;
+      App.settingsApp.showdebuginfo();
+      //App.settingsApp.getRules();;
     }
   );
 };
 
-$s.settingsApp.clearTemps = function() {
+App.settingsApp.clearTemps = function() {
   chrome.runtime.sendMessage(
     {
       type: "clearTemps"
     },
     function(response) {
       if (response.message == "successfullyclearedTemps") {
-        $s.settingsApp.tempExcludes = "";
-        $s.settingsApp.tempIncludes = "";
-        //$s.settingsApp.getRules();;
-        $s.settingsApp.getRules();
+        App.settingsApp.tempExcludes = "";
+        App.settingsApp.tempIncludes = "";
+        //App.settingsApp.getRules();;
+        App.settingsApp.getRules();
       }
     }
   );
 };
 
-$s.settingsApp.removefromExclude = function(url) {
+App.settingsApp.removefromExclude = function(url) {
   let url1 = url.replace(/[\|&;\$%@"<>\(\)\+\^\'\*,]/g, "");
-  $s.settingsApp.message = null;
-  var inclPattrn = $s.settingsApp.getPattern(url1);
+  App.settingsApp.message = null;
+  var inclPattrn = App.settingsApp.getPattern(url1);
   var msg;
-  $s.settingsApp.newIncludeSite = "";
+  App.settingsApp.newIncludeSite = "";
   if (inclPattrn.domain.indexOf("|") > -1) {
     msg =
       "You entered a URL -> " +
       inclPattrn.domain +
       " with | symbol. This is not allowed, please try again";
-    $s.settingsApp.showMessage(msg, false, 10, 1);
-    $s.settingsApp.newIncludeSite = "";
-    $s.settingsApp.getRules();
+    App.settingsApp.showMessage(msg, false, 10, 1);
+    App.settingsApp.newIncludeSite = "";
+    App.settingsApp.getRules();
 
     return;
   }
@@ -228,81 +228,81 @@ $s.settingsApp.removefromExclude = function(url) {
       "You entered a URL -> " +
       inclPattrn.domain +
       " This is not allowed, removing this will affect functionality";
-    $s.settingsApp.showMessage(msg, false, 10, 1);
-    $s.settingsApp.newIncludeSite = "";
-    $s.settingsApp.getRules();
+    App.settingsApp.showMessage(msg, false, 10, 1);
+    App.settingsApp.newIncludeSite = "";
+    App.settingsApp.getRules();
 
     return;
   }
-  let str = $s.settingsApp.redirects[0].excludePattern;
+  let str = App.settingsApp.redirects[0].excludePattern;
   let array = str.split("*");
   // Using >0 because we shouldn't let remove web.archive.org from excludeslist - avoiding endless redirect loop
   if (array.indexOf(inclPattrn.domain) > -1) {
-    $s.settingsApp.newIncludeSite = "";
+    App.settingsApp.newIncludeSite = "";
 
-    var obj = $s.settingsApp.replaceAll(
-      $s.settingsApp.redirects[0].excludePattern,
+    var obj = App.settingsApp.replaceAll(
+      App.settingsApp.redirects[0].excludePattern,
       inclPattrn.domain
     );
     if (obj.isremoved) {
-      $s.settingsApp.redirects[0].excludePattern = obj.string;
+      App.settingsApp.redirects[0].excludePattern = obj.string;
       msg =
         "This site " + inclPattrn.domain + " is removed from the Excludes list";
-      var arr = $s.settingsApp.redirects.map($s.settingsApp.normalize);
-      $s.settingsApp.saveRedirectsMsgsender(arr);
-      $s.settingsApp.showMessage(msg, true, 10, 1);
+      var arr = App.settingsApp.redirects.map(App.settingsApp.normalize);
+      App.settingsApp.saveRedirectsMsgsender(arr);
+      App.settingsApp.showMessage(msg, true, 10, 1);
     } else {
       msg =
         "No need to remove.. This site " +
         inclPattrn.domain +
         " is already not available in the Excludes list";
-      $s.settingsApp.showMessage(msg, "success", 10, 1);
+      App.settingsApp.showMessage(msg, "success", 10, 1);
     }
   } else {
-    $s.settingsApp.newIncludeSite = "";
+    App.settingsApp.newIncludeSite = "";
     msg =
       "No need to remove! This site " +
       inclPattrn.domain +
       " is already not available in the Excludes list";
-    $s.settingsApp.showMessage(msg, "success", 10, 1);
+    App.settingsApp.showMessage(msg, "success", 10, 1);
   }
-  $s.settingsApp.getRules();
+  App.settingsApp.getRules();
 };
 
-$s.settingsApp.isLoadAllLinksEnabled = false;
+App.settingsApp.isLoadAllLinksEnabled = false;
 
-$s.settingsApp.storage.get(
+App.settingsApp.storage.get(
   {
     isLoadAllLinksEnabled: false
   },
   function(obj) {
-    $s.settingsApp.isLoadAllLinksEnabled = obj.isLoadAllLinksEnabled;
+    App.settingsApp.isLoadAllLinksEnabled = obj.isLoadAllLinksEnabled;
     document.getElementById("isLoadAllLinksEnabled").checked =
       obj.isLoadAllLinksEnabled;
-    //$s.settingsApp.getRules();;
+    //App.settingsApp.getRules();;
   }
 );
 
-$s.settingsApp.toggleLoadAllLinksSettings = function() {
-  $s.settingsApp.storage.set(
+App.settingsApp.toggleLoadAllLinksSettings = function() {
+  App.settingsApp.storage.set(
     {
-      isLoadAllLinksEnabled: !$s.settingsApp.isLoadAllLinksEnabled
+      isLoadAllLinksEnabled: !App.settingsApp.isLoadAllLinksEnabled
     },
     function() {
-      $s.settingsApp.isLoadAllLinksEnabled = !$s.settingsApp
+      App.settingsApp.isLoadAllLinksEnabled = !App.settingsApp
         .isLoadAllLinksEnabled;
 
-      if ($s.settingsApp.isLoadAllLinksEnabled) {
+      if (App.settingsApp.isLoadAllLinksEnabled) {
         document.getElementById("showExampleOpen").style.display = "";
         document.getElementById("showExampleOpenall").style.display = "none";
       }
 
-      //$s.settingsApp.getRules();;
+      //App.settingsApp.getRules();;
     }
   );
 };
 
-$s.settingsApp.replaceAll = (exclist, domain) => {
+App.settingsApp.replaceAll = (exclist, domain) => {
   // format *web.archive.org*|*example.org*
   var obj = {
     string: "",
@@ -321,7 +321,7 @@ $s.settingsApp.replaceAll = (exclist, domain) => {
   return obj;
 };
 
-$s.settingsApp.getPattern = url => {
+App.settingsApp.getPattern = url => {
   var url2 = url;
   var obj = {
     domain: "",
@@ -350,7 +350,7 @@ $s.settingsApp.getPattern = url => {
   return obj;
 };
 
-$s.settingsApp.openHelp = function() {
+App.settingsApp.openHelp = function() {
   var url = chrome.extension.getURL("help.html");
 
   //FIREFOXBUG: Firefox chokes on url:url filter if the url is a moz-extension:// url
@@ -382,34 +382,34 @@ $s.settingsApp.openHelp = function() {
   );
 };
 
-$s.settingsApp.normalize = function(r) {
+App.settingsApp.normalize = function(r) {
   return new Redirect(r).toObject(); //Cleans out any extra props, and adds default values for missing ones.
 };
 
-$s.settingsApp.showresetConfirmation = false;
+App.settingsApp.showresetConfirmation = false;
 
-$s.settingsApp.saveRedirectsMsgsender = arr => {
+App.settingsApp.saveRedirectsMsgsender = arr => {
   chrome.runtime.sendMessage(
     {
       type: "saveredirects",
       redirects: arr
     },
     function(response) {
-      $s.settingsApp.redirects = [];
-      $s.settingsApp.redirects = arr;
-      $s.settingsApp.ReadableExcludePattern = $s.settingsApp.redirects[0].excludePattern
+      App.settingsApp.redirects = [];
+      App.settingsApp.redirects = arr;
+      App.settingsApp.ReadableExcludePattern = App.settingsApp.redirects[0].excludePattern
         .replace(/\*/g, "")
         .replace(/\|/g, ", ");
-      $s.settingsApp.getRules();
-      //$s.settingsApp.getRules();;
+      App.settingsApp.getRules();
+      //App.settingsApp.getRules();;
     }
   );
 };
 
-// Saves the entire list of redirects to $s.settingsApp.storage
-$s.settingsApp.saveChanges = function() {
+// Saves the entire list of redirects to App.settingsApp.storage
+App.settingsApp.saveChanges = function() {
   // Clean them up so angular $$hash things and stuff don't get serialized.
-  var arr = $s.settingsApp.redirects.map($s.settingsApp.normalize);
+  var arr = App.settingsApp.redirects.map(App.settingsApp.normalize);
 
   //adding web.archive.org to beginning of exclude so that even if user clears it, ,
   // so that user won't end up endless looping
@@ -424,11 +424,11 @@ $s.settingsApp.saveChanges = function() {
     }
   }
 
-  $s.settingsApp.saveRedirectsMsgsender(arr);
+  App.settingsApp.saveRedirectsMsgsender(arr);
 };
 
-// Saves the entire list of redirects to $s.settingsApp.storage
-$s.settingsApp.saveChanges2 = function(arr) {
+// Saves the entire list of redirects to App.settingsApp.storage
+App.settingsApp.saveChanges2 = function(arr) {
   // Clean them up so angular $$hash things and stuff don't get serialized.
 
   //adding web.archive.org to beginning of exclude so that even if imported json doesn't have it,
@@ -439,45 +439,45 @@ $s.settingsApp.saveChanges2 = function(arr) {
       "*web.archive.org*|*archive.org*|*chrome://*|*about:*|" +
       arr[0].excludePattern;
   }
-  $s.settingsApp.saveRedirectsMsgsender(arr);
+  App.settingsApp.saveRedirectsMsgsender(arr);
 };
 
-$s.settingsApp.redirects = [];
+App.settingsApp.redirects = [];
 
-$s.settingsApp.ReadableExcludePattern = "web.archive.org";
+App.settingsApp.ReadableExcludePattern = "web.archive.org";
 //Need to proxy this through the background page,because Firefox gives us dead objects
 //nonsense when accessing chrome.Storage directly.
-$s.settingsApp.getRules = () => {
+App.settingsApp.getRules = () => {
   chrome.runtime.sendMessage(
     {
       type: "getredirects"
     },
     function(response) {
-      if ($s.settingsApp.redirects.length == 0) {
-        $s.settingsApp.redirects.push(
-          $s.settingsApp.normalize(response.redirects[0])
+      if (App.settingsApp.redirects.length == 0) {
+        App.settingsApp.redirects.push(
+          App.settingsApp.normalize(response.redirects[0])
         );
       }
       document.getElementById("rDescription").textContent =
-        $s.settingsApp.redirects[0].description;
-      $s.settingsApp.ReadableExcludePattern = response.redirects[0].excludePattern
+        App.settingsApp.redirects[0].description;
+      App.settingsApp.ReadableExcludePattern = response.redirects[0].excludePattern
         .replace(/\*/g, "")
         .replace(/\|/g, ", ");
-      let el = (document.querySelector("#showExcludes").textContent =
-        $s.settingsApp.ReadableExcludePattern);
-      $s.settingsApp.getTemps();
-      $s.settingsApp.showdebuginfo();
+      document.querySelector("#showExcludes").textContent =
+        App.settingsApp.ReadableExcludePattern;
+      App.settingsApp.getTemps();
+      App.settingsApp.showdebuginfo();
 
-      //$s.settingsApp.getRules();;
+      //App.settingsApp.getRules();;
     }
   );
 };
 
 // Shows a message explaining how many redirects were imported.
 
-$s.settingsApp.timestamp = new Date();
+App.settingsApp.timestamp = new Date();
 
-$s.settingsApp.importRedirects = function() {
+App.settingsApp.importRedirects = function() {
   var fileInput = document.getElementById("fileInput");
   fileInput.addEventListener("change", function(e) {
     var file = fileInput.files[0];
@@ -490,7 +490,7 @@ $s.settingsApp.importRedirects = function() {
         data = JSON.parse(reader.result);
         console.log("Wayback Everywhere: Imported data" + JSON.stringify(data));
       } catch (e) {
-        $s.settingsApp.showMessage(
+        App.settingsApp.showMessage(
           "Failed to parse JSON data, invalid JSON: " +
             (e.message || "").substr(0, 100)
         );
@@ -498,7 +498,7 @@ $s.settingsApp.importRedirects = function() {
       }
 
       if (!data.redirects) {
-        $s.settingsApp.showMessage(
+        App.settingsApp.showMessage(
           'Invalid JSON, missing "redirects" property '
         );
         return;
@@ -508,7 +508,7 @@ $s.settingsApp.importRedirects = function() {
         data.createdBy.indexOf("Wayback Everywhere") < 0 ||
         data.redirects[0].description.indexOf("Wayback Everywhere") < 0
       ) {
-        $s.settingsApp.showMessage(
+        App.settingsApp.showMessage(
           "Invalid JSON, this does not seem to be exported from Wayback Everywhere"
         );
         return;
@@ -521,7 +521,7 @@ $s.settingsApp.importRedirects = function() {
       var r = new Redirect(data.redirects[i]);
       r.updateExampleResult();
       if (
-        $s.settingsApp.redirects.some(function(i) {
+        App.settingsApp.redirects.some(function(i) {
           return new Redirect(i).equals(r);
         })
       ) {
@@ -531,10 +531,10 @@ $s.settingsApp.importRedirects = function() {
         arr.push(r.toObject());
 
         imported++;
-        $s.settingsApp.saveChanges2(arr);
+        App.settingsApp.saveChanges2(arr);
       }
 
-      $s.settingsApp.showImportedMessage(imported, existing);
+      App.settingsApp.showImportedMessage(imported, existing);
 
       // add above this
     };
@@ -542,7 +542,7 @@ $s.settingsApp.importRedirects = function() {
     try {
       reader.readAsText(file, "utf-8");
     } catch (e) {
-      $s.settingsApp.showMessage("Failed to read import file");
+      App.settingsApp.showMessage("Failed to read import file");
     }
   });
 };
@@ -550,7 +550,7 @@ $s.settingsApp.importRedirects = function() {
 // Updates the export link with a data url containing all the redirects.
 // We want to have the href updated instead of just generated on click to
 // allow people to right click and choose Save As...
-$s.settingsApp.updateExportLink = function() {
+App.settingsApp.updateExportLink = function() {
   var d = new Date();
   var localtime = d
     .toTimeString()
@@ -568,9 +568,9 @@ $s.settingsApp.updateExportLink = function() {
     .substring(4)
     .trim()
     .replace(/ /g, ".");
-  $s.settingsApp.timestamp = day + "_" + localtime + "_" + localtimezone;
+  App.settingsApp.timestamp = day + "_" + localtime + "_" + localtimezone;
 
-  var redirects = $s.settingsApp.redirects.map(function(r) {
+  var redirects = App.settingsApp.redirects.map(function(r) {
     return new Redirect(r).toObject();
   });
 
@@ -583,27 +583,27 @@ $s.settingsApp.updateExportLink = function() {
   var json = JSON.stringify(exportObj, null, 4);
 
   //Using encodeURIComponent here instead of base64 because base64 always messed up our encoding for some reason...
-  $s.settingsApp.redirectDownload =
+  App.settingsApp.redirectDownload =
     "data:text/plain;charset=utf-8," + encodeURIComponent(json);
   let elem = document.getElementById("exportSettingBtn");
   if (!!elem) {
-    elem.href = $s.settingsApp.redirectDownload;
+    elem.href = App.settingsApp.redirectDownload;
     elem.download = elem.download.replace(
       "{{timestamp}}",
-      $s.settingsApp.timestamp
+      App.settingsApp.timestamp
     );
   }
 };
 
-$s.settingsApp.showImportedMessage = (imported, existing) => {
+App.settingsApp.showImportedMessage = (imported, existing) => {
   if (imported == 0 && existing == 0) {
-    $s.settingsApp.showMessage("No redirects existed in the file.");
+    App.settingsApp.showMessage("No redirects existed in the file.");
   }
   if (imported > 0 && existing == 0) {
-    $s.settingsApp.showMessage("Successfully imported settings", true);
+    App.settingsApp.showMessage("Successfully imported settings", true);
   }
   if (imported == 0 && existing > 0) {
-    $s.settingsApp.showMessage(
+    App.settingsApp.showMessage(
       "All redirects in the file already existed and were ignored."
     );
   }
@@ -619,24 +619,25 @@ $s.settingsApp.showImportedMessage = (imported, existing) => {
     } else {
       m += existing + " redirects already existed and were ignored.";
     }
-    $s.settingsApp.showMessage(m, true);
+    App.settingsApp.showMessage(m, true);
   }
 };
 
-$s.settingsApp.showdebuginfo = () => {
+App.settingsApp.showdebuginfo = () => {
   let el = document.getElementById("logging");
   let el2 = document.getElementById("loggingInAdvancedUserPage");
-  if ($s.settingsApp.logging || !!el2) {
+  if (App.settingsApp.logging || !!el2) {
     if (!!el) {
       el.style.display = "";
     }
-    document.getElementById("justsaved").textContent = $s.settingsApp.justSaved;
+    document.getElementById("justsaved").textContent =
+      App.settingsApp.justSaved;
     document.getElementById(
       "filtersarea"
-    ).textContent = $s.settingsApp.filters.join(", ");
+    ).textContent = App.settingsApp.filters.join(", ");
     document.getElementById(
       "fileExtarea"
-    ).textContent = $s.settingsApp.commonExtensions.join(", ");
+    ).textContent = App.settingsApp.commonExtensions.join(", ");
   } else {
     if (!!el) {
       el.style.display = "none";
@@ -644,44 +645,44 @@ $s.settingsApp.showdebuginfo = () => {
   }
 };
 
-$s.settingsApp.logging = false;
+App.settingsApp.logging = false;
 
-$s.settingsApp.toggleLogging = function() {
-  $s.settingsApp.storage.get(
+App.settingsApp.toggleLogging = function() {
+  App.settingsApp.storage.get(
     {
       logging: false
     },
     function(obj) {
-      $s.settingsApp.storage.set({
+      App.settingsApp.storage.set({
         logging: !obj.logging
       });
-      $s.settingsApp.logging = !obj.logging;
-      $s.settingsApp.showdebuginfo();
+      App.settingsApp.logging = !obj.logging;
+      App.settingsApp.showdebuginfo();
     }
   );
 };
 
-$s.settingsApp.togglereadermode = () => {
-  $s.settingsApp.storage.set({
-    readermode: !$s.settingsApp.readermode
+App.settingsApp.togglereadermode = () => {
+  App.settingsApp.storage.set({
+    readermode: !App.settingsApp.readermode
   });
-  $s.settingsApp.readermode = !$s.settingsApp.readermode;
-  $s.settingsApp.getRules();
+  App.settingsApp.readermode = !App.settingsApp.readermode;
+  App.settingsApp.getRules();
 };
 
-$s.settingsApp.toggleOperationMode = () => {
-  $s.settingsApp.storage.set(
+App.settingsApp.toggleOperationMode = () => {
+  App.settingsApp.storage.set(
     {
-      operationMode: !$s.settingsApp.operationmode
+      operationMode: !App.settingsApp.operationmode
     },
     function(a) {
-      $s.settingsApp.operationmode = !$s.settingsApp.operationmode;
-      $s.settingsApp.getRules();
+      App.settingsApp.operationmode = !App.settingsApp.operationmode;
+      App.settingsApp.getRules();
     }
   );
 };
 
-$s.settingsApp.doFactoryReset = () => {
+App.settingsApp.doFactoryReset = () => {
   chrome.runtime.sendMessage({
     type: "doFullReset",
     subtype: "fromSettings"
@@ -689,16 +690,16 @@ $s.settingsApp.doFactoryReset = () => {
 };
 
 // Shows a message bar above the list of redirects.
-$s.settingsApp.showMessage = (message, success, timer, id) => {
+App.settingsApp.showMessage = (message, success, timer, id) => {
   let msgBox = document.getElementById("message-box");
   let incExcmsg = document.getElementById("incExcmsg");
   if (id != null) {
-    $s.settingsApp.incExcmsg = message;
+    App.settingsApp.incExcmsg = message;
     incExcmsg.style.display = "";
     incExcmsg.innerText = message;
     incExcmsg.classList = success ? "success" : "error";
   } else {
-    $s.settingsApp.message = message;
+    App.settingsApp.message = message;
     msgBox.style.display = "";
     msgBox.innerText = message;
     msgBox.classList = success ? "success" : "error";
@@ -709,40 +710,41 @@ $s.settingsApp.showMessage = (message, success, timer, id) => {
   //Remove the message in 20 seconds if it hasnt been changed...
 
   setTimeout(function() {
-    if ($s.settingsApp.message == message) {
-      $s.settingsApp.message = null;
+    if (App.settingsApp.message == message) {
+      App.settingsApp.message = null;
       msgBox.style.display = "none";
     }
   }, timer * 1000);
   setTimeout(function() {
-    if ($s.settingsApp.incExcmsg == message) {
-      $s.settingsApp.incExcmsg = null;
+    if (App.settingsApp.incExcmsg == message) {
+      App.settingsApp.incExcmsg = null;
       incExcmsg.style.display = "none";
     }
   }, timer * 1000);
 };
 
-$s.settingsApp.showresetConfirmation = false;
-$s.settingsApp.showresetbutton = true;
-$s.settingsApp.toggleResetwarn = function() {
-  $s.settingsApp.showresetConfirmation = !$s.settingsApp.showresetConfirmation;
-  $s.settingsApp.showresetbutton = !$s.settingsApp.showresetbutton;
-  if ($s.settingsApp.showresetConfirmation) {
-    document.getElementById("showresetConfirmation").style.display = $s
+App.settingsApp.showresetConfirmation = false;
+App.settingsApp.showresetbutton = true;
+App.settingsApp.toggleResetwarn = function() {
+  App.settingsApp.showresetConfirmation = !App.settingsApp
+    .showresetConfirmation;
+  App.settingsApp.showresetbutton = !App.settingsApp.showresetbutton;
+  if (App.settingsApp.showresetConfirmation) {
+    document.getElementById("showresetConfirmation").style.display = App
       .settingsApp.showresetConfirmation
       ? ""
       : "none";
   }
-  $s.settingsApp.showresetbutton = !$s.settingsApp.showresetbutton;
-  document.getElementById("toggleResetwarn").style.display = $s.settingsApp
+  App.settingsApp.showresetbutton = !App.settingsApp.showresetbutton;
+  document.getElementById("toggleResetwarn").style.display = App.settingsApp
     .showresetbutton
     ? ""
     : "none";
 };
 
-$s.settingsApp.toggleDisabled = function(redirect) {
+App.settingsApp.toggleDisabled = function(redirect) {
   redirect.disabled = !redirect.disabled;
-  $s.settingsApp.saveChanges();
+  App.settingsApp.saveChanges();
 };
 
 (() => {
@@ -758,7 +760,7 @@ $s.settingsApp.toggleDisabled = function(redirect) {
 
   document.addEventListener(
     hidden.visibilityChange,
-    $s.settingsApp.getInitialValues,
+    App.settingsApp.getInitialValues,
     false
   );
 })();

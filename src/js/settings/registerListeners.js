@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
-var $s = window.$s || {};
-$s.settingsApp = window.$s.settingsApp || {};
+var App = window.App || {};
+App.settingsApp = window.App.settingsApp || {};
 
 window.onload = function() {
     document.querySelector("#addtoExclude").disabled = true;
     document.querySelector("#removefromExclude").disabled = true;
 
-    document.addEventListener("click", $s.settingsApp.listenForClicks);
+    document.addEventListener("click", App.settingsApp.listenForClicks);
     document
         .getElementById("newExcludesite")
         .addEventListener("input", DOM.shouldEnableButton);
@@ -36,13 +36,13 @@ window.onload = function() {
         .addEventListener("input", DOM.shouldEnableButton);
     document
         .getElementById("newExcludesite")
-        .addEventListener("keyup", $s.keyUpListener);
+        .addEventListener("keyup", App.keyUpListener);
     document
         .getElementById("newIncludeSite")
-        .addEventListener("keyup", $s.keyUpListener);
+        .addEventListener("keyup", App.keyUpListener);
     let btn = document.getElementById("exportSettingBtn");
     if (!!btn) {
-        btn.addEventListener("mousedown", $s.settingsApp.updateExportLink);
+        btn.addEventListener("mousedown", App.settingsApp.updateExportLink);
     }
     try {
         document
@@ -50,114 +50,114 @@ window.onload = function() {
             .addEventListener("input", DOM.shouldEnableButton);
         document
             .getElementById("addfilter")
-            .addEventListener("keyup", $s.keyUpListener);
+            .addEventListener("keyup", App.keyUpListener);
 
         document
             .getElementById("toRemoveFilter")
             .addEventListener("input", DOM.shouldEnableButton);
         document
             .getElementById("toRemoveFilter")
-            .addEventListener("keyup", $s.keyUpListener);
+            .addEventListener("keyup", App.keyUpListener);
 
         document
             .getElementById("newExtension")
             .addEventListener("input", DOM.shouldEnableButton);
         document
             .getElementById("newExtension")
-            .addEventListener("keyup", $s.keyUpListener);
+            .addEventListener("keyup", App.keyUpListener);
 
         document
             .getElementById("removeExtension")
             .addEventListener("input", DOM.shouldEnableButton);
         document
             .getElementById("removeExtension")
-            .addEventListener("keyup", $s.keyUpListener);
+            .addEventListener("keyup", App.keyUpListener);
     } catch (e) {
         // do nothing..
     }
-    $s.settingsApp.getInitialValues();
-    $s.settingsApp.updateExportLink(); //Run once so we will have a href to begin with
+    App.settingsApp.getInitialValues();
+    App.settingsApp.updateExportLink(); //Run once so we will have a href to begin with
 };
 
-$s.keyUpListener = function(e) {
+App.keyUpListener = function(e) {
     if (e.keyCode === 13 || e.key === "Enter") {
         switch (e.target.id) {
             case "newExcludesite":
-                $s.settingsApp.addtoExclude(e.target.value);
+                App.settingsApp.addtoExclude(e.target.value);
                 e.target.value = "";
                 e.target.parentElement.disabled = true;
                 break;
             case "newIncludeSite":
-                $s.settingsApp.removefromExclude(e.target.value);
+                App.settingsApp.removefromExclude(e.target.value);
                 e.target.value = "";
                 e.target.parentElement.disabled = true;
                 break;
             case "addfilter":
-                $s.settingsApp.addtofilters(e.target.value);
+                App.settingsApp.addtofilters(e.target.value);
                 e.target.value = "";
                 document.getElementById("addtofiltersBtn").disabled = true;
                 break;
             case "toRemoveFilter":
-                $s.settingsApp.removefromfilters(e.target.value);
+                App.settingsApp.removefromfilters(e.target.value);
                 e.target.value = "";
                 document.getElementById("removefromfiltersBtn").disabled = true;
                 break;
             case "newExtension":
-                $s.settingsApp.addtoExtensions(e.target.value);
+                App.settingsApp.addtoExtensions(e.target.value);
                 e.target.value = "";
                 document.getElementById("addtoExtensions").disabled = true;
                 break;
 
             case "removeExtension":
-                $s.settingsApp.removefromExtensions(e.target.value);
+                App.settingsApp.removefromExtensions(e.target.value);
                 e.target.value = "";
                 document.getElementById("removefromExtensions").disabled = true;
                 break;
         }
-        $s.settingsApp.getRules();
+        App.settingsApp.getRules();
     } else if (e.key === " " || e.keyCode === 32) {
         switch (e.target.id) {
             case "isLoadAllLinksEnabled":
-                $s.settingsApp.toggleLoadAllLinksSettings();
+                App.settingsApp.toggleLoadAllLinksSettings();
                 break;
             case "togglereadermode":
-                $s.settingsApp.togglereadermode();
+                App.settingsApp.togglereadermode();
                 break;
             case "toggleOperationMode":
-                $s.settingsApp.toggleOperationMode();
+                App.settingsApp.toggleOperationMode();
                 break;
             case "toggleLogging":
-                $s.settingsApp.toggleLogging();
+                App.settingsApp.toggleLogging();
                 break;
         }
     }
-    $s.settingsApp.getRules();
+    App.settingsApp.getRules();
 };
 
-$s.settingsApp.listenForClicks = function(e) {
-    $s.settingsApp.incExcmsg = null;
+App.settingsApp.listenForClicks = function(e) {
+    App.settingsApp.incExcmsg = null;
 
     switch (e.target.id) {
         case "addtoExclude":
             let el2 = document.querySelector("#newExcludesite");
-            $s.settingsApp.addtoExclude(el2.value);
+            App.settingsApp.addtoExclude(el2.value);
             el2.value = "";
             document.getElementById("addtoExclude").disabled = true;
             break;
         case "removefromExclude":
             let el3 = document.querySelector("#newIncludeSite");
-            $s.settingsApp.removefromExclude(el3.value);
+            App.settingsApp.removefromExclude(el3.value);
             el3.value = "";
             document.getElementById("removefromExclude").disabled = true;
             break;
         case "isLoadAllLinksEnabled":
-            $s.settingsApp.toggleLoadAllLinksSettings();
+            App.settingsApp.toggleLoadAllLinksSettings();
             break;
         case "togglereadermode":
-            $s.settingsApp.togglereadermode();
+            App.settingsApp.togglereadermode();
             break;
         case "toggleOperationMode":
-            $s.settingsApp.toggleOperationMode();
+            App.settingsApp.toggleOperationMode();
             break;
         case "showExampleOpenall":
             document.getElementById("showExampleOpen").style.display = "";
@@ -165,20 +165,20 @@ $s.settingsApp.listenForClicks = function(e) {
                 "none";
             break;
         case "toggleLogging":
-            $s.settingsApp.toggleLogging();
+            App.settingsApp.toggleLogging();
             break;
         case "toggleResetwarn":
-            $s.settingsApp.toggleResetwarn();
+            App.settingsApp.toggleResetwarn();
             document.getElementById("toggleResetwarn").style.display = "none";
             break;
         case "cancelresets":
-            $s.settingsApp.toggleResetwarn();
+            App.settingsApp.toggleResetwarn();
             document.getElementById("showresetConfirmation").style.display =
                 "none";
             document.getElementById("toggleResetwarn").style.display = "";
             break;
         case "doFactoryReset":
-            $s.settingsApp.doFactoryReset();
+            App.settingsApp.doFactoryReset();
             break;
         case "showExcludesButton":
             let el = document.getElementById("showExcludes");
@@ -186,7 +186,7 @@ $s.settingsApp.listenForClicks = function(e) {
             el.previousElementSibling.style.display = "none";
             break;
         case "clearTemps":
-            $s.settingsApp.clearTemps();
+            App.settingsApp.clearTemps();
             break;
         case "incExcmsg":
             let el1 = document.getElementById("incExcmsg");
@@ -196,45 +196,45 @@ $s.settingsApp.listenForClicks = function(e) {
             document.getElementById("message-box").style.display = "none";
             break;
         case "fileInput":
-            $s.settingsApp.importRedirects();
+            App.settingsApp.importRedirects();
             break;
         case "openHelp":
-            $s.settingsApp.openHelp();
+            App.settingsApp.openHelp();
             break;
         case "clearAllHostnamesFromExcludes":
-            $s.settingsApp.clearAllHostnamesFromExcludes();
+            App.settingsApp.clearAllHostnamesFromExcludes();
             break;
         case "clearAllStats":
-            $s.settingsApp.clearAllStats();
+            App.settingsApp.clearAllStats();
             break;
         case "clearAllFilters":
-            $s.settingsApp.clearAllFilters();
+            App.settingsApp.clearAllFilters();
             break;
         case "clearAllFileExtensions":
-            $s.settingsApp.clearAllFileExtensions();
+            App.settingsApp.clearAllFileExtensions();
             break;
         case "addtofiltersBtn":
             let e4 = document.querySelector("#addfilter");
-            $s.settingsApp.addtofilters(e4.value);
+            App.settingsApp.addtofilters(e4.value);
             e4.value = "";
             document.getElementById("addtofiltersBtn").disabled = true;
             break;
         case "removefromfiltersBtn":
             let e5 = document.querySelector("#toRemoveFilter");
-            $s.settingsApp.removefromfilters(e5.value);
+            App.settingsApp.removefromfilters(e5.value);
             e5.value = "";
             document.getElementById("removefromfiltersBtn").disabled = true;
             break;
         case "addtoExtensions":
             let e6 = document.querySelector("#newExtension");
-            $s.settingsApp.addtoExtensions(e6.value);
+            App.settingsApp.addtoExtensions(e6.value);
             e6.value = "";
             document.getElementById("addtoExtensions").disabled = true;
             break;
 
         case "removefromExtensions":
             let e7 = document.querySelector("#removeExtension");
-            $s.settingsApp.removefromExtensions(e7.value);
+            App.settingsApp.removefromExtensions(e7.value);
             e7.value = "";
             document.getElementById("removefromExtensions").disabled = true;
             break;

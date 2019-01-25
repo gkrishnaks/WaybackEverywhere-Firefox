@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -113,7 +113,8 @@ PopupApp.listenForClicks = e => {
 
 window.onload = () => {
     document.addEventListener("click", PopupApp.listenForClicks);
-    document
-        .getElementById("selectorInput")
-        .addEventListener("keyup", DOM.popupDOM.keyUpListener);
+    let el = document.getElementById("selectorInput");
+    if (!!el) {
+        el.addEventListener("keyup", DOM.popupDOM.keyUpListener);
+    }
 };

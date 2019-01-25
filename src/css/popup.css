@@ -51,7 +51,8 @@ tr.spaceUnder > td {
 
 #inTempexcludesAlert,
 #inExcludesAlert,
-#inTempIncludesAlert {
+#inTempIncludesAlert,
+#refreshbutton {
   white-space: nowrap;
 }
 /*
