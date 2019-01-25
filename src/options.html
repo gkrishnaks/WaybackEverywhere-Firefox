@@ -1,11 +1,15 @@
 <!doctype html>
 <html>
+<head>
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <!-- 
 	/*******************************************************************************
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,23 +28,21 @@
 */
 -->
 
-<head>
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
   <title>Wayback Everywhere</title>
   <link rel="stylesheet" href="css/popup.css" />
 
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <script src="js/dom/DOMUpdater.js"></script>
-  <script src="js/registerListeners.js"></script>
+  <script src="js/commonUtils/parseUrl.js"></script>
+  <script src="js/popup/registerListeners.js"></script>
   <script src="js/popup/popup.js"></script>
 
 </head>
 <!--<body style="min-width: 200px;max-width: 200px;">-->
 
-<body ng-app="popupApp" ng-controller="PopupCtrl">
+<body>
 
   <table width="100%" style="min-width: 120px; text-align:center; ">
     <tr class="spaceUnder">

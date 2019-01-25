@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
     Home: https://gitlab.com/gkrishnaks/WaybackEverywhere-Firefox
 */
 
-//to hide wayback hideWaybackToolbat
+//to hide wayback hideWaybackToolbar
 // We hide for 2 cases
 // 1. In desktop firefox, when user clicks save as pdf button, so that PDF wont have header blocking the text
 // 2. In Firefox Android, as there`s limited screen space,  let's hide it
 
 (() => {
-    let c = document.getElementById("wm-tb-close");
-    if (c != null) {
-        c.click();
+    let c = document.getElementById("wm-ipp");
+    if (c !== null) {
+        c.style.display = "none";
     }
 })();

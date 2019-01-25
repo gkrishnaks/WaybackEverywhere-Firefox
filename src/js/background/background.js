@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ function subscribeListeners() {
   chrome.runtime.onInstalled.addListener(onInstalledfn);
   chrome.runtime.onStartup.addListener(handleStartup);
   chrome.storage.onChanged.addListener(monitorChanges);
-  chrome.tabs.onUpdated.addListener(tabsUpdatedListner);
+  chrome.tabs.onUpdated.addListener(tabsUpdatedListner); //Only for firefox, see issue #2
   chrome.runtime.onMessage.addListener(MessageHandler);
-  chrome.tabs.onActivated.addListener(tabOnActivatedListener);
+  chrome.tabs.onActivated.addListener(tabOnActivatedListener); //Only for firefox, see issue #2
   chrome.webRequest.onBeforeSendHeaders.addListener(
     headerHandler,
     {
@@ -88,6 +88,7 @@ function headerHandler(details) {
   return blockingResponse;
 }
 
+//Only for firefox, see #2
 function tabsUpdatedListner(tabId, changeInfo, tab) {
   //Issue #1 fix https://github.com/gkrishnaks/WaybackEverywhere-Firefox/issues/1
   if (
@@ -128,7 +129,7 @@ function tabsUpdatedListner(tabId, changeInfo, tab) {
     }
   }
 }
-
+//Only for firefox, see issue #2
 function handleRemoved(tabId, removeInfo) {
   // in android, until Mozilla enables reader mode api for android firefox, this is not needed.
   // but hasOwnProperty will return false always if object does not have any property
@@ -153,6 +154,7 @@ chrome.pageAction.onClicked.addListener(function(tab) {
   });
 });*/
 
+//Only for firefox, see issue #2
 function tabOnActivatedListener(tab) {
   let currentUrl;
   // As per documentation, URL may not be available this 'tab' object, so we use tabs.query to find current url in activated tab..
@@ -794,6 +796,7 @@ function monitorChanges(changes, namespace) {
     tempExcludes = changes.tempExcludes.newValue;
   }
 
+  //Only for firefox
   if (changes.readermode) {
     isReaderModeEnabled = changes.readermode.newValue;
     if (
@@ -813,9 +816,11 @@ function monitorChanges(changes, namespace) {
   if (changes.filters) {
     filters = changes.filters.newValue;
   }
+
   if (changes.isLoadAllLinksEnabled) {
     isLoadAllLinksEnabled = changes.isLoadAllLinksEnabled.newValue;
   }
+
   if (changes.counts) {
     // This is needed only when user resets stats to 0 from advanceduser page
     if (
@@ -1357,7 +1362,9 @@ function dedupExcludes(excludePattern) {
 }
 
 function handleUpdate(istemporary) {
-  let updateWorker = new Worker(chrome.extension.getURL("js/readData.js"));
+  let updateWorker = new Worker(
+    chrome.extension.getURL("js/background/readData.js")
+  );
   let STORAGE = chrome.storage.local;
   let type = "update";
   let updateJson = "settings/updates.json";
@@ -1589,6 +1596,7 @@ function handleStartup() {
     oldcounts = JSON.parse(JSON.stringify(counts));
   });  */
 
+  // only for firefox
   STORAGE.get(
     {
       readermode: false

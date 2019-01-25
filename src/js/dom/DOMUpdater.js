@@ -2,7 +2,7 @@
 
     Wayback Everywhere - a browser addon/extension to redirect all pages to
     archive.org's Wayback Machine except the ones in Excludes List
-    Copyright (C) 2018 Gokulakrishna K S
+    Copyright (C) 2018 - 2019 Gokulakrishna Sudharsan
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,221 +25,240 @@
 var DOM = {};
 DOM.popupDOM = {};
 
+var PopupApp = window.PopupApp || {};
+
 DOM.popupDOM.updateDOM = () => {
-  //logging($s);
-  if (PopupApp.disabled) {
-    document.querySelector("#showdisablebutton").style.display = "none";
-    document.querySelector("#showenablebutton").style.display = "";
-  } else {
-    document.querySelector("#showdisablebutton").style.display = "";
-    document.querySelector("#showenablebutton").style.display = "none";
-  }
+  try {
+    if (PopupApp.disabled) {
+      document.querySelector("#showdisablebutton").style.display = "none";
+      document.querySelector("#showenablebutton").style.display = "";
+    } else {
+      document.querySelector("#showdisablebutton").style.display = "";
+      document.querySelector("#showenablebutton").style.display = "none";
+    }
+    if (
+      !PopupApp.disabled &&
+      PopupApp.settingsInAboutConfig &&
+      !PopupApp.webextpagesExcluded
+    ) {
+      document.querySelector("#saveButtonArea").style.display = "";
+      document.querySelector(
+        "#savePagebutton"
+      ).textContent = !PopupApp.issiteexcluded
+        ? "Save this page now"
+        : "Save this page again";
+    } else {
+      document.querySelector("#saveButtonArea").style.display = "none";
+    }
 
-  if (
-    !PopupApp.disabled &&
-    PopupApp.settingsInAboutConfig &&
-    !PopupApp.webextpagesExcluded
-  ) {
-    document.querySelector("#saveButtonArea").style.display = "";
+    if (
+      PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.settingsInAboutConfig &&
+      !PopupApp.hideIncludebutton
+    ) {
+      document.querySelector("#firstArchivedbuttonArea").style.display = "";
+    } else {
+      document.querySelector("#firstArchivedbuttonArea").style.display = "none";
+    }
+
+    if (
+      !PopupApp.isMobilefirefox &&
+      PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig
+    ) {
+      document.querySelector("#SavePagetoPDFArea").style.display = "";
+    } else {
+      document.querySelector("#SavePagetoPDFArea").style.display = "none";
+    }
+
     document.querySelector(
-      "#savePagebutton"
-    ).textContent = !PopupApp.issiteexcluded
-      ? "Save this page now"
-      : "Save this page again";
-  } else {
-    document.querySelector("#saveButtonArea").style.display = "none";
-  }
+      "#settingsbuttonarea"
+    ).style.display = !PopupApp.settingspagehide ? "" : "none";
 
-  if (
-    PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.settingsInAboutConfig &&
-    !PopupApp.hideIncludebutton
-  ) {
-    document.querySelector("#firstArchivedbuttonArea").style.display = "";
-  } else {
-    document.querySelector("#firstArchivedbuttonArea").style.display = "none";
-  }
+    if (
+      !PopupApp.disabled &&
+      !PopupApp.settingspagehide &&
+      PopupApp.domain &&
+      PopupApp.domain !== "chrome" &&
+      (PopupApp.isDomainInExcludesList ||
+        PopupApp.isDomainTempExcluded ||
+        PopupApp.isDomainTempIncluded)
+    ) {
+      document.querySelector("#alertArea").style.display = "";
+      let alertAreaTempexcludes = document.querySelector(
+        "#inTempexcludesAlert"
+      );
+      let alertAreaExcludes = document.querySelector("#inExcludesAlert");
 
-  if (
-    !PopupApp.isMobilefirefox &&
-    PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig
-  ) {
-    document.querySelector("#SavePagetoPDFArea").style.display = "";
-  } else {
-    document.querySelector("#SavePagetoPDFArea").style.display = "none";
-  }
+      let alertAreaTempIncludes = document.querySelector(
+        "#inTempIncludesAlert"
+      );
+      if (PopupApp.isDomainInExcludesList) {
+        alertAreaExcludes.style.display = "";
+        alertAreaExcludes.textContent =
+          PopupApp.domain + " is in Excludes List";
+        alertAreaTempIncludes.style.display = "none";
+        alertAreaTempexcludes.style.display = "none";
+      }
 
-  document.querySelector(
-    "#settingsbuttonarea"
-  ).style.display = !PopupApp.settingspagehide ? "" : "none";
+      if (PopupApp.isDomainTempExcluded) {
+        alertAreaTempexcludes.style.display = "";
+        alertAreaTempexcludes.textContent =
+          PopupApp.domain + " is temporarily Excluded";
+        alertAreaTempIncludes.style.display = "none";
+        alertAreaExcludes.style.display = "none";
+      }
 
-  if (
-    !PopupApp.disabled &&
-    !PopupApp.settingspagehide &&
-    PopupApp.domain &&
-    PopupApp.domain !== "chrome" &&
-    (PopupApp.isDomainInExcludesList ||
-      PopupApp.isDomainTempExcluded ||
-      PopupApp.isDomainTempIncluded)
-  ) {
-    document.querySelector("#alertArea").style.display = "";
-    let alertAreaTempexcludes = document.querySelector("#inTempexcludesAlert");
-    let alertAreaExcludes = document.querySelector("#inExcludesAlert");
-
-    let alertAreaTempIncludes = document.querySelector("#inTempIncludesAlert");
-    if (PopupApp.isDomainInExcludesList) {
-      alertAreaExcludes.style.display = "";
-      alertAreaExcludes.textContent = PopupApp.domain + " is in Excludes List";
-      alertAreaTempIncludes.style.display = "none";
-      alertAreaTempexcludes.style.display = "none";
+      if (PopupApp.isDomainTempIncluded) {
+        alertAreaTempIncludes.style.display = "";
+        alertAreaTempIncludes.textContent =
+          PopupApp.domain + " is temporarily Included";
+        alertAreaExcludes.style.display = "none";
+        alertAreaTempexcludes.style.display = "none";
+      }
+    } else {
+      let alertarea = document.querySelector("#alertArea");
+      alertarea.style.display = "none";
     }
 
-    if (PopupApp.isDomainTempExcluded) {
-      alertAreaTempexcludes.style.display = "";
-      alertAreaTempexcludes.textContent =
-        PopupApp.domain + " is temporarily Excluded";
-      alertAreaTempIncludes.style.display = "none";
-      alertAreaExcludes.style.display = "none";
+    if (
+      PopupApp.showRefreshAlert &&
+      !PopupApp.settingspagehide &&
+      !PopupApp.webextpagesExcluded &&
+      !PopupApp.disabled &&
+      !!PopupApp.domain &&
+      !PopupApp.isDomainInExcludesList &&
+      !PopupApp.isDomainTempExcluded &&
+      !PopupApp.issiteexcluded &&
+      PopupApp.domain !== "chrome"
+    ) {
+      document.querySelector("#clicktoRefreshArea").style.display = "";
+    } else {
+      document.querySelector("#clicktoRefreshArea").style.display = "none";
     }
 
-    if (PopupApp.isDomainTempIncluded) {
-      alertAreaTempIncludes.style.display = "";
-      alertAreaTempIncludes.textContent =
-        PopupApp.domain + " is temporarily Included";
-      alertAreaExcludes.style.display = "none";
-      alertAreaTempexcludes.style.display = "none";
+    if (
+      !PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig &&
+      !PopupApp.hideIncludebutton &&
+      !!PopupApp.domain &&
+      PopupApp.domain !== "chrome" &&
+      !PopupApp.isDomainTempExcluded
+    ) {
+      document.querySelector("#includeDomainArea").style.display = "";
+      document.querySelector("#includeButton").textContent =
+        "Include " + PopupApp.domain;
+      document.querySelector("#tempIncludeArea").style.display = "";
+      document.querySelector("#tempIncludeButton").textContent =
+        "Temporarily Include " + PopupApp.domain;
+    } else {
+      document.querySelector("#includeDomainArea").style.display = "none";
+      document.querySelector("#tempIncludeArea").style.display = "none";
     }
-  } else {
-    let alertarea = document.querySelector("#alertArea");
-    alertarea.style.display = "none";
-  }
 
-  if (
-    PopupApp.showRefreshAlert &&
-    !PopupApp.settingspagehide &&
-    !PopupApp.webextpagesExcluded &&
-    !PopupApp.disabled &&
-    !!PopupApp.domain &&
-    !PopupApp.isDomainInExcludesList &&
-    !PopupApp.isDomainTempExcluded &&
-    !PopupApp.issiteexcluded &&
-    PopupApp.domain !== "chrome"
-  ) {
-    document.querySelector("#clicktoRefreshArea").style.display = "";
-  } else {
-    document.querySelector("#clicktoRefreshArea").style.display = "none";
-  }
+    if (
+      !PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig &&
+      !PopupApp.hideIncludebutton &&
+      !!PopupApp.domain &&
+      PopupApp.isDomainTempExcluded
+    ) {
+      document.querySelector("#clearTempExcludeArea").style.display = "";
+      document.querySelector("#clearTempExcludeButton").textContent =
+        "Clear " + PopupApp.domain + " from Temporary Excludes";
+      document.querySelector("#applyTempToPermExcludes").style.display = "";
+      document.querySelector("#applyTempToPermExcludesButton").textContent =
+        "Add " + PopupApp.domain + " to Excludes List";
+    } else {
+      document.querySelector("#clearTempExcludeArea").style.display = "none";
+      document.querySelector("#applyTempToPermExcludes").style.display = "none";
+    }
 
-  if (
-    !PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig &&
-    !PopupApp.hideIncludebutton &&
-    !!PopupApp.domain &&
-    PopupApp.domain !== "chrome" &&
-    !PopupApp.isDomainTempExcluded
-  ) {
-    document.querySelector("#includeDomainArea").style.display = "";
-    document.querySelector("#includeButton").textContent =
-      "Include " + PopupApp.domain;
-    document.querySelector("#tempIncludeArea").style.display = "";
-    document.querySelector("#tempIncludeButton").textContent =
-      "Temporarily Include " + PopupApp.domain;
-  } else {
-    document.querySelector("#includeDomainArea").style.display = "none";
-    document.querySelector("#tempIncludeArea").style.display = "none";
-  }
+    if (
+      PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig &&
+      !PopupApp.hideIncludebutton &&
+      !!PopupApp.domain &&
+      PopupApp.isDomainTempIncluded
+    ) {
+      document.querySelector("#clearFromTempIncludesArea").style.display = "";
+      document.querySelector("#clearFromTempIncludesButton").textContent =
+        "Clear " + PopupApp.domain + " from Temporary Includes";
+      document.querySelector(
+        "#applysitetoPermanentIncludesArea"
+      ).style.display =
+        "";
+      document.querySelector(
+        "#applysitetoPermanentIncludesButton"
+      ).textContent =
+        "Include " + PopupApp.domain + " from now";
+    } else {
+      document.querySelector("#clearFromTempIncludesArea").style.display =
+        "none";
+      document.querySelector(
+        "#applysitetoPermanentIncludesArea"
+      ).style.display =
+        "none";
+    }
 
-  if (
-    !PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig &&
-    !PopupApp.hideIncludebutton &&
-    !!PopupApp.domain &&
-    PopupApp.isDomainTempExcluded
-  ) {
-    document.querySelector("#clearTempExcludeArea").style.display = "";
-    document.querySelector("#clearTempExcludeButton").textContent =
-      "Clear " + PopupApp.domain + " from Temporary Excludes";
-    document.querySelector("#applyTempToPermExcludes").style.display = "";
-    document.querySelector("#applyTempToPermExcludesButton").textContent =
-      "Add " + PopupApp.domain + " to Excludes List";
-  } else {
-    document.querySelector("#clearTempExcludeArea").style.display = "none";
-    document.querySelector("#applyTempToPermExcludes").style.display = "none";
-  }
+    if (
+      PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig &&
+      !PopupApp.hideIncludebutton &&
+      !!PopupApp.domain &&
+      !PopupApp.isDomainTempIncluded
+    ) {
+      document.querySelector("#tempExcludeArea").style.display = "";
+      document.querySelector("#tempExcludebutton").textContent =
+        "Temporarily Exclude " + PopupApp.domain;
+      document.querySelector("#MainExcludesButtonArea").style.display = "";
+      document.querySelector("#MainExcludesButton").textContent =
+        "Add " + PopupApp.domain + " to Excludes List";
+    } else {
+      document.querySelector("#tempExcludeArea").style.display = "none";
+      document.querySelector("#MainExcludesButtonArea").style.display = "none";
+    }
 
-  if (
-    PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig &&
-    !PopupApp.hideIncludebutton &&
-    !!PopupApp.domain &&
-    PopupApp.isDomainTempIncluded
-  ) {
-    document.querySelector("#clearFromTempIncludesArea").style.display = "";
-    document.querySelector("#clearFromTempIncludesButton").textContent =
-      "Clear " + PopupApp.domain + " from Temporary Includes";
-    document.querySelector("#applysitetoPermanentIncludesArea").style.display =
-      "";
-    document.querySelector("#applysitetoPermanentIncludesButton").textContent =
-      "Include " + PopupApp.domain + " from now";
-  } else {
-    document.querySelector("#clearFromTempIncludesArea").style.display = "none";
-    document.querySelector("#applysitetoPermanentIncludesArea").style.display =
-      "none";
-  }
+    if (
+      PopupApp.isLoadAllLinksEnabled &&
+      PopupApp.issiteexcluded &&
+      !PopupApp.disabled &&
+      !PopupApp.webextpagesExcluded &&
+      PopupApp.SettingsInAboutConfig &&
+      !!PopupApp.domain
+    ) {
+      document.querySelector("#openAllLinksArea").style.display = "";
+      document.querySelector("#openAllLinksButton").disabled = true;
+      document
+        .querySelector("#selectorInput")
+        .addEventListener("input", DOM.shouldEnableButton);
+    } else {
+      document.querySelector("#openAllLinksArea").style.display = "none";
+    }
+    document.querySelector(
+      "#versiondisplay"
+    ).textContent = !!PopupApp.appVersion
+      ? "Version " + PopupApp.appVersion
+      : "Version 1.1";
 
-  if (
-    PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig &&
-    !PopupApp.hideIncludebutton &&
-    !!PopupApp.domain &&
-    !PopupApp.isDomainTempIncluded
-  ) {
-    document.querySelector("#tempExcludeArea").style.display = "";
-    document.querySelector("#tempExcludebutton").textContent =
-      "Temporarily Exclude " + PopupApp.domain;
-    document.querySelector("#MainExcludesButtonArea").style.display = "";
-    document.querySelector("#MainExcludesButton").textContent =
-      "Add " + PopupApp.domain + " to Excludes List";
-  } else {
-    document.querySelector("#tempExcludeArea").style.display = "none";
-    document.querySelector("#MainExcludesButtonArea").style.display = "none";
-  }
-
-  if (
-    PopupApp.isLoadAllLinksEnabled &&
-    PopupApp.issiteexcluded &&
-    !PopupApp.disabled &&
-    !PopupApp.webextpagesExcluded &&
-    PopupApp.SettingsInAboutConfig &&
-    !!PopupApp.domain
-  ) {
-    document.querySelector("#openAllLinksArea").style.display = "";
-    document.querySelector("#openAllLinksButton").disabled = true;
-    document
-      .querySelector("#selectorInput")
-      .addEventListener("input", DOM.shouldEnableButton);
-  } else {
-    document.querySelector("#openAllLinksArea").style.display = "none";
-  }
-  document.querySelector("#versiondisplay").textContent = !!PopupApp.appVersion
-    ? "Version " + PopupApp.appVersion
-    : "Version 1.1";
-
-  if (!!document.getElementsByClassName("hideBody")[0]) {
-    document.getElementsByClassName("hideBody")[0].classList = "";
+    if (!!document.getElementsByClassName("hideBody")[0]) {
+      document.getElementsByClassName("hideBody")[0].classList = "";
+    }
+  } catch (e) {
+    PopupApp.log(e);
+    PopupApp.log("error probably occured in options.html as we reuse scripts");
   }
 };
 
